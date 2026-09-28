@@ -87,17 +87,32 @@
     <h2 class="sec-title serif">원고 투고하기</h2>
     <p class="mo-desc">아웃오브박스는 언제나 새로운 이야기를 기다립니다.<br />아래 내용을 담아 <b>첨부파일과 함께</b> 대표메일로 보내주세요.</p>
     <div class="submit-box">
-      <ul class="submit-list">
-        <li>📄 <b>원고 파일</b> — 완성 원고 또는 샘플 원고 (hwp · docx · pdf)</li>
-        <li>📝 <b>기획 소개</b> — 어떤 책인지, 누구를 위한 책인지 한두 문단</li>
-        <li>👤 <b>작가 소개와 연락처</b></li>
-      </ul>
-      <div class="submit-mail">
-        <span class="mail-addr" id="mailAddr">hasung4001@gmail.com</span>
-        <button class="btn btn-line btn-sm" id="copyMail">주소 복사</button>
-      </div>
-      <a class="btn btn-gold" id="mailtoBtn" href="mailto:hasung4001@gmail.com?subject=%5B%EC%9B%90%EA%B3%A0%20%ED%88%AC%EA%B3%A0%5D%20&body=%EC%B1%85%20%EC%A0%9C%EB%AA%A9%2F%EA%B0%80%EC%A0%9C%3A%0A%EA%B8%B0%ED%9A%8D%20%EC%86%8C%EA%B0%9C%3A%0A%EC%9E%91%EA%B0%80%20%EC%86%8C%EA%B0%9C%EC%99%80%20%EC%97%B0%EB%9D%BD%EC%B2%98%3A%0A%0A%E2%80%BB%20%EC%9B%90%EA%B3%A0%20%ED%8C%8C%EC%9D%BC%EC%9D%84%20%EC%B2%A8%EB%B6%80%ED%95%B4%20%EC%A3%BC%EC%84%B8%EC%9A%94.">메일 앱 열고 투고하기 →</a>
-      <p class="submit-note">버튼을 누르면 메일 앱이 열립니다 — 원고 파일을 첨부해서 보내주세요. 검토에는 2~3주가 걸릴 수 있어요.</p>
+      <form id="submitForm">
+        <div class="field-row">
+          <div class="field">
+            <label for="sfName">작가 이름 *</label>
+            <input id="sfName" name="name" type="text" required maxlength="30" placeholder="홍길동" />
+          </div>
+          <div class="field">
+            <label for="sfEmail">연락받을 이메일 *</label>
+            <input id="sfEmail" name="email" type="email" required placeholder="you@example.com" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="sfTitle">책 제목 / 가제 *</label>
+          <input id="sfTitle" name="title" type="text" required maxlength="60" placeholder="예: 퇴근길에 쓰는 마음" />
+        </div>
+        <div class="field">
+          <label for="sfIntro">기획 소개 — 어떤 책인지, 누구를 위한 책인지 *</label>
+          <textarea id="sfIntro" name="intro" rows="4" required maxlength="2000" placeholder="한두 문단이면 충분해요. 작가 소개도 함께 적어주세요."></textarea>
+        </div>
+        <div class="field">
+          <label for="sfFile">원고 파일 (hwp · docx · pdf, 10MB 이하)</label>
+          <input id="sfFile" name="attachment" type="file" accept=".hwp,.hwpx,.doc,.docx,.pdf,.txt" />
+        </div>
+        <button type="submit" class="btn btn-gold" id="sfSend">투고 보내기 ✉️</button>
+        <p class="submit-note" id="sfStatus">보내기를 누르면 아웃오브박스 대표메일로 바로 접수됩니다. 검토에는 2~3주가 걸릴 수 있어요.</p>
+      </form>
     </div>
   </div>
 </div>
@@ -108,7 +123,6 @@
       <div class="brand">아웃오브박스 OUT OF BOX</div>
       <div>ⓒ 아웃오브박스 · 멘토링연구소</div>
     </div>
-    <div><a href="https://mentoring-university-2.vercel.app/homo-ambidex" target="_blank" rel="noopener">호모 앰비덱스 미션 웹 ↗</a></div>
   </div>
 </footer>
 
@@ -332,8 +346,32 @@ document.getElementById("openSubmit").addEventListener("click", () => { soEl.hid
 function soHide() { soEl.hidden = true; document.body.style.overflow = ""; }
 document.getElementById("soClose").addEventListener("click", soHide);
 soEl.addEventListener("click", (e) => { if (e.target === soEl) soHide(); });
-document.getElementById("copyMail").addEventListener("click", async (e) => {
-  try { await navigator.clipboard.writeText(document.getElementById("mailAddr").textContent.trim()); e.target.textContent = "복사됨 ✓"; setTimeout(() => e.target.textContent = "주소 복사", 1600); } catch { /* noop */ }
+/* 투고 폼 — FormSubmit로 대표메일에 바로 접수 (메일 앱 불필요) */
+const SF_ENDPOINT = "https://formsubmit.co/ajax/hasung4001@gmail.com";
+document.getElementById("submitForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const file = document.getElementById("sfFile").files[0];
+  const status = document.getElementById("sfStatus");
+  const btn = document.getElementById("sfSend");
+  if (file && file.size > 10 * 1024 * 1024) { status.textContent = "⚠️ 파일이 10MB를 넘어요 — 더 작은 파일로 부탁드려요."; return; }
+  const fd = new FormData(form);
+  fd.append("_subject", "[원고 투고] " + (fd.get("title") || "무제"));
+  fd.append("_template", "table");
+  fd.append("_captcha", "false");
+  btn.disabled = true; btn.textContent = "보내는 중…";
+  status.textContent = "접수하고 있어요. 잠시만요…";
+  try {
+    const r = await fetch(SF_ENDPOINT, { method: "POST", body: fd, headers: { "Accept": "application/json" } });
+    const j = await r.json().catch(() => ({}));
+    if (r.ok && (j.success === "true" || j.success === true)) {
+      form.hidden = true;
+      status.innerHTML = "✅ <b>투고가 접수됐어요!</b> 소중한 원고 감사합니다.<br />검토 후 적어주신 이메일로 연락드릴게요. (2~3주 소요)";
+    } else { throw new Error(j.message || "전송 실패"); }
+  } catch (err) {
+    btn.disabled = false; btn.textContent = "투고 보내기 ✉️";
+    status.innerHTML = "⚠️ 전송에 실패했어요. 잠시 후 다시 시도하시거나, <b>hasung4001@gmail.com</b>으로 직접 보내주세요.";
+  }
 });
 
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") { if (!moEl.hidden) moHide(); if (!soEl.hidden) soHide(); } });
