@@ -90,18 +90,6 @@ header { position: sticky; top: 0; z-index: 50; background: rgba(16,18,22,.92); 
 .spine .a { writing-mode: vertical-rl; font-size: 10px; opacity: .75; margin-top: 8px; max-height: 16%; overflow: hidden; white-space: nowrap; }
 .spine .m { font-size: 7px; letter-spacing: .12em; opacity: .6; font-weight: 700; }
 
-/* MISSION 띠지 — 책등 상단을 두르는 종이 띠 */
-.band {
-  position: absolute; top: 13px; left: 0; right: 0; height: 30px;
-  background: linear-gradient(180deg, var(--goldlt) 0%, var(--gold) 55%, var(--golddk, #A97426) 100%);
-  color: #1E2430; font-size: 9px; font-weight: 800; letter-spacing: .22em;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 2px 7px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.4), inset 0 -2px 3px rgba(0,0,0,.22);
-  border-top: 1px solid rgba(255,255,255,.25);
-  border-bottom: 1px solid rgba(0,0,0,.3);
-}
-.book.has-mission .spine { padding-top: 52px; }
-
 /* 정면(표지) 면 */
 .face { position: absolute; inset: 0; opacity: 0; transition: opacity .34s .1s; }
 .book:hover .face, .book.front .face { opacity: 1; }
@@ -152,7 +140,7 @@ header { position: sticky; top: 0; z-index: 50; background: rgba(16,18,22,.92); 
 }
 .btn:hover { opacity: .85; }
 .btn-gold { background: var(--gold); color: #fff; }
-.btn-line { border: 1.5px solid var(--line); color: var(--ink); }
+.btn-line { border: 1.5px solid var(--line); color: var(--ink); background: transparent; }
 .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
 
 /* 미션 그리드 (호모 앰비덱스 상세) */
@@ -169,10 +157,37 @@ header { position: sticky; top: 0; z-index: 50; background: rgba(16,18,22,.92); 
 .sec-title { font-family: "Noto Serif KR", serif; font-size: 26px; font-weight: 900; margin-bottom: 14px; }
 .about p { color: var(--mut); margin-bottom: 12px; }
 .about p b { color: var(--ink); }
-.stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.stat-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
 .stat { background: var(--bg2); border: 1px solid var(--line); border-radius: 16px; padding: 18px; text-align: center; }
 .stat .num { font-family: "Noto Serif KR", serif; font-size: 28px; font-weight: 900; color: var(--goldlt); }
 .stat .label { font-size: 12.5px; color: var(--mut); }
+
+/* ── 원고 투고 · 작가 되기 ── */
+.join-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 44px; }
+.join-card {
+  background: var(--bg2); border: 1px solid var(--line); border-radius: 20px;
+  padding: 28px; text-align: center;
+}
+.join-card .btn { font-size: 15px; padding: 13px 30px; }
+.join-card p { color: var(--mut); font-size: 13.5px; margin-top: 14px; line-height: 1.75; }
+.join-card p b { color: var(--goldlt); }
+.btn-cyan { background: #1E5F6E; color: #D9F4FA; }
+.btn-sm { padding: 7px 14px; font-size: 12.5px; }
+
+.submit-inner, .mo-inner.submit-inner { max-width: 560px; text-align: left; }
+.submit-inner .sec-kicker, .submit-inner .sec-title, .submit-inner .mo-desc { text-align: center; }
+.submit-box { background: var(--bg2); border: 1px solid var(--line); border-radius: 20px; padding: 26px; }
+.submit-list { list-style: none; margin-bottom: 20px; }
+.submit-list li { padding: 6px 0; font-size: 14.5px; color: var(--ink); }
+.submit-list b { color: var(--goldlt); }
+.submit-mail {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--bg); border: 1px dashed var(--line); border-radius: 12px;
+  padding: 10px 14px; margin-bottom: 14px;
+}
+.mail-addr { font-weight: 700; font-size: 14.5px; color: var(--ink); word-break: break-all; }
+.submit-box .btn-gold { display: block; text-align: center; }
+.submit-note { font-size: 12.5px; color: var(--mut); margin-top: 12px; text-align: center; }
 
 footer { border-top: 1px solid var(--line); padding: 34px 0; font-size: 13px; color: var(--mut); }
 footer .foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; align-items: baseline; }
@@ -218,5 +233,6 @@ footer a { color: var(--goldlt); }
   .detail-card { grid-template-columns: 1fr; padding: 24px; }
   .detail-cover { max-width: 210px; }
   .about-grid { grid-template-columns: 1fr; }
+  .join-grid { grid-template-columns: 1fr; }
   .shelf { padding: 0 10px; }
 }

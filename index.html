@@ -63,11 +63,44 @@
     </div>
     <div class="stat-row">
       <div class="stat"><div class="num">13</div><div class="label">서재의 책</div></div>
+      <div class="stat"><div class="num">14</div><div class="label">소속 작가</div></div>
       <div class="stat"><div class="num">9</div><div class="label">공개된 독자 미션</div></div>
       <div class="stat"><div class="num">2023</div><div class="label">첫 책 출간</div></div>
     </div>
   </div>
+  <div class="wrap join-grid">
+    <div class="join-card">
+      <button class="btn btn-gold" id="openSubmit">✉️ 원고 투고하기</button>
+      <p>완성된 원고나 기획안이 있다면 첨부파일과 함께 대표메일로 보내주세요. 검토 후 출간 여부를 직접 연락드립니다.</p>
+    </div>
+    <div class="join-card">
+      <a class="btn btn-cyan" href="https://gloja-academy.vercel.app/login" target="_blank" rel="noopener">✍️ 나도 작가 되기</a>
+      <p>한 문단의 글만 쓰면 AI가 자동으로 책으로 편집해 드려요. 페이지당 인세를 받는 작가에 도전하세요 — <b>글로자 아카데미</b>.</p>
+    </div>
+  </div>
 </section>
+
+<div id="submitOverlay" class="mission-overlay" hidden>
+  <div class="mo-inner submit-inner">
+    <button class="mo-close" id="soClose" aria-label="닫기">✕</button>
+    <div class="sec-kicker">SUBMIT YOUR MANUSCRIPT</div>
+    <h2 class="sec-title serif">원고 투고하기</h2>
+    <p class="mo-desc">아웃오브박스는 언제나 새로운 이야기를 기다립니다.<br />아래 내용을 담아 <b>첨부파일과 함께</b> 대표메일로 보내주세요.</p>
+    <div class="submit-box">
+      <ul class="submit-list">
+        <li>📄 <b>원고 파일</b> — 완성 원고 또는 샘플 원고 (hwp · docx · pdf)</li>
+        <li>📝 <b>기획 소개</b> — 어떤 책인지, 누구를 위한 책인지 한두 문단</li>
+        <li>👤 <b>작가 소개와 연락처</b></li>
+      </ul>
+      <div class="submit-mail">
+        <span class="mail-addr" id="mailAddr">hasung4001@gmail.com</span>
+        <button class="btn btn-line btn-sm" id="copyMail">주소 복사</button>
+      </div>
+      <a class="btn btn-gold" id="mailtoBtn" href="mailto:hasung4001@gmail.com?subject=%5B%EC%9B%90%EA%B3%A0%20%ED%88%AC%EA%B3%A0%5D%20&body=%EC%B1%85%20%EC%A0%9C%EB%AA%A9%2F%EA%B0%80%EC%A0%9C%3A%0A%EA%B8%B0%ED%9A%8D%20%EC%86%8C%EA%B0%9C%3A%0A%EC%9E%91%EA%B0%80%20%EC%86%8C%EA%B0%9C%EC%99%80%20%EC%97%B0%EB%9D%BD%EC%B2%98%3A%0A%0A%E2%80%BB%20%EC%9B%90%EA%B3%A0%20%ED%8C%8C%EC%9D%BC%EC%9D%84%20%EC%B2%A8%EB%B6%80%ED%95%B4%20%EC%A3%BC%EC%84%B8%EC%9A%94.">메일 앱 열고 투고하기 →</a>
+      <p class="submit-note">버튼을 누르면 메일 앱이 열립니다 — 원고 파일을 첨부해서 보내주세요. 검토에는 2~3주가 걸릴 수 있어요.</p>
+    </div>
+  </div>
+</div>
 
 <footer>
   <div class="wrap foot">
@@ -211,10 +244,9 @@ const BOOKS = [
 /* ── 책장 렌더 ── */
 const shelfEl = document.getElementById("shelfEl");
 shelfEl.innerHTML = BOOKS.map((b, i) => `
-  <div class="book${b.tilt ? " tilt" : ""}${b.mission ? " has-mission" : ""}" data-i="${i}"
+  <div class="book${b.tilt ? " tilt" : ""}" data-i="${i}"
     style="--sc:${b.sc}; --st:${b.st}; --sh:${b.sh}px; --sw:${b.sw}px; --sf:${b.sf}px; --fw:${Math.round(b.sh / (RATIOS[b.slug] || 1.4))}px">
     <div class="spine">
-      ${b.mission ? '<span class="band">MISSION</span>' : ""}
       <span class="t serif">${b.title}</span>
       <span class="a">${b.author}</span>
       <span class="m">OUTOFBOX</span>
@@ -294,7 +326,17 @@ document.getElementById("navMission").addEventListener("click", (e) => { e.preve
 function moHide() { moEl.hidden = true; document.body.style.overflow = ""; }
 document.getElementById("moClose").addEventListener("click", moHide);
 moEl.addEventListener("click", (e) => { if (e.target === moEl) moHide(); });
-document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !moEl.hidden) moHide(); });
+/* ── 원고 투고 팝업 ── */
+const soEl = document.getElementById("submitOverlay");
+document.getElementById("openSubmit").addEventListener("click", () => { soEl.hidden = false; document.body.style.overflow = "hidden"; });
+function soHide() { soEl.hidden = true; document.body.style.overflow = ""; }
+document.getElementById("soClose").addEventListener("click", soHide);
+soEl.addEventListener("click", (e) => { if (e.target === soEl) soHide(); });
+document.getElementById("copyMail").addEventListener("click", async (e) => {
+  try { await navigator.clipboard.writeText(document.getElementById("mailAddr").textContent.trim()); e.target.textContent = "복사됨 ✓"; setTimeout(() => e.target.textContent = "주소 복사", 1600); } catch { /* noop */ }
+});
+
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") { if (!moEl.hidden) moHide(); if (!soEl.hidden) soHide(); } });
 
 shelfEl.addEventListener("click", (e) => {
   const bookEl = e.target.closest(".book");
