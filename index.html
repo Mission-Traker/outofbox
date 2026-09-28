@@ -20,7 +20,7 @@
     <nav class="nav-links">
       <a href="#shelf">서재</a>
       <a href="#about">출판사 소개</a>
-      <a href="https://mentoring-university-2.vercel.app/homo-ambidex" target="_blank" rel="noopener">미션 웹 ↗</a>
+      <a href="#" id="navMission">미션 웹</a>
     </nav>
   </div>
 </header>
@@ -79,8 +79,27 @@
   </div>
 </footer>
 
+<div id="missionOverlay" class="mission-overlay" hidden>
+  <div class="mo-inner">
+    <button class="mo-close" id="moClose" aria-label="닫기">✕</button>
+    <div class="sec-kicker">MISSION BOOKS</div>
+    <h2 class="sec-title serif">미션이 있는 책들</h2>
+    <p class="mo-desc">읽는 데서 끝나지 않는 책들입니다. 책을 클릭하면 그 책의 미션 웹으로 이동해요.</p>
+    <div class="mo-grid" id="moGrid"></div>
+  </div>
+</div>
+
 <script>
-const MISSION_URL = "https://mentoring-university-2.vercel.app/homo-ambidex";
+const HA_MISSION_URL = "https://mentoring-university-2.vercel.app/homo-ambidex";
+const MU_MISSION_URL = "https://mentoring-university-2.vercel.app/";
+
+/* 표지 실측 비율(h/w) — 정면일 때 표지가 잘리지 않도록 폭 계산에 사용 */
+const RATIOS = {
+  "homo-ambidex": 1.4017, "192495663": 1.4184, "189528188": 1.6043, "183234736": 1.6438,
+  "170526498": 1.6349, "154723991": 1.4035, "146524508": 1.4002, "143830983": 1.4002,
+  "142637821": 1.6216, "133199376": 1.4218, "127972671": 1.4184, "126438110": 1.4201,
+  "122490082": 1.3825,
+};
 
 /* 미션 목록 (호모 앰비덱스) */
 const MISSIONS = [
@@ -100,7 +119,7 @@ const MISSIONS = [
 const BOOKS = [
   { slug: "homo-ambidex", cover: "covers/homo-ambidex.jpg",
     title: "호모 앰비덱스", author: "윤성화", year: "출간 준비 중",
-    cat: "자기계발 · AI시대 생존법", mission: true, tilt: true,
+    cat: "자기계발 · AI시대 생존법", mission: true, missionUrl: HA_MISSION_URL, tilt: true,
     sc: "#15151D", st: "#35C8E8", sh: 300, sw: 58, sf: 17,
     desc: "AI시대 양손잡이 신인류가 생존하는 10가지 방법. 한 손에는 나의 코어, 다른 손에는 AI — 한 장을 읽을 때마다 '나의 것'으로 바꾸는 독자 미션이 웹에서 기다립니다. 지금 9개의 미션이 공개되어 있어요." },
   { slug: "192495663", cover: "covers/192495663.jpg",
@@ -133,7 +152,7 @@ const BOOKS = [
     intro: ["『기록이 날 구원할지도 몰라』는 '잘 기록하는 법'을 알려주는 책이 아니다. 대신 기록을 하며 살아온 한 사람의 마음을 따라가는 에세이다. 매일 쓰지 못한 날들, 쓰다 만 다이어리, 빈칸으로 남겨진 페이지 앞에서 느꼈던 죄책감까지. 이 책은 그런 순간들을 실패로 규정하지 않는다.", "작가는 기록을 목표나 성취의 수단이 아니라, 자신을 판단하지 않고 곁에 남아 있던 존재로 이야기한다. 기록 덕분에 인생이 달라지지는 않았지만, 감당하기 힘든 날들을 지나올 수 있었다는 고백은 기록을 대하는 태도 자체를 바꾸어 놓는다."] },
   { slug: "154723991", cover: "covers/154723991.jpg",
     title: "그래서 제가 어떻게 쉬면 되나요?", author: "윤성화", year: "2025",
-    cat: "자기계발", buy: "https://www.yes24.com/product/goods/154723991",
+    cat: "자기계발", buy: "https://www.yes24.com/product/goods/154723991", mission: true, missionUrl: MU_MISSION_URL,
     sc: "#6E7034", st: "#F5F0DC", sh: 292, sw: 57, sf: 13.5,
     desc: "번아웃의 시대, 진짜 휴식을 찾기 위한 10단계 로드맵. 나의 특성에 맞는 휴식을 설계해 삶의 활력을 회복하도록 안내합니다.",
     quote: "휴식은 '더 나은 나를 위한 필수 조건'이자 '존재의 예술'",
@@ -168,7 +187,7 @@ const BOOKS = [
     intro: ["반려묘 도도와 슬로 집사의 우당탕탕 현실 동거 이야기.", "이 책은 깊은 우울과 무기력에 빠져있던 작가가 버려진 고양이 '도도'를 데려와 동거하는 지난 4년의 이야기가 담겨있다. 작가는 도도를 만나기 전과 후의 삶이 크게 달라졌다고 말하며, 작고 연약한 존재가 집사에게 끼친 영향을 고스란히 담고자 했다. 귀엽게 생긴 외모와 다르게 행동은 결코 귀엽지 않은 도도의 이야기에 작가 특유의 위트가 묻어있다."] },
   { slug: "127972671", cover: "covers/127972671.jpg",
     title: "그래서 제가 뭘 하면 되나요?", author: "윤성화", year: "2024 개정판",
-    cat: "진로 · 자기계발", buy: "https://www.yes24.com/product/goods/127972671",
+    cat: "진로 · 자기계발", buy: "https://www.yes24.com/product/goods/127972671", mission: true, missionUrl: MU_MISSION_URL,
     sc: "#F1E5BC", st: "#6B4E1E", sh: 296, sw: 58, sf: 13.5,
     desc: "15년 경력의 진로 교육가가 안내하는 자아발견·비전발견·멘토발견의 3단계 로드맵. 청년들이 자신의 중심을 잡고 실질적인 변화를 이루도록 돕는 책입니다.",
     quote: "책장을 덮고 나면 가슴이 뛸 것이다! 변화된 내 모습이 선명하게 그려질 테니까!",
@@ -182,7 +201,7 @@ const BOOKS = [
     intro: ["하나님과 진짜 동행하는 삶을 살아간다는 것에 대해 말하다.", "이 책은 부부가 하나의 비전을 품고 나아가면서 능력 밖의 문제들을 허락하시는 하나님을 의지하며 기꺼이 하나님의 부르심에 동참하고자 하는 이야기를 담았다. 성숙한 크리스천으로 성장하는 과정이 생각만큼 쉽지 않지만 '감사'하며 나아갈 수 있는 이유와 방법을 소개하고자 한다."] },
   { slug: "122490082", cover: "covers/122490082.jpg",
     title: "12 POWERS", author: "윤성화 · 최대열", year: "2023",
-    cat: "자기계발", buy: "https://www.yes24.com/product/goods/122490082",
+    cat: "자기계발", buy: "https://www.yes24.com/product/goods/122490082", mission: true, missionUrl: MU_MISSION_URL,
     sc: "#231917", st: "#C9A24B", sh: 278, sw: 56, sf: 16,
     desc: "12가지 자기성장의 법칙. 체력, 자기통제력, 사색력 — 나다운 삶을 세우는 12가지 성장 역량을 진로직업교육 전문가와 취업컨설턴트가 안내합니다.",
     quote: "살면서 가장 후회되는 순간으로 다시 돌아갈 수 있다면?",
@@ -192,17 +211,17 @@ const BOOKS = [
 /* ── 책장 렌더 ── */
 const shelfEl = document.getElementById("shelfEl");
 shelfEl.innerHTML = BOOKS.map((b, i) => `
-  <div class="book${b.tilt ? " tilt" : ""}" data-i="${i}"
-    style="--sc:${b.sc}; --st:${b.st}; --sh:${b.sh}px; --sw:${b.sw}px; --sf:${b.sf}px">
+  <div class="book${b.tilt ? " tilt" : ""}${b.mission ? " has-mission" : ""}" data-i="${i}"
+    style="--sc:${b.sc}; --st:${b.st}; --sh:${b.sh}px; --sw:${b.sw}px; --sf:${b.sf}px; --fw:${Math.round(b.sh / (RATIOS[b.slug] || 1.4))}px">
     <div class="spine">
-      ${b.mission ? '<span class="mtag">MISSION</span>' : ""}
+      ${b.mission ? '<span class="band">MISSION</span>' : ""}
       <span class="t serif">${b.title}</span>
       <span class="a">${b.author}</span>
       <span class="m">OUTOFBOX</span>
     </div>
     <div class="face">
       <img src="${b.cover}" alt="${b.title} 표지" loading="lazy" />
-      ${b.mission ? `<a class="mission-tag" href="${MISSION_URL}" target="_blank" rel="noopener" onclick="event.stopPropagation()">미션 페이지 →</a>` : ""}
+      ${b.mission ? `<a class="mission-tag" href="${b.missionUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">미션 페이지 →</a>` : ""}
     </div>
   </div>
 `).join("");
@@ -244,15 +263,13 @@ function openDetail(i) {
         <div class="meta">${b.author} 지음 · ${b.year} · 아웃오브박스</div>
         ${b.quote ? `<div class="pull serif">${b.quote}</div>` : ""}
         ${(b.intro || [b.desc]).map(p => `<p class="desc">${p}</p>`).join("")}
-        ${b.mission ? `
+        ${b.slug === "homo-ambidex" ? `
           <p class="desc" style="color:var(--mut); font-size:14px;">📖 책의 한 장이 끝날 때마다 독자 미션이 하나씩 열립니다 — 닉네임+PIN만으로 시작해요.</p>
-          ${missionGridHtml()}
-          <div class="btn-row">
-            <a class="btn btn-gold" href="${MISSION_URL}" target="_blank" rel="noopener">미션 페이지로 이동하기 →</a>
-          </div>` : `
-          <div class="btn-row">
-            <a class="btn btn-gold" href="${b.buy}" target="_blank" rel="noopener">구매하러 가기 →</a>
-          </div>`}
+          ${missionGridHtml()}` : ""}
+        <div class="btn-row">
+          ${b.buy ? `<a class="btn ${b.mission ? "btn-line" : "btn-gold"}" href="${b.buy}" target="_blank" rel="noopener">구매하러 가기 →</a>` : ""}
+          ${b.mission ? `<a class="btn btn-gold" href="${b.missionUrl}" target="_blank" rel="noopener">미션 페이지로 이동하기 →</a>` : ""}
+        </div>
       </div>
     </div>`;
   detail.classList.add("show");
@@ -264,6 +281,20 @@ function closeDetail() {
   activeIdx = null;
   document.querySelectorAll(".book").forEach((el) => el.classList.remove("active", "front"));
 }
+
+/* ── 미션 서가 오버레이 ── */
+const moEl = document.getElementById("missionOverlay");
+document.getElementById("moGrid").innerHTML = BOOKS.filter(b => b.mission).map(b => `
+  <a class="mo-card" href="${b.missionUrl}" target="_blank" rel="noopener">
+    <img src="${b.cover}" alt="${b.title} 표지" />
+    <div class="mo-title serif">${b.title}</div>
+    <div class="mo-go">미션 웹으로 이동 →</div>
+  </a>`).join("");
+document.getElementById("navMission").addEventListener("click", (e) => { e.preventDefault(); moEl.hidden = false; document.body.style.overflow = "hidden"; });
+function moHide() { moEl.hidden = true; document.body.style.overflow = ""; }
+document.getElementById("moClose").addEventListener("click", moHide);
+moEl.addEventListener("click", (e) => { if (e.target === moEl) moHide(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !moEl.hidden) moHide(); });
 
 shelfEl.addEventListener("click", (e) => {
   const bookEl = e.target.closest(".book");
