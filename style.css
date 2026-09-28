@@ -1,0 +1,184 @@
+:root {
+  --bg: #101216;
+  --bg2: #16181D;
+  --ink: #F2EFE8;
+  --mut: #9BA0AA;
+  --line: #262A31;
+  --gold: #C9903A;
+  --goldlt: #E3B76E;
+  --cyan: #35C8E8;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "Noto Sans KR", sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.8;
+}
+.serif { font-family: "Noto Serif KR", serif; }
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+.wrap { max-width: 1140px; margin: 0 auto; padding: 0 20px; }
+
+/* ── 헤더 ── */
+header { position: sticky; top: 0; z-index: 50; background: rgba(16,18,22,.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; }
+.logo { display: flex; align-items: baseline; gap: 10px; }
+.logo .mark { font-family: "Noto Serif KR", serif; font-weight: 900; font-size: 20px; }
+.logo .mark b { color: var(--goldlt); }
+.logo .en { font-size: 10px; letter-spacing: .38em; color: var(--mut); font-weight: 700; }
+.nav-links { display: flex; gap: 22px; font-size: 14px; }
+.nav-links a { color: var(--mut); font-weight: 500; }
+.nav-links a:hover { color: var(--goldlt); }
+
+/* ── 인트로 ── */
+.intro { padding: 68px 0 8px; text-align: center; }
+.intro .kicker { font-size: 11px; letter-spacing: .45em; color: var(--gold); font-weight: 700; margin-bottom: 14px; }
+.intro h1 { font-family: "Noto Serif KR", serif; font-size: clamp(26px, 4vw, 40px); font-weight: 900; line-height: 1.45; }
+.intro h1 em { font-style: normal; color: var(--goldlt); }
+.intro p { color: var(--mut); margin-top: 12px; font-size: 15px; }
+.hint { margin-top: 6px; font-size: 13px; color: var(--mut); }
+.hint b { color: var(--goldlt); font-weight: 700; }
+
+/* ── 책장 ── */
+.shelf-zone { padding: 44px 0 0; }
+.shelf-scroll { overflow-x: auto; overflow-y: hidden; padding: 40px 8px 0; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+.shelf {
+  display: flex; align-items: flex-end; gap: 7px;
+  min-width: max-content; margin: 0 auto; padding: 0 14px;
+  width: fit-content;
+}
+.board {
+  height: 14px; border-radius: 3px;
+  background: linear-gradient(180deg, #2E323A, #1C1F25);
+  box-shadow: 0 14px 34px rgba(0,0,0,.55);
+  max-width: 1140px; margin: 0 auto;
+}
+.board-wrap { padding: 0 20px; }
+
+/* 책 한 권 */
+.book {
+  position: relative; flex: 0 0 auto;
+  width: var(--sw, 52px); height: var(--sh, 280px);
+  border-radius: 4px 6px 6px 4px;
+  cursor: pointer;
+  transition: width .42s cubic-bezier(.22,.9,.3,1), transform .42s cubic-bezier(.22,.9,.3,1), box-shadow .3s;
+  box-shadow: 2px 0 6px rgba(0,0,0,.45);
+  transform-origin: bottom center;
+  overflow: hidden;
+  background: var(--sc, #333);
+}
+.book:hover, .book.front { width: calc(var(--sh) * 0.72); transform: rotate(0deg) translateY(-10px); box-shadow: 0 18px 40px rgba(0,0,0,.6); z-index: 5; }
+.book.tilt { transform: rotate(4.5deg); margin: 0 14px 0 10px; }
+.book.tilt:hover, .book.tilt.front { transform: rotate(0deg) translateY(-10px); }
+.book.active { outline: 2px solid var(--goldlt); outline-offset: 3px; }
+
+/* 책등 면 */
+.spine {
+  position: absolute; inset: 0; padding: 14px 0 10px;
+  display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+  background: var(--sc); color: var(--st);
+  transition: opacity .3s .06s;
+}
+.spine .t {
+  writing-mode: vertical-rl; text-orientation: mixed;
+  font-family: "Noto Serif KR", serif; font-weight: 900;
+  font-size: var(--sf, 15px); letter-spacing: .06em; line-height: 1.2;
+  max-height: 74%; overflow: hidden; white-space: nowrap;
+}
+.spine .a { writing-mode: vertical-rl; font-size: 10px; opacity: .75; margin-top: 8px; max-height: 16%; overflow: hidden; white-space: nowrap; }
+.spine .m { font-size: 7px; letter-spacing: .12em; opacity: .6; font-weight: 700; }
+.spine .mtag { font-size: 8px; letter-spacing: .3em; font-weight: 700; color: var(--cyan); margin-bottom: 4px; }
+
+/* 정면(표지) 면 */
+.face { position: absolute; inset: 0; opacity: 0; transition: opacity .34s .1s; }
+.book:hover .face, .book.front .face { opacity: 1; }
+.book:hover .spine, .book.front .spine { opacity: 0; }
+.face img { width: 100%; height: 100%; object-fit: cover; }
+.face .mission-tag {
+  position: absolute; right: 8px; bottom: 8px;
+  background: var(--gold); color: #fff; font-size: 11px; font-weight: 700;
+  border-radius: 999px; padding: 5px 12px; box-shadow: 0 4px 12px rgba(0,0,0,.4);
+}
+.face .mission-tag:hover { background: var(--goldlt); color: #16181D; }
+
+/* MISSION 리본(책등 상태에서도 표시) */
+.ribbon {
+  position: absolute; top: -26px; left: 50%; transform: translateX(-50%);
+  font-size: 9px; letter-spacing: .28em; font-weight: 700; color: var(--cyan);
+  white-space: nowrap;
+}
+
+/* ── 상세 패널 ── */
+.detail-zone { padding: 46px 0 20px; }
+#detail { display: none; scroll-margin-top: 92px; }
+#detail.show { display: block; animation: rise .4s ease; }
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+.detail-card {
+  background: var(--bg2); border: 1px solid var(--line); border-radius: 24px;
+  padding: 38px; display: grid; grid-template-columns: 250px 1fr; gap: 38px;
+  position: relative;
+}
+.detail-card .close {
+  position: absolute; top: 18px; right: 22px; background: none; border: none;
+  color: var(--mut); font-size: 20px; cursor: pointer;
+}
+.detail-card .close:hover { color: var(--ink); }
+.detail-cover img { border-radius: 10px; box-shadow: 0 16px 40px rgba(0,0,0,.5); }
+.detail-info .cat { font-size: 11px; letter-spacing: .3em; color: var(--gold); font-weight: 700; margin-bottom: 8px; }
+.detail-info h3 { font-family: "Noto Serif KR", serif; font-size: 27px; font-weight: 900; line-height: 1.4; margin-bottom: 6px; }
+.detail-info .meta { color: var(--mut); font-size: 14px; margin-bottom: 16px; }
+.detail-info .desc { color: var(--ink); margin-bottom: 14px; max-width: 640px; font-size: 15px; color: #CFD3DA; }
+.detail-info .desc:last-of-type { margin-bottom: 22px; }
+.detail-info .pull {
+  border-left: 3px solid var(--gold); padding: 4px 0 4px 16px; margin: 4px 0 18px;
+  font-weight: 900; font-size: 17px; line-height: 1.6; color: var(--goldlt); max-width: 640px;
+}
+.btn {
+  display: inline-block; border-radius: 999px; padding: 11px 24px;
+  font-weight: 700; font-size: 14px; transition: opacity .15s; cursor: pointer;
+}
+.btn:hover { opacity: .85; }
+.btn-gold { background: var(--gold); color: #fff; }
+.btn-line { border: 1.5px solid var(--line); color: var(--ink); }
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* 미션 그리드 (호모 앰비덱스 상세) */
+.mission-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 9px; margin: 18px 0 20px; }
+.mission-card { background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 10px 13px; font-size: 12.5px; line-height: 1.5; }
+.mission-card b { display: block; font-size: 13.5px; color: var(--ink); }
+.mission-card .ch { color: var(--goldlt); font-weight: 700; font-size: 10.5px; letter-spacing: .1em; }
+.mission-card.locked { opacity: .45; }
+
+/* ── 소개 ── */
+.about { border-top: 1px solid var(--line); margin-top: 60px; padding: 60px 0; }
+.about-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: start; }
+.sec-kicker { font-size: 11px; letter-spacing: .35em; color: var(--gold); font-weight: 700; margin-bottom: 8px; }
+.sec-title { font-family: "Noto Serif KR", serif; font-size: 26px; font-weight: 900; margin-bottom: 14px; }
+.about p { color: var(--mut); margin-bottom: 12px; }
+.about p b { color: var(--ink); }
+.stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.stat { background: var(--bg2); border: 1px solid var(--line); border-radius: 16px; padding: 18px; text-align: center; }
+.stat .num { font-family: "Noto Serif KR", serif; font-size: 28px; font-weight: 900; color: var(--goldlt); }
+.stat .label { font-size: 12.5px; color: var(--mut); }
+
+footer { border-top: 1px solid var(--line); padding: 34px 0; font-size: 13px; color: var(--mut); }
+footer .foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; align-items: baseline; }
+footer .brand { font-family: "Noto Serif KR", serif; font-weight: 900; color: var(--ink); }
+footer a { color: var(--goldlt); }
+
+.hint .mo { display: none; }
+@media (max-width: 760px) {
+  .hint .pc { display: none; }
+  .hint .mo { display: inline; }
+  .logo .mark { font-size: 17px; white-space: nowrap; }
+  .logo .en { display: none; }
+  .nav-links { gap: 14px; font-size: 13px; white-space: nowrap; }
+  .intro { padding-top: 44px; }
+  .book { --sh: 232px !important; }
+  .detail-card { grid-template-columns: 1fr; padding: 24px; }
+  .detail-cover { max-width: 210px; }
+  .about-grid { grid-template-columns: 1fr; }
+  .shelf { padding: 0 10px; }
+}
