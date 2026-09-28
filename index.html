@@ -347,7 +347,7 @@ function soHide() { soEl.hidden = true; document.body.style.overflow = ""; }
 document.getElementById("soClose").addEventListener("click", soHide);
 soEl.addEventListener("click", (e) => { if (e.target === soEl) soHide(); });
 /* 투고 폼 — FormSubmit로 대표메일에 바로 접수 (메일 앱 불필요) */
-const SF_ENDPOINT = "https://formsubmit.co/ajax/hasung4001@gmail.com";
+const SF_ENDPOINT = "https://formsubmit.co/ajax/de7e57f783d123de6abd0484256cb851";
 document.getElementById("submitForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const form = e.target;
