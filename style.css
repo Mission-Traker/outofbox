@@ -116,9 +116,38 @@ header { position: sticky; top: 0; z-index: 50; background: rgba(16,18,22,.92); 
 @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
 .detail-card {
   background: var(--bg2); border: 1px solid var(--line); border-radius: 24px;
-  padding: 38px; display: grid; grid-template-columns: 250px 1fr; gap: 38px;
-  position: relative;
+  padding: 38px; position: relative;
 }
+.detail-body { display: grid; grid-template-columns: 250px 1fr; gap: 38px; }
+
+/* ── 생생 구매 후기 ── */
+.rv-zone { max-width: 640px; margin: 0 auto 36px; }
+.rv-head { text-align: center; margin-bottom: 20px; }
+.rv-badge {
+  display: inline-block; background: var(--gold); color: #fff;
+  font-size: 11px; font-weight: 800; letter-spacing: .18em;
+  border-radius: 999px; padding: 6px 16px; margin-bottom: 10px;
+}
+.rv-head h4 { font-size: 24px; font-weight: 900; color: var(--ink); }
+.rv-card { border-radius: 20px; padding: 18px 20px 14px; margin-bottom: 14px; box-shadow: 0 8px 22px rgba(0,0,0,.3); }
+.rv-card.rv-v0 { background: linear-gradient(135deg, #24406B, #1C3A5E); border: 1px solid #2E4C7A; }
+.rv-card.rv-v1 { background: linear-gradient(135deg, #8A6320, #6E4E18); border: 1px solid #A97C33; }
+.rv-card.rv-v2 { background: var(--bg); border: 1.5px dashed var(--gold); box-shadow: none; }
+.rv-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.rv-ava {
+  flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 13px; color: #fff;
+}
+.rv-card.rv-v2 .rv-ava { background: var(--bg2); border-color: var(--gold); color: var(--goldlt); }
+.rv-id { font-weight: 700; font-size: 13.5px; color: #fff; flex: 1; }
+.rv-card.rv-v2 .rv-id { color: var(--ink); }
+.rv-stars { color: #FFD34D; font-size: 14px; letter-spacing: .1em; }
+.rv-text { font-size: 14.5px; line-height: 1.8; color: rgba(255,255,255,.95); margin-bottom: 8px; }
+.rv-card.rv-v2 .rv-text { color: var(--ink); }
+.rv-src { font-size: 11px; color: rgba(255,255,255,.55); letter-spacing: .06em; }
+.rv-card.rv-v2 .rv-src { color: var(--mut); }
 .detail-card .close {
   position: absolute; top: 18px; right: 22px; background: none; border: none;
   color: var(--mut); font-size: 20px; cursor: pointer;
@@ -247,7 +276,8 @@ footer a { color: var(--goldlt); }
   .logo .en { display: none; }
   .nav-links { gap: 14px; font-size: 13px; white-space: nowrap; }
   .intro { padding-top: 44px; }
-  .detail-card { grid-template-columns: 1fr; padding: 24px; }
+  .detail-card { padding: 24px; }
+  .detail-body { grid-template-columns: 1fr; }
   .detail-cover { max-width: 210px; }
   .about-grid { grid-template-columns: 1fr; }
   .join-grid { grid-template-columns: 1fr; }
