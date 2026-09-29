@@ -127,6 +127,12 @@ td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
     </section>
 
     <section class="panel">
+      <h3>👥 작가 권한 관리</h3>
+      <p class="hint">간편로그인으로 한 번이라도 로그인한 회원 목록 · 「작가 지정」을 누르면 그 회원이 홈페이지 「작가의 오늘」에 직접 글을 쓸 수 있어요</p>
+      <div id="authorAdmin"></div>
+    </section>
+
+    <section class="panel">
       <h3>💌 작가 답글을 기다리는 글</h3>
       <p class="hint">작가 답글이 아직 없는 방명록·도서 댓글 — 홈페이지에서 답글을 달면 독자에게 알림이 갑니다</p>
       <div id="unansweredList"></div>
@@ -306,14 +312,37 @@ async function loadDash() {
       ? sessions.slice(0, 20).map(s => `<tr><td>${fmtDT(s.started)}</td><td>${esc(s.nickname)}</td><td class="num">${fmtDur(s.seconds)}</td><td class="num">${s.events}</td></tr>`).join("")
       : `<tr><td colspan="4" class="empty">아직 세션이 없어요.</td></tr>`);
 
-  loadModeration(); loadAuthorAdmin(); loadUnanswered();
+  loadModeration(); loadAuthorAdmin(); loadUnanswered(); loadAuthors();
+}
+
+/* ── 작가 권한 관리 ── */
+async function loadAuthors() {
+  const { data } = await sb.from("ob_profiles")
+    .select("id, nickname, avatar_url, is_author, is_admin, created_at, provider")
+    .order("created_at", { ascending: false }).limit(200);
+  const rows = data || [];
+  $("authorAdmin").innerHTML = rows.length
+    ? rows.map(p => `<div class="mod-card">
+        <span class="meta">${p.avatar_url ? `<img src="${esc(p.avatar_url)}" referrerpolicy="no-referrer" style="width:24px;height:24px;border-radius:50%;object-fit:cover;vertical-align:middle" />` : "🙂"}</span>
+        <span class="txt"><b>${esc(p.nickname || "독자")}</b> <span style="color:var(--mut);font-size:12px">${esc(p.provider || "")}</span>
+          ${p.is_admin ? ` <span style="color:var(--gold);font-size:12px;font-weight:700">👑 관리자</span>` : ""}${p.is_author ? ` <span style="color:var(--gold);font-size:12px;font-weight:700">✍️ 작가</span>` : ""}</span>
+        ${p.is_admin ? "" : `<button data-author="${p.id}" data-flag="${p.is_author ? "0" : "1"}">${p.is_author ? "작가 해제" : "작가 지정"}</button>`}
+      </div>`).join("")
+    : `<p class="empty">아직 로그인한 회원이 없어요 — 작가님들께 홈페이지에서 카카오/네이버 로그인을 한 번 해달라고 부탁해 주세요.</p>`;
+  document.querySelectorAll("#authorAdmin [data-author]").forEach(b => b.addEventListener("click", async () => {
+    const grant = b.dataset.flag === "1";
+    if (!confirm(grant ? "이 회원을 작가로 지정할까요? 「작가의 오늘」에 글을 쓸 수 있게 돼요." : "이 회원의 작가 권한을 해제할까요?")) return;
+    const { error } = await sb.rpc("ob_set_author", { target: b.dataset.author, flag: grant });
+    if (error) { alert("변경에 실패했어요: " + error.message); return; }
+    loadAuthors();
+  }));
 }
 
 /* ── 작가의 오늘 관리 ── */
 async function loadAuthorAdmin() {
-  const { data } = await sb.from("ob_author_posts").select("id, content, image_url, created_at").order("created_at", { ascending:false }).limit(20);
+  const { data } = await sb.from("ob_author_posts").select("id, content, image_url, created_at, profile:ob_profiles(nickname)").order("created_at", { ascending:false }).limit(20);
   $("afAdmin").innerHTML = (data && data.length)
-    ? data.map(p => `<div class="mod-card"><span class="meta">${fmtDT(p.created_at)}${p.image_url ? "<br />🖼 사진 포함" : ""}</span><span class="txt">${esc(p.content.length > 140 ? p.content.slice(0, 140) + "…" : p.content)}</span><button data-delpost="${p.id}">삭제</button></div>`).join("")
+    ? data.map(p => `<div class="mod-card"><span class="meta">${fmtDT(p.created_at)}<br /><b style="color:var(--ink)">${esc((p.profile && p.profile.nickname) || "작가")}</b>${p.image_url ? "<br />🖼 사진 포함" : ""}</span><span class="txt">${esc(p.content.length > 140 ? p.content.slice(0, 140) + "…" : p.content)}</span><button data-delpost="${p.id}">삭제</button></div>`).join("")
     : `<p class="empty">아직 게시한 글이 없어요 — 첫 이야기를 남겨 보세요.</p>`;
   document.querySelectorAll("#afAdmin [data-delpost]").forEach(b => b.addEventListener("click", async () => {
     if (!confirm("이 글을 삭제할까요? 달린 한마디와 좋아요도 함께 사라져요.")) return;
@@ -337,7 +366,7 @@ $("afPost").addEventListener("click", async () => {
       if (up.error) throw up.error;
       image_url = sb.storage.from("ob-posts").getPublicUrl(path).data.publicUrl;
     }
-    const ins = await sb.from("ob_author_posts").insert({ content: v, image_url });
+    const ins = await sb.from("ob_author_posts").insert({ content: v, image_url, user_id: user.id });
     if (ins.error) throw ins.error;
     $("afText").value = ""; $("afImg").value = "";
     loadAuthorAdmin();
@@ -350,14 +379,15 @@ $("afPost").addEventListener("click", async () => {
 /* ── 작가 답글을 기다리는 글 ── */
 async function loadUnanswered() {
   const [gb, cm] = await Promise.all([
-    sb.from("ob_guestbook").select("id, content, created_at, parent_id, profile:ob_profiles(nickname, is_admin)").order("created_at", { ascending:false }).limit(100),
-    sb.from("ob_book_comments").select("id, content, created_at, parent_id, book_slug, profile:ob_profiles(nickname, is_admin)").order("created_at", { ascending:false }).limit(100),
+    sb.from("ob_guestbook").select("id, content, created_at, parent_id, profile:ob_profiles(nickname, is_admin, is_author)").order("created_at", { ascending:false }).limit(100),
+    sb.from("ob_book_comments").select("id, content, created_at, parent_id, book_slug, profile:ob_profiles(nickname, is_admin, is_author)").order("created_at", { ascending:false }).limit(100),
   ]);
+  const isAu = (x) => x.profile && (x.profile.is_admin || x.profile.is_author);
   const build = (rows, label) => {
     const all = rows || [];
-    const answered = new Set(all.filter(x => x.parent_id && x.profile && x.profile.is_admin).map(x => x.parent_id));
+    const answered = new Set(all.filter(x => x.parent_id && isAu(x)).map(x => x.parent_id));
     return all
-      .filter(x => !x.parent_id && !(x.profile && x.profile.is_admin) && !answered.has(x.id))
+      .filter(x => !x.parent_id && !isAu(x) && !answered.has(x.id))
       .map(x => ({ ...x, label: label || "📕 " + (x.book_slug || "") }));
   };
   const list = [...build(gb.data, "📖 방명록"), ...build(cm.data, null)]

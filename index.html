@@ -55,6 +55,12 @@
     .af-cms{margin-top:12px;border-top:1px dashed var(--line);padding-top:12px}
     .af-cms[hidden]{display:none}
     .af-cm-form-wrap{margin-top:10px}
+    .gb-form.af-col{flex-direction:column;align-items:stretch;margin-bottom:24px}
+    .af-write-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+    .af-file-lb{cursor:pointer;color:var(--mut);font-size:13px;border:1px dashed var(--line);border-radius:10px;padding:9px 13px}
+    .af-file-lb:hover{color:var(--gold);border-color:var(--gold)}
+    .af-file-name{font-size:12px;color:var(--mut);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .af-write-row .btn{margin-left:auto}
     .cm-zone{margin-top:28px;border-top:1px dashed var(--line);padding-top:22px}
     .cm-badge{background:rgba(53,200,232,.12) !important;color:var(--cyan) !important}
     #obToast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:#22262E;color:var(--ink);border:1px solid var(--line);border-radius:24px;padding:10px 20px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:999;max-width:88vw}
@@ -183,7 +189,8 @@
   <div class="wrap">
     <div class="sec-kicker">AUTHOR'S DAY</div>
     <h2 class="sec-title serif">작가의 오늘</h2>
-    <p class="gb-desc">작가의 일상과 집필 근황 — 이 서재에서만 만날 수 있는 이야기입니다.</p>
+    <p class="gb-desc">작가들의 일상과 집필 근황 — 이 서재에서만 만날 수 있는 이야기입니다.</p>
+    <div id="afFormWrap"></div>
     <div id="afList"><p class="gb-empty">작가의 이야기를 불러오는 중…</p></div>
   </div>
 </section>
@@ -847,10 +854,10 @@ async function setUser(session) {
   obUser = session ? session.user : null;
   obProfile = null;
   if (obUser) {
-    const { data } = await sb.from("ob_profiles").select("nickname, avatar_url, is_admin").eq("id", obUser.id).maybeSingle();
-    obProfile = data || { nickname: "독자", avatar_url: "", is_admin: false };
+    const { data } = await sb.from("ob_profiles").select("nickname, avatar_url, is_admin, is_author").eq("id", obUser.id).maybeSingle();
+    obProfile = data || { nickname: "독자", avatar_url: "", is_admin: false, is_author: false };
   }
-  renderAuth(); renderGbForm(); refreshCommentForms(); loadGuestbook(); loadAuthorFeed(); checkNotifications();
+  renderAuth(); renderGbForm(); refreshCommentForms(); loadGuestbook(); renderAfForm(); loadAuthorFeed(); checkNotifications();
 }
 function renderAuth() {
   if (!obUser) {
@@ -908,7 +915,7 @@ function entryCard(g, table, foot, nested) {
       <div class="gb-top">
         ${ava ? `<img class="gb-ava" src="${esc(ava)}" alt="" referrerpolicy="no-referrer" />` : `<span class="gb-ava gb-ava-t">${esc(nick[0] || "독")}</span>`}
         <b>${esc(nick)}</b>
-        ${g.profile && g.profile.is_admin ? `<span class="gb-author-tag">✍️ 작가</span>` : ""}
+        ${g.profile && (g.profile.is_admin || g.profile.is_author) ? `<span class="gb-author-tag">✍️ 작가</span>` : ""}
         ${g.parent_id ? `<span class="gb-reply-tag">답글</span>` : ""}
         <span class="gb-date">${fmtDT(g.created_at)}</span>
         ${obUser && obUser.id === g.user_id ? `<button class="gb-del" data-del="${g.id}" data-table="${table}">삭제</button>` : ""}
@@ -920,6 +927,7 @@ function entryCard(g, table, foot, nested) {
 }
 function bindDelete(root, reload) {
   root.querySelectorAll("[data-del]").forEach((b) => b.addEventListener("click", async () => {
+    if (b.dataset.table === "ob_author_posts" && !confirm("이 글을 삭제할까요? 달린 한마디와 좋아요도 함께 사라져요.")) return;
     await sb.from(b.dataset.table).delete().eq("id", b.dataset.del);
     toast("삭제했어요."); reload();
   }));
@@ -962,7 +970,7 @@ function bindLikes(root, reload) {
 async function loadGuestbook() {
   if (!gbList) return;
   const { data, error } = await sb.from("ob_guestbook")
-    .select("id, content, created_at, user_id, parent_id, profile:ob_profiles(nickname, avatar_url, is_admin)")
+    .select("id, content, created_at, user_id, parent_id, profile:ob_profiles(nickname, avatar_url, is_admin, is_author)")
     .order("created_at", { ascending: true }).limit(200);
   if (error) { gbList.innerHTML = `<p class="gb-empty">방명록을 불러오지 못했어요.</p>`; return; }
   const parents = data.filter((g) => !g.parent_id).reverse();
@@ -1020,7 +1028,7 @@ async function loadComments(slug) {
   const zone = document.getElementById("cmList-" + slug);
   if (!zone) return;
   const { data, error } = await sb.from("ob_book_comments")
-    .select("id, content, created_at, user_id, parent_id, profile:ob_profiles(nickname, avatar_url, is_admin)")
+    .select("id, content, created_at, user_id, parent_id, profile:ob_profiles(nickname, avatar_url, is_admin, is_author)")
     .eq("book_slug", slug).order("created_at", { ascending: true }).limit(150);
   if (error) { zone.innerHTML = `<p class="gb-empty">댓글을 불러오지 못했어요.</p>`; return; }
   const parents = data.filter((c) => !c.parent_id).reverse();
@@ -1080,6 +1088,52 @@ function refreshCommentForms() {
 
 /* ── 작가의 오늘 (작가 피드) ── */
 const afList = document.getElementById("afList");
+const afFormWrap = document.getElementById("afFormWrap");
+async function afUploadImage(f) {
+  if (f.size > 5 * 1024 * 1024) throw new Error("사진은 5MB 이하만 올릴 수 있어요.");
+  const ext = ((f.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "")) || "jpg";
+  const path = Date.now() + "-" + Math.random().toString(36).slice(2, 8) + "." + ext;
+  const up = await sb.storage.from("ob-posts").upload(path, f, { contentType: f.type || "image/jpeg" });
+  if (up.error) throw up.error;
+  return sb.storage.from("ob-posts").getPublicUrl(path).data.publicUrl;
+}
+function renderAfForm() {
+  if (!afFormWrap) return;
+  if (!(obProfile && (obProfile.is_author || obProfile.is_admin))) { afFormWrap.innerHTML = ""; return; }
+  afFormWrap.innerHTML = `
+    <form class="gb-form af-col" id="afWriteForm">
+      <textarea id="afWriteText" rows="3" maxlength="2000" placeholder="${esc(obProfile.nickname || "작가")} 작가님, 오늘의 이야기를 남겨 주세요 (2000자)"></textarea>
+      <div class="af-write-row">
+        <label class="af-file-lb">📷 사진 첨부<input type="file" id="afWriteImg" accept="image/*" hidden /></label>
+        <span class="af-file-name" id="afWriteImgName"></span>
+        <button type="submit" class="btn btn-gold" data-tr="피드:게시">게시하기</button>
+      </div>
+    </form>`;
+  const fileInp = document.getElementById("afWriteImg");
+  fileInp.addEventListener("change", () => {
+    document.getElementById("afWriteImgName").textContent = fileInp.files[0] ? fileInp.files[0].name : "";
+  });
+  document.getElementById("afWriteForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const ta = document.getElementById("afWriteText");
+    const v = ta.value.trim();
+    if (!v) return;
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    try {
+      let image_url = null;
+      if (fileInp.files[0]) image_url = await afUploadImage(fileInp.files[0]);
+      const ins = await sb.from("ob_author_posts").insert({ content: v, image_url, user_id: obUser.id });
+      if (ins.error) throw ins.error;
+      ta.value = ""; fileInp.value = ""; document.getElementById("afWriteImgName").textContent = "";
+      toast("이야기가 게시됐어요 ✍️");
+      loadAuthorFeed();
+    } catch (err) {
+      toast("게시에 실패했어요: " + (err.message || err));
+    }
+    btn.disabled = false;
+  });
+}
 function afCommentFormHtml(postId) {
   return obUser
     ? `<form class="gb-form af-cm-form" data-post="${postId}">
@@ -1092,7 +1146,7 @@ async function loadAuthorFeed() {
   if (!afList) return;
   const openZones = new Set(Array.from(afList.querySelectorAll(".af-cms:not([hidden])")).map((z) => z.id));
   const { data, error } = await sb.from("ob_author_posts")
-    .select("id, content, image_url, created_at")
+    .select("id, content, image_url, created_at, user_id, profile:ob_profiles(nickname, avatar_url)")
     .order("created_at", { ascending: false }).limit(10);
   if (error) { afList.innerHTML = `<p class="gb-empty">이야기를 불러오지 못했어요.</p>`; return; }
   if (!data.length) { afList.innerHTML = `<p class="gb-empty">아직 첫 이야기가 준비 중이에요 — 곧 작가의 일상이 열립니다 ✍️</p>`; return; }
@@ -1100,7 +1154,7 @@ async function loadAuthorFeed() {
   const [likeMap, cms] = await Promise.all([
     fetchLikes("post", ids),
     sb.from("ob_post_comments")
-      .select("id, post_id, content, created_at, user_id, profile:ob_profiles(nickname, avatar_url, is_admin)")
+      .select("id, post_id, content, created_at, user_id, profile:ob_profiles(nickname, avatar_url, is_admin, is_author)")
       .in("post_id", ids).order("created_at", { ascending: true }).limit(300),
   ]);
   const cmMap = {};
@@ -1112,9 +1166,10 @@ async function loadAuthorFeed() {
     return `
     <div class="gb-card af-card">
       <div class="gb-top">
-        <span class="gb-ava gb-ava-t">✍️</span>
-        <b>윤멘토</b><span class="gb-author-tag">✍️ 작가</span>
+        ${p.profile && p.profile.avatar_url ? `<img class="gb-ava" src="${esc(p.profile.avatar_url)}" alt="" referrerpolicy="no-referrer" />` : `<span class="gb-ava gb-ava-t">✍️</span>`}
+        <b>${esc((p.profile && p.profile.nickname) || "아웃오브박스")}</b><span class="gb-author-tag">✍️ 작가</span>
         <span class="gb-date">${fmtDT(p.created_at)}</span>
+        ${obUser && (obUser.id === p.user_id || (obProfile && obProfile.is_admin)) ? `<button class="gb-del" data-del="${p.id}" data-table="ob_author_posts">삭제</button>` : ""}
       </div>
       <p class="af-text">${esc(p.content)}</p>
       ${p.image_url ? `<img class="af-img" src="${esc(p.image_url)}" alt="" loading="lazy" />` : ""}
