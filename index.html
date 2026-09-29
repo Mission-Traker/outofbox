@@ -70,6 +70,7 @@
     .ds-inner .sec-kicker{margin-top:8px}
     .ds-title{font-size:24px;margin-bottom:18px}
     .ds-guide{color:var(--mut);font-size:13.5px;line-height:1.7;margin-bottom:16px}
+    .tp-timer{color:var(--mut);font-size:12.5px;margin-bottom:10px;font-variant-numeric:tabular-nums}
     .tp-wrap{position:relative;border:1px solid var(--line);border-radius:14px;background:var(--bg2);padding:22px 24px;margin-bottom:6px;cursor:text;transition:border-color .2s}
     .tp-wrap.focus{border-color:var(--gold)}
     .tp-ghost{font-size:17px;line-height:2.05;white-space:pre-wrap;user-select:none;-webkit-user-select:none}
@@ -1320,14 +1321,16 @@ loadDaily();
 const tpOverlay = document.getElementById("typingOverlay");
 const tpBody = document.getElementById("tpBody");
 document.getElementById("tpClose").addEventListener("click", () => { tpOverlay.hidden = true; loadDaily(); });
-let tpStart = 0, tpFinished = false, tpChars = [];
+let tpStart = 0, tpFinished = false, tpChars = [], tpTick = null;
 function openTyping() {
   if (!dsTyping) { toast("오늘의 필사 문장이 준비 중이에요."); return; }
   track("open_typing", "");
   tpOverlay.hidden = false; tpStart = 0; tpFinished = false;
+  if (tpTick) { clearInterval(tpTick); tpTick = null; }
   tpChars = Array.from(dsTyping.content);
   tpBody.innerHTML = `
     <p class="ds-guide">옅은 글자 위에 그대로 겹쳐 써 보세요. 첫 글자를 입력하는 순간부터 시간이 흐르고, 끝 글자를 쓰면 자동으로 채점됩니다.</p>
+    <div class="tp-timer" id="tpTimer">⏱ 첫 글자를 쓰는 순간 시작돼요</div>
     <div class="tp-wrap" id="tpWrap">
       <div class="tp-ghost" id="tpGhost">${tpChars.map((c) => `<span>${esc(c)}</span>`).join("")}</div>
       <textarea id="tpInput" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"></textarea>
@@ -1350,12 +1353,22 @@ function openTyping() {
   const maybeDone = () => {
     if (!tpFinished && Array.from(inp.value).length >= tpChars.length) finishTyping();
   };
+  const tpBegin = () => {
+    if (tpStart || tpFinished) return;
+    tpStart = Date.now();
+    tpTick = setInterval(() => {
+      const t = document.getElementById("tpTimer");
+      if (!t || tpFinished) { clearInterval(tpTick); tpTick = null; return; }
+      t.textContent = `⏱ ${((Date.now() - tpStart) / 1000).toFixed(1)}초`;
+    }, 100);
+  };
   inp.addEventListener("paste", (e) => { e.preventDefault(); toast("필사는 붙여넣기 없이, 손으로 🙂"); });
-  inp.addEventListener("compositionstart", () => { composing = true; });
+  inp.addEventListener("compositionstart", () => { composing = true; tpBegin(); });
   inp.addEventListener("compositionend", () => { composing = false; render(); maybeDone(); });
+  inp.addEventListener("beforeinput", (e) => { if (e.inputType && e.inputType.indexOf("delete") !== 0) tpBegin(); });
   inp.addEventListener("input", () => {
     if (tpFinished) return;
-    if (!tpStart && inp.value) tpStart = Date.now();
+    if (inp.value) tpBegin();
     render(); if (!composing) maybeDone();
   });
   inp.addEventListener("focus", () => wrap.classList.add("focus"));
@@ -1378,6 +1391,7 @@ async function finishTyping() {
   const typed = inp.value;
   if (!typed.trim() || !tpStart) { toast("먼저 옅은 글자 위에 따라 써 주세요 🙂"); return; }
   tpFinished = true;
+  if (tpTick) { clearInterval(tpTick); tpTick = null; }
   inp.blur();
   const ms = Date.now() - tpStart;
   const acc = Math.min(100, typingAccuracy(dsTyping.content, typed));
@@ -1421,7 +1435,9 @@ async function loadTypingRank() {
 /* ── 이어쓰기 릴레이 ── */
 const rlOverlay = document.getElementById("relayOverlay");
 const rlBody = document.getElementById("rlBody");
-document.getElementById("rlClose").addEventListener("click", () => { rlOverlay.hidden = true; loadDaily(); });
+let rlDraft = "";
+function rlSaveDraft() { const ta = rlBody.querySelector("#rlWrite textarea"); if (ta) rlDraft = ta.value; }
+document.getElementById("rlClose").addEventListener("click", () => { rlSaveDraft(); rlOverlay.hidden = true; loadDaily(); });
 function openRelay() {
   if (!dsRelay) { toast("오늘의 첫 문장이 준비 중이에요."); return; }
   track("open_relay", "");
@@ -1438,21 +1454,31 @@ function openRelay() {
 function renderRelayForm() {
   const w = document.getElementById("rlForm");
   if (!w) return;
+  const prevTa = w.querySelector("textarea");
+  if (prevTa && obUser) { return; } /* 이미 쓰기 폼이 있으면 다시 그리지 않는다 — 쓰던 글 보존 */
+  const draft = (prevTa && prevTa.value) || rlDraft || "";
   w.innerHTML = obUser
-    ? `<form class="gb-form" id="rlWrite"><textarea rows="2" maxlength="200" placeholder="이어질 문장을 써 보세요 (200자)"></textarea><button type="submit" class="btn btn-gold" data-tr="이어쓰기:등록">잇기</button></form>`
+    ? `<form class="gb-form af-col" id="rlWrite"><textarea rows="3" maxlength="1000" placeholder="이어질 문장을 써 보세요 (1,000자까지)"></textarea><div class="af-write-row"><span class="af-file-name" id="rlCount"></span><button type="submit" class="btn btn-gold" data-tr="이어쓰기:등록">잇기</button></div></form>`
     : `<div class="gb-login"><p>로그인하면 문장을 이어 쓸 수 있어요.</p><button class="btn btn-line" id="rlLoginBtn">간편로그인 하기</button></div>`;
   const f = document.getElementById("rlWrite");
-  if (f) f.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  if (f) {
     const ta = f.querySelector("textarea");
-    const v = ta.value.trim();
-    if (!v) return;
-    const { error } = await sb.from("ob_relay_lines").insert({ user_id: obUser.id, day: kstDay(), content: v });
-    if (error) { toast("등록에 실패했어요."); return; }
-    ta.value = ""; toast("문장이 이어졌어요 📝");
-    track("relay_write", "");
-    loadRelayLines();
-  });
+    ta.value = draft;
+    const cnt = document.getElementById("rlCount");
+    const updateCnt = () => { cnt.textContent = ta.value.length ? `${ta.value.length} / 1,000자` : ""; };
+    ta.addEventListener("input", updateCnt); updateCnt();
+    f.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const v = ta.value.trim();
+      if (!v) return;
+      if (v.length > 1000) { toast(`1,000자까지 담을 수 있어요 — 지금 ${v.length}자예요. 글은 그대로 있으니 조금만 줄여 주세요.`); return; }
+      const { error } = await sb.from("ob_relay_lines").insert({ user_id: obUser.id, day: kstDay(), content: v });
+      if (error) { toast("등록에 실패했어요. 쓰신 글은 그대로 있어요 — 잠시 후 다시 눌러 주세요."); return; }
+      ta.value = ""; rlDraft = ""; updateCnt(); toast("문장이 이어졌어요 📝");
+      track("relay_write", "");
+      loadRelayLines();
+    });
+  }
   const lb = document.getElementById("rlLoginBtn");
   if (lb) lb.addEventListener("click", openLogin);
 }
