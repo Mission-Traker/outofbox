@@ -559,7 +559,7 @@ const MISSIONS = [
 /* ── 서재 데이터 — 새 책이 나오면 여기에 한 권 추가 ──
    sc: 책등 색 / st: 책등 글자색 / sh: 책 높이 / sw: 책등 폭 / sf: 책등 글자 크기 */
 const BOOKS = [
-  { slug: "homo-ambidex", cover: "covers/homo-ambidex.jpg",
+  { slug: "homo-ambidex", isNew: true, cover: "covers/homo-ambidex.jpg",
     title: "호모 앰비덱스", author: "윤성화", year: "출간 준비 중",
     cat: "자기계발 · AI시대 생존법", mission: true, missionUrl: HA_MISSION_URL, tilt: true,
     sc: "#15151D", st: "#35C8E8", sh: 300, sw: 58, sf: 17,
@@ -653,15 +653,17 @@ const BOOKS = [
 /* ── 책장 렌더 ── */
 const shelfEl = document.getElementById("shelfEl");
 shelfEl.innerHTML = BOOKS.map((b, i) => `
-  <div class="book${b.tilt ? " tilt" : ""}" data-i="${i}"
+  <div class="book${b.tilt ? " tilt" : ""}${b.isNew ? " newbook" : ""}" data-i="${i}"
     style="--sc:${b.sc}; --st:${b.st}; --sh:${b.sh}px; --sw:${b.sw}px; --sf:${b.sf}px; --fw:${Math.round(b.sh / (RATIOS[b.slug] || 1.4))}px">
     <div class="spine">
+      ${b.isNew ? `<span class="new-tag">NEW</span>` : ""}
       <span class="t serif">${b.title}</span>
       <span class="a">${b.author}</span>
       <span class="m">OUTOFBOX</span>
     </div>
     <div class="face">
       <img src="${b.cover}" alt="${b.title} 표지" loading="lazy" />
+      ${b.isNew ? `<span class="new-tag-face">NEW</span>` : ""}
       ${b.mission ? `<a class="mission-tag" href="${b.missionUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()">미션 페이지 →</a>` : ""}
     </div>
   </div>

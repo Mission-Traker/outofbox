@@ -102,6 +102,21 @@ header { position: sticky; top: 0; z-index: 50; background: rgba(16,18,22,.92); 
 }
 .face .mission-tag:hover { background: var(--goldlt); color: #16181D; }
 
+/* NEW 신간 배지 */
+.book.newbook .spine { padding-top: 32px; }
+.new-tag {
+  position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+  background: var(--goldlt); color: #17130C;
+  font-size: 7.5px; font-weight: 900; letter-spacing: .14em;
+  padding: 2px 5px; border-radius: 4px; line-height: 1.4; pointer-events: none;
+}
+.face .new-tag-face {
+  position: absolute; top: 8px; left: 8px;
+  background: var(--goldlt); color: #17130C;
+  font-size: 9.5px; font-weight: 900; letter-spacing: .12em;
+  padding: 2px 7px; border-radius: 4px; box-shadow: 0 3px 10px rgba(0,0,0,.35); pointer-events: none;
+}
+
 /* MISSION 리본(책등 상태에서도 표시) */
 .ribbon {
   position: absolute; top: -26px; left: 50%; transform: translateX(-50%);
