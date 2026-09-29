@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>아웃오브박스 관리자</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet" />
+<style>
+:root { --bg:#101216; --bg2:#16181D; --ink:#F2EFE8; --mut:#9BA0AA; --line:#262A31; --gold:#C9903A; --goldlt:#E3B76E; --cyan:#35C8E8; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:"Noto Sans KR",sans-serif; background:var(--bg); color:var(--ink); min-height:100vh; }
+.serif { font-family:"Noto Serif KR",serif; }
+.wrap { max-width:1080px; margin:0 auto; padding:0 20px; }
+header { border-bottom:1px solid var(--line); }
+.topbar { display:flex; align-items:center; justify-content:space-between; padding:16px 0; }
+.logo { font-weight:900; font-size:17px; }
+.logo b { color:var(--gold); }
+.logo a { color:var(--mut); font-size:13px; text-decoration:none; margin-left:12px; font-weight:400; }
+.logo a:hover { color:var(--goldlt); }
+.who { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--mut); }
+.who img { width:24px; height:24px; border-radius:50%; object-fit:cover; }
+.who button { background:none; border:1px solid var(--line); color:var(--mut); border-radius:18px; padding:5px 11px; font-size:12px; cursor:pointer; font-family:inherit; }
+main { padding:36px 0 80px; }
+h1 { font-size:24px; margin-bottom:6px; }
+.sub { color:var(--mut); font-size:14px; margin-bottom:28px; }
+.center-card { max-width:380px; margin:80px auto; background:var(--bg2); border:1px solid var(--line); border-radius:18px; padding:34px 30px; text-align:center; }
+.center-card h2 { font-size:19px; margin-bottom:10px; }
+.center-card p { color:var(--mut); font-size:13.5px; line-height:1.7; margin-bottom:20px; }
+.btn-kakao, .btn-naver, .btn-gold { display:block; width:100%; border:none; border-radius:12px; padding:13px; font-size:14.5px; font-weight:700; cursor:pointer; font-family:inherit; margin-bottom:10px; }
+.btn-kakao { background:#FEE500; color:#191919; }
+.btn-naver { background:#03C75A; color:#fff; }
+.btn-gold { background:var(--gold); color:#17130C; }
+.btn-kakao:hover, .btn-naver:hover, .btn-gold:hover { filter:brightness(1.06); }
+.code-input { width:100%; background:var(--bg); border:1px solid var(--line); border-radius:12px; color:var(--ink); padding:12px 14px; font-size:14px; margin-bottom:10px; font-family:inherit; text-align:center; letter-spacing:1px; }
+.code-input:focus { outline:none; border-color:var(--gold); }
+.range-row { display:flex; gap:8px; margin-bottom:22px; }
+.range-row button { background:var(--bg2); border:1px solid var(--line); color:var(--mut); border-radius:18px; padding:7px 16px; font-size:13px; cursor:pointer; font-family:inherit; }
+.range-row button.on { background:var(--gold); border-color:var(--gold); color:#17130C; font-weight:700; }
+.tiles { display:grid; grid-template-columns:repeat(auto-fit, minmax(160px,1fr)); gap:12px; margin-bottom:34px; }
+.tile { background:var(--bg2); border:1px solid var(--line); border-radius:16px; padding:18px 18px 16px; }
+.tile .label { font-size:12.5px; color:var(--mut); margin-bottom:8px; }
+.tile .num { font-size:26px; font-weight:900; }
+.tile .unit { font-size:13px; color:var(--mut); font-weight:400; margin-left:2px; }
+section.panel { margin-bottom:38px; }
+.panel h3 { font-size:16px; margin-bottom:4px; }
+.panel .hint { color:var(--mut); font-size:12.5px; margin-bottom:14px; }
+table { width:100%; border-collapse:collapse; font-size:13.5px; }
+th { text-align:left; color:var(--mut); font-weight:500; font-size:12px; padding:8px 10px; border-bottom:1px solid var(--line); white-space:nowrap; }
+td { padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
+.tbl-wrap { overflow-x:auto; background:var(--bg2); border:1px solid var(--line); border-radius:14px; padding:6px 10px 10px; }
+.bar-row { display:grid; grid-template-columns:minmax(120px, 300px) 1fr 52px; gap:10px; align-items:center; padding:6px 0; }
+.bar-label { font-size:13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.bar-track { height:14px; border-radius:0 4px 4px 0; background:var(--gold); min-width:2px; }
+.bar-val { font-size:12.5px; color:var(--mut); text-align:right; font-variant-numeric:tabular-nums; }
+.mod-card { border:1px solid var(--line); background:var(--bg2); border-radius:12px; padding:11px 14px; margin-bottom:8px; display:flex; gap:12px; align-items:flex-start; font-size:13.5px; }
+.mod-card .meta { color:var(--mut); font-size:12px; white-space:nowrap; }
+.mod-card .txt { flex:1; line-height:1.6; word-break:break-word; }
+.mod-card button { background:none; border:1px solid var(--line); color:var(--mut); border-radius:14px; padding:4px 10px; font-size:12px; cursor:pointer; font-family:inherit; flex:none; }
+.mod-card button:hover { color:#E36A5C; border-color:#E36A5C; }
+.empty { color:var(--mut); font-size:13.5px; padding:10px 4px; }
+.err { color:#E36A5C; font-size:13px; margin-top:8px; }
+.cols { display:grid; grid-template-columns:1fr 1fr; gap:26px; }
+@media (max-width:840px) { .cols { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap topbar">
+    <div class="logo">아웃<b>오브</b>박스 관리자<a href="index.html">← 홈페이지</a></div>
+    <div class="who" id="who"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- 로그인 전 -->
+  <div id="viewLogin" class="center-card" hidden>
+    <h2>관리자 로그인</h2>
+    <p>운영 통계와 방명록·댓글 관리는<br />관리자 계정으로만 볼 수 있어요.</p>
+    <button class="btn-kakao" id="btnKakao">💬 카카오로 로그인</button>
+    <button class="btn-naver" id="btnNaver">N&nbsp; 네이버로 로그인</button>
+  </div>
+
+  <!-- 로그인했지만 관리자 아님 -->
+  <div id="viewClaim" class="center-card" hidden>
+    <h2>관리자 인증</h2>
+    <p>이 계정을 관리자로 등록하려면<br />전달받은 관리자 코드를 입력하세요.</p>
+    <input class="code-input" id="claimCode" type="text" placeholder="관리자 코드" autocomplete="off" />
+    <button class="btn-gold" id="btnClaim">관리자 등록</button>
+    <div class="err" id="claimErr"></div>
+  </div>
+
+  <!-- 대시보드 -->
+  <div id="viewDash" hidden>
+    <h1 class="serif">홈페이지 방문 분석</h1>
+    <p class="sub">로그인 방문자의 방문 횟수·머문 시간·클릭 흐름으로 UI/UX 개선 포인트를 찾습니다.</p>
+
+    <div class="range-row" id="rangeRow">
+      <button data-days="7">최근 7일</button>
+      <button data-days="30" class="on">최근 30일</button>
+      <button data-days="90">최근 90일</button>
+    </div>
+
+    <div class="tiles" id="tiles"></div>
+
+    <section class="panel">
+      <h3>👤 방문자별 집계</h3>
+      <p class="hint">로그인한 방문자 기준 · 비로그인 방문은 마지막 줄에 묶어서 표시</p>
+      <div class="tbl-wrap"><table id="visitorTbl"></table></div>
+    </section>
+
+    <section class="panel">
+      <h3>🖱 무엇을 눌렀나 — 클릭 랭킹</h3>
+      <p class="hint">기간 내 클릭 이벤트 상위 목록 · 책등/구매/미션웹/방명록 버튼 등</p>
+      <div class="tbl-wrap" id="clickList" style="padding:14px 16px;"></div>
+    </section>
+
+    <section class="panel">
+      <h3>🕐 최근 방문 세션</h3>
+      <p class="hint">세션 = 브라우저 탭 단위 방문 · 머문 시간 = 첫 이벤트부터 마지막 이벤트까지</p>
+      <div class="tbl-wrap"><table id="sessionTbl"></table></div>
+    </section>
+
+    <div class="cols">
+      <section class="panel">
+        <h3>📖 방명록 관리</h3>
+        <p class="hint">최근 30개 · 삭제 시 즉시 사라집니다</p>
+        <div id="gbAdmin"></div>
+      </section>
+      <section class="panel">
+        <h3>💬 도서 댓글 관리</h3>
+        <p class="hint">최근 30개 · 삭제 시 즉시 사라집니다</p>
+        <div id="cmAdmin"></div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SB_URL = "https://cxxoikktagpyuklwxpsr.supabase.co";
+const SB_KEY = "sb_publishable_JPTs0CY1_hO3ZOptyku0HA_4xWKDew7";
+const sb = window.supabase.createClient(SB_URL, SB_KEY);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fmtDT = (s) => { const d = new Date(s); return `${String(d.getMonth()+1).padStart(2,"0")}.${String(d.getDate()).padStart(2,"0")} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`; };
+const fmtDur = (sec) => { sec = Math.max(0, Math.round(sec)); const m = Math.floor(sec/60), s = sec%60; return m ? `${m}분 ${s}초` : `${s}초`; };
+
+let user = null, profile = null, days = 30;
+const $ = (id) => document.getElementById(id);
+function show(view) { ["viewLogin","viewClaim","viewDash"].forEach(v => $(v).hidden = (v !== view)); }
+
+/* ── 네이버 콜백 토큰 ── */
+(async () => {
+  const m = location.hash.match(/ob_naver_token=([^&]+)/);
+  if (!m) return;
+  history.replaceState(null, "", location.pathname);
+  await sb.auth.verifyOtp({ type: "magiclink", token_hash: decodeURIComponent(m[1]) });
+})();
+
+/* ── 로그인 버튼 ── */
+$("btnKakao").addEventListener("click", async () => {
+  const { data } = await sb.auth.signInWithOAuth({ provider:"kakao", options:{ redirectTo: location.origin + "/admin.html", skipBrowserRedirect:true } });
+  if (data && data.url) location.href = data.url;
+});
+$("btnNaver").addEventListener("click", () => {
+  location.href = SB_URL + "/functions/v1/naver-login?action=start&site=" + encodeURIComponent(location.origin + "/admin.html");
+});
+
+/* ── 관리자 클레임 ── */
+$("btnClaim").addEventListener("click", async () => {
+  const code = $("claimCode").value.trim();
+  if (!code) return;
+  const { data, error } = await sb.rpc("ob_claim_admin", { code });
+  if (error) { $("claimErr").textContent = "인증 중 오류가 발생했어요."; return; }
+  if (data === true) { await refreshProfile(); }
+  else $("claimErr").textContent = "코드가 올바르지 않아요.";
+});
+
+async function refreshProfile() {
+  if (!user) { show("viewLogin"); $("who").innerHTML = ""; return; }
+  const { data } = await sb.from("ob_profiles").select("nickname, avatar_url, is_admin").eq("id", user.id).maybeSingle();
+  profile = data || { nickname:"독자", avatar_url:"", is_admin:false };
+  $("who").innerHTML = `${profile.avatar_url ? `<img src="${esc(profile.avatar_url)}" referrerpolicy="no-referrer" />` : ""}<span>${esc(profile.nickname)}님</span><button id="outBtn">로그아웃</button>`;
+  $("outBtn").addEventListener("click", async () => { await sb.auth.signOut(); location.reload(); });
+  if (profile.is_admin) { show("viewDash"); loadDash(); }
+  else show("viewClaim");
+}
+sb.auth.onAuthStateChange((_e, session) => { user = session ? session.user : null; refreshProfile(); });
+sb.auth.getSession().then(({ data:{ session } }) => { user = session ? session.user : null; refreshProfile(); });
+
+/* ── 기간 선택 ── */
+$("rangeRow").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-days]");
+  if (!b) return;
+  days = Number(b.dataset.days);
+  document.querySelectorAll("#rangeRow button").forEach(x => x.classList.toggle("on", x === b));
+  loadDash();
+});
+
+/* ── 대시보드 로딩 ── */
+async function loadDash() {
+  const [sessRes, clickRes, memberRes] = await Promise.all([
+    sb.rpc("ob_admin_sessions", { p_days: days }),
+    sb.rpc("ob_admin_clicks", { p_days: days }),
+    sb.from("ob_profiles").select("id", { count:"exact", head:true }),
+  ]);
+  const sessions = sessRes.data || [];
+  const clicks = clickRes.data || [];
+  const members = memberRes.count || 0;
+
+  /* 스탯 타일 */
+  const loggedSessions = sessions.filter(s => s.user_id);
+  const uniqueUsers = new Set(loggedSessions.map(s => s.user_id)).size;
+  const meaningful = sessions.filter(s => s.seconds > 0);
+  const avgSec = meaningful.length ? meaningful.reduce((a,s) => a + s.seconds, 0) / meaningful.length : 0;
+  const totalClicks = clicks.reduce((a,c) => a + Number(c.cnt), 0);
+  $("tiles").innerHTML = [
+    ["방문 세션", sessions.length, "회"],
+    ["로그인 방문자", uniqueUsers, "명"],
+    ["평균 머문 시간", fmtDur(avgSec), ""],
+    ["클릭 수", totalClicks, "회"],
+    ["누적 회원", members, "명"],
+  ].map(([l,n,u]) => `<div class="tile"><div class="label">${l}</div><div class="num">${n}<span class="unit">${u}</span></div></div>`).join("");
+
+  /* 방문자별 집계 */
+  const byUser = new Map();
+  let anon = { sessions:0, seconds:0, events:0, last:null };
+  sessions.forEach(s => {
+    if (!s.user_id) {
+      anon.sessions++; anon.seconds += s.seconds; anon.events += Number(s.events);
+      if (!anon.last || s.started > anon.last) anon.last = s.started;
+      return;
+    }
+    const u = byUser.get(s.user_id) || { nickname:s.nickname, provider:s.provider, sessions:0, seconds:0, events:0, last:null };
+    u.sessions++; u.seconds += s.seconds; u.events += Number(s.events);
+    if (!u.last || s.started > u.last) u.last = s.started;
+    byUser.set(s.user_id, u);
+  });
+  const rows = [...byUser.values()].sort((a,b) => b.seconds - a.seconds);
+  $("visitorTbl").innerHTML = `
+    <tr><th>방문자</th><th>가입</th><th class="num">방문 횟수</th><th class="num">총 머문 시간</th><th class="num">행동 수</th><th class="num">마지막 방문</th></tr>` +
+    (rows.length || anon.sessions
+      ? rows.map(u => `<tr><td><b>${esc(u.nickname)}</b></td><td>${esc(u.provider || "-")}</td><td class="num">${u.sessions}회</td><td class="num">${fmtDur(u.seconds)}</td><td class="num">${u.events}</td><td class="num">${fmtDT(u.last)}</td></tr>`).join("") +
+        (anon.sessions ? `<tr><td style="color:var(--mut)">(비로그인 방문)</td><td>-</td><td class="num">${anon.sessions}회</td><td class="num">${fmtDur(anon.seconds)}</td><td class="num">${anon.events}</td><td class="num">${anon.last ? fmtDT(anon.last) : "-"}</td></tr>` : "")
+      : `<tr><td colspan="6" class="empty">아직 방문 기록이 없어요.</td></tr>`);
+
+  /* 클릭 랭킹 — 단일 골드 막대 */
+  const maxC = clicks.length ? Number(clicks[0].cnt) : 1;
+  $("clickList").innerHTML = clicks.length
+    ? clicks.slice(0, 25).map(c => `
+      <div class="bar-row">
+        <span class="bar-label" title="${esc(c.target)}">${esc(c.target || "(무명)")}</span>
+        <span class="bar-track" style="width:${Math.max(2, Math.round(Number(c.cnt) / maxC * 100))}%"></span>
+        <span class="bar-val">${c.cnt}회</span>
+      </div>`).join("")
+    : `<p class="empty">아직 클릭 기록이 없어요.</p>`;
+
+  /* 최근 세션 */
+  $("sessionTbl").innerHTML = `
+    <tr><th>시작</th><th>방문자</th><th class="num">머문 시간</th><th class="num">행동 수</th></tr>` +
+    (sessions.length
+      ? sessions.slice(0, 20).map(s => `<tr><td>${fmtDT(s.started)}</td><td>${esc(s.nickname)}</td><td class="num">${fmtDur(s.seconds)}</td><td class="num">${s.events}</td></tr>`).join("")
+      : `<tr><td colspan="4" class="empty">아직 세션이 없어요.</td></tr>`);
+
+  loadModeration();
+}
+
+/* ── 방명록/댓글 관리 ── */
+function modCard(x, table, extra) {
+  return `<div class="mod-card">
+    <span class="meta">${fmtDT(x.created_at)}<br /><b style="color:var(--ink)">${esc((x.profile && x.profile.nickname) || "독자")}</b>${extra ? `<br />${esc(extra)}` : ""}</span>
+    <span class="txt">${esc(x.content)}</span>
+    <button data-del="${x.id}" data-table="${table}">삭제</button>
+  </div>`;
+}
+async function loadModeration() {
+  const [gb, cm] = await Promise.all([
+    sb.from("ob_guestbook").select("id, content, created_at, profile:ob_profiles(nickname)").order("created_at", { ascending:false }).limit(30),
+    sb.from("ob_book_comments").select("id, content, created_at, book_slug, profile:ob_profiles(nickname)").order("created_at", { ascending:false }).limit(30),
+  ]);
+  $("gbAdmin").innerHTML = (gb.data && gb.data.length) ? gb.data.map(x => modCard(x, "ob_guestbook")).join("") : `<p class="empty">방명록이 비어 있어요.</p>`;
+  $("cmAdmin").innerHTML = (cm.data && cm.data.length) ? cm.data.map(x => modCard(x, "ob_book_comments", "📕 " + x.book_slug)).join("") : `<p class="empty">댓글이 비어 있어요.</p>`;
+  document.querySelectorAll("#gbAdmin [data-del], #cmAdmin [data-del]").forEach(b => b.addEventListener("click", async () => {
+    if (!confirm("정말 삭제할까요? 되돌릴 수 없어요.")) return;
+    await sb.from(b.dataset.table).delete().eq("id", b.dataset.del);
+    loadModeration();
+  }));
+}
+</script>
+
+</body>
+</html>

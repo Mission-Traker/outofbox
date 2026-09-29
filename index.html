@@ -8,6 +8,44 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── 간편로그인 · 방명록 · 댓글 · 토스트 ── */
+    .auth-area{display:flex;align-items:center;gap:8px}
+    .btn-login{background:var(--gold);color:#17130C;border:none;border-radius:20px;padding:7px 15px;font-weight:700;cursor:pointer;font-size:13px;font-family:inherit}
+    .btn-login:hover{background:var(--goldlt)}
+    .btn-logout{background:none;border:1px solid var(--line);color:var(--mut);border-radius:20px;padding:5px 11px;font-size:12px;cursor:pointer;font-family:inherit}
+    .btn-logout:hover{color:var(--ink)}
+    .auth-chip{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink);white-space:nowrap}
+    .auth-chip img{width:24px;height:24px;border-radius:50%;object-fit:cover}
+    .auth-admin{font-size:12px;color:var(--cyan) !important;border:1px solid rgba(53,200,232,.5);border-radius:20px;padding:4px 10px;white-space:nowrap}
+    .gb{padding:70px 0 80px;border-top:1px solid var(--line)}
+    .gb-desc{color:var(--mut);margin:10px 0 24px;font-size:15px}
+    .gb-form{display:flex;gap:10px;margin-bottom:26px;align-items:stretch}
+    .gb-form textarea{flex:1;background:var(--bg2);border:1px solid var(--line);border-radius:12px;color:var(--ink);padding:12px 14px;font-family:inherit;font-size:14px;resize:vertical;min-height:52px}
+    .gb-form textarea:focus{outline:none;border-color:var(--gold)}
+    .gb-login{background:var(--bg2);border:1px dashed var(--line);border-radius:14px;padding:22px;text-align:center;margin-bottom:26px}
+    .gb-login p{color:var(--mut);margin-bottom:12px;font-size:14px}
+    .gb-card{border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px;background:var(--bg2)}
+    .gb-top{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:13px}
+    .gb-ava{width:26px;height:26px;border-radius:50%;object-fit:cover;flex:none}
+    .gb-ava-t{display:inline-flex;align-items:center;justify-content:center;background:var(--gold);color:#17130C;font-weight:700;font-size:12px}
+    .gb-date{color:var(--mut);font-size:12px}
+    .gb-del{margin-left:auto;background:none;border:none;color:var(--mut);font-size:12px;cursor:pointer;font-family:inherit}
+    .gb-del:hover{color:#E36A5C}
+    .gb-card>p{font-size:14px;line-height:1.7;color:var(--ink);word-break:break-word}
+    .gb-empty{color:var(--mut);font-size:14px;padding:8px 2px}
+    .cm-zone{margin-top:28px;border-top:1px dashed var(--line);padding-top:22px}
+    .cm-badge{background:rgba(53,200,232,.12) !important;color:var(--cyan) !important}
+    #obToast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:#22262E;color:var(--ink);border:1px solid var(--line);border-radius:24px;padding:10px 20px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:999;max-width:88vw}
+    #obToast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .login-inner{max-width:420px}
+    .login-btns{display:flex;flex-direction:column;gap:12px;max-width:300px;margin:26px auto 0}
+    .btn-kakao{background:#FEE500;color:#191919;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
+    .btn-naver{background:#03C75A;color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
+    .btn-kakao:hover,.btn-naver:hover{filter:brightness(1.06)}
+    .login-note{color:var(--mut);font-size:12.5px;margin-top:18px;line-height:1.7;text-align:center}
+    @media (max-width:720px){ .auth-chip .nick{display:none} .gb-form{flex-direction:column} }
+  </style>
 </head>
 <body>
 
@@ -20,7 +58,9 @@
     <nav class="nav-links">
       <a href="#shelf">서재</a>
       <a href="#about">출판사 소개</a>
+      <a href="#guestbook">방명록</a>
       <a href="#" id="navMission">미션 웹</a>
+      <span class="auth-area" id="authArea"></span>
     </nav>
   </div>
 </header>
@@ -114,6 +154,30 @@
         <p class="submit-note" id="sfStatus">보내기를 누르면 아웃오브박스 대표메일로 바로 접수됩니다. 검토에는 2~3주가 걸릴 수 있어요.</p>
       </form>
     </div>
+  </div>
+</div>
+
+<section id="guestbook" class="gb">
+  <div class="wrap">
+    <div class="sec-kicker">GUESTBOOK</div>
+    <h2 class="sec-title serif">방명록</h2>
+    <p class="gb-desc">서재에 들러주셔서 감사합니다. 다녀간 흔적, 따뜻한 인사 한 줄을 남겨 주세요.</p>
+    <div id="gbFormWrap"></div>
+    <div id="gbList"><p class="gb-empty">방명록을 불러오는 중…</p></div>
+  </div>
+</section>
+
+<div id="loginOverlay" class="mission-overlay" hidden>
+  <div class="mo-inner login-inner">
+    <button class="mo-close" id="loClose" aria-label="닫기">✕</button>
+    <div class="sec-kicker">SIGN IN</div>
+    <h2 class="sec-title serif">간편로그인</h2>
+    <p class="mo-desc">방명록과 도서 댓글은 로그인 후 이용할 수 있어요. 3초면 충분합니다.</p>
+    <div class="login-btns">
+      <button class="btn-kakao" id="btnKakao">💬 카카오로 시작하기</button>
+      <button class="btn-naver" id="btnNaver">N &nbsp;네이버로 시작하기</button>
+    </div>
+    <p class="login-note">로그인 시 닉네임·프로필 이미지만 받아 방명록·댓글 표시와<br />방문 통계 목적으로만 사용해요.</p>
   </div>
 </div>
 
@@ -523,7 +587,6 @@ let activeIdx = null;
 function missionGridHtml() {
   return `<div class="mission-grid">
     ${MISSIONS.map(m => `<div class="mission-card"><span class="ch">${m[0]}</span><b>${m[1]}</b>${m[2]}</div>`).join("")}
-    <div class="mission-card locked"><span class="ch">CH 11</span><b>🔒 집필 중</b>다음 미션을 기다려 주세요</div>
   </div>`;
 }
 
@@ -568,8 +631,8 @@ function openDetail(i) {
           <p class="desc" style="color:var(--mut); font-size:14px;">📖 책의 한 장이 끝날 때마다 독자 미션이 하나씩 열립니다 — 닉네임+PIN만으로 시작해요.</p>
           ${missionGridHtml()}` : ""}
         <div class="btn-row">
-          ${b.buy ? `<a class="btn ${b.mission ? "btn-line" : "btn-gold"}" href="${b.buy}" target="_blank" rel="noopener">구매하러 가기 →</a>` : ""}
-          ${b.mission ? `<a class="btn btn-gold" href="${b.missionUrl}" target="_blank" rel="noopener">미션 페이지로 이동하기 →</a>` : ""}
+          ${b.buy ? `<a class="btn ${b.mission ? "btn-line" : "btn-gold"}" href="${b.buy}" target="_blank" rel="noopener" data-tr="구매:${b.title}">구매하러 가기 →</a>` : ""}
+          ${b.mission ? `<a class="btn btn-gold" href="${b.missionUrl}" target="_blank" rel="noopener" data-tr="미션웹:${b.title}">미션 페이지로 이동하기 →</a>` : ""}
         </div>
       </div>
       </div>
@@ -639,6 +702,258 @@ shelfEl.addEventListener("click", (e) => {
   if (activeIdx === i) { closeDetail(); return; }
   openDetail(i);
 });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ═══ 회원(간편로그인) · 방명록 · 도서별 댓글 · 방문 분석 ═══ */
+const SB_URL = "https://cxxoikktagpyuklwxpsr.supabase.co";
+const SB_KEY = "sb_publishable_JPTs0CY1_hO3ZOptyku0HA_4xWKDew7";
+const sb = window.supabase.createClient(SB_URL, SB_KEY);
+
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fmtDT = (s) => { const d = new Date(s); return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`; };
+
+function toast(msg) {
+  let t = document.getElementById("obToast");
+  if (!t) { t = document.createElement("div"); t.id = "obToast"; document.body.appendChild(t); }
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), 3200);
+}
+
+/* ── 방문·행동 추적 (탭 단위 세션) ── */
+const OB_SID = (() => {
+  try { let s = sessionStorage.getItem("ob_sid"); if (!s) { s = crypto.randomUUID(); sessionStorage.setItem("ob_sid", s); } return s; }
+  catch (e) { return "s-" + Math.random().toString(36).slice(2); }
+})();
+let obUser = null, obProfile = null;
+function track(type, target, meta) {
+  try {
+    sb.from("ob_events").insert({
+      user_id: obUser ? obUser.id : null, session_id: OB_SID,
+      event_type: type, target: String(target || "").slice(0, 200), meta: meta || {},
+    }).then(() => {});
+  } catch (e) {}
+}
+track("page_view", location.pathname, { ref: (document.referrer || "").slice(0, 150) });
+setInterval(() => { if (document.visibilityState === "visible") track("beat", ""); }, 25000);
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") {
+    try {
+      fetch(SB_URL + "/rest/v1/ob_events", {
+        method: "POST", keepalive: true,
+        headers: { apikey: SB_KEY, Authorization: "Bearer " + SB_KEY, "Content-Type": "application/json", Prefer: "return=minimal" },
+        body: JSON.stringify({ user_id: null, session_id: OB_SID, event_type: "leave", target: "" }),
+      });
+    } catch (e) {}
+  }
+});
+document.addEventListener("click", (e) => {
+  const el = e.target.closest("[data-tr], a.btn, .mission-tag, .nav-links a, .book, .mo-card");
+  if (!el) return;
+  let label = el.dataset ? el.dataset.tr : "";
+  if (!label) {
+    if (el.classList.contains("book")) label = "책등:" + ((BOOKS[Number(el.dataset.i)] || {}).title || "");
+    else if (el.classList.contains("mission-tag")) label = "미션태그";
+    else if (el.classList.contains("mo-card")) label = "미션서가:" + ((el.querySelector(".mo-title") || {}).textContent || "").trim();
+    else label = (el.textContent || "").trim().slice(0, 40);
+  }
+  track("click", label);
+}, true);
+
+/* ── 로그인 모달 ── */
+const loEl = document.getElementById("loginOverlay");
+function openLogin() { loEl.hidden = false; document.body.style.overflow = "hidden"; }
+function loHide() { loEl.hidden = true; document.body.style.overflow = ""; }
+document.getElementById("loClose").addEventListener("click", loHide);
+loEl.addEventListener("click", (e) => { if (e.target === loEl) loHide(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !loEl.hidden) loHide(); });
+
+document.getElementById("btnKakao").addEventListener("click", async () => {
+  const { data } = await sb.auth.signInWithOAuth({
+    provider: "kakao",
+    options: { redirectTo: location.origin + location.pathname, skipBrowserRedirect: true },
+  });
+  if (!data || !data.url) { toast("카카오 로그인 준비 중이에요. 조금만 기다려 주세요!"); return; }
+  try {
+    const r = await fetch(data.url, { redirect: "manual" });
+    if (r.type === "opaqueredirect" || (r.status >= 300 && r.status < 400)) { location.href = data.url; return; }
+    const j = await r.json().catch(() => null);
+    if (j && /provider|validation/i.test((j.error_code || "") + (j.msg || "") + (j.error_description || ""))) {
+      toast("카카오 로그인은 준비 중이에요 — 곧 열릴 예정입니다!"); track("login_unavailable", "kakao"); return;
+    }
+    location.href = data.url;
+  } catch (e) { location.href = data.url; }
+});
+document.getElementById("btnNaver").addEventListener("click", () => {
+  location.href = SB_URL + "/functions/v1/naver-login?action=start&site=" + encodeURIComponent(location.origin + location.pathname);
+});
+
+/* 네이버 콜백 토큰 → 세션 교환 */
+(async () => {
+  const m = location.hash.match(/ob_naver_token=([^&]+)/);
+  if (!m) return;
+  history.replaceState(null, "", location.pathname + location.search);
+  const { error } = await sb.auth.verifyOtp({ type: "magiclink", token_hash: decodeURIComponent(m[1]) });
+  if (error) toast("네이버 로그인에 실패했어요. 다시 시도해 주세요.");
+})();
+
+/* ── 인증 상태 ── */
+const authArea = document.getElementById("authArea");
+async function setUser(session) {
+  obUser = session ? session.user : null;
+  obProfile = null;
+  if (obUser) {
+    const { data } = await sb.from("ob_profiles").select("nickname, avatar_url, is_admin").eq("id", obUser.id).maybeSingle();
+    obProfile = data || { nickname: "독자", avatar_url: "", is_admin: false };
+  }
+  renderAuth(); renderGbForm(); refreshCommentForms(); loadGuestbook();
+}
+function renderAuth() {
+  if (!obUser) {
+    authArea.innerHTML = `<button class="btn-login" id="authLoginBtn">로그인</button>`;
+    document.getElementById("authLoginBtn").addEventListener("click", openLogin);
+    return;
+  }
+  const p = obProfile || { nickname: "독자", avatar_url: "", is_admin: false };
+  authArea.innerHTML = `
+    ${p.is_admin ? `<a class="auth-admin" href="admin.html">관리자</a>` : ""}
+    <span class="auth-chip">${p.avatar_url ? `<img src="${esc(p.avatar_url)}" alt="" referrerpolicy="no-referrer" />` : "🙂"}<span class="nick">${esc(p.nickname)}님</span></span>
+    <button class="btn-logout" id="authOutBtn">로그아웃</button>`;
+  document.getElementById("authOutBtn").addEventListener("click", async () => { await sb.auth.signOut(); toast("로그아웃 됐어요."); });
+}
+let obToastedLogin = false;
+sb.auth.onAuthStateChange((ev, session) => {
+  setUser(session);
+  if (ev === "SIGNED_IN" && !obToastedLogin) {
+    obToastedLogin = true; loHide(); toast("환영합니다! 로그인 됐어요 🙌");
+    track("login", (session && session.user && (session.user.user_metadata || {}).provider_name) || (session && session.user && (session.user.app_metadata || {}).provider) || "");
+  }
+});
+sb.auth.getSession().then(({ data: { session } }) => setUser(session));
+
+/* ── 방명록 ── */
+const gbList = document.getElementById("gbList");
+const gbFormWrap = document.getElementById("gbFormWrap");
+function renderGbForm() {
+  if (!gbFormWrap) return;
+  if (!obUser) {
+    gbFormWrap.innerHTML = `<div class="gb-login"><p>따뜻한 인사 한 줄, 로그인하면 남길 수 있어요.</p><button class="btn btn-gold" id="gbLoginBtn" data-tr="방명록:로그인유도">간편로그인 하고 인사 남기기 ✍️</button></div>`;
+    document.getElementById("gbLoginBtn").addEventListener("click", openLogin);
+  } else {
+    gbFormWrap.innerHTML = `
+      <form class="gb-form" id="gbForm">
+        <textarea id="gbText" rows="2" maxlength="300" placeholder="서재에 들른 인사를 남겨 주세요 (300자)"></textarea>
+        <button type="submit" class="btn btn-gold" data-tr="방명록:등록">남기기</button>
+      </form>`;
+    document.getElementById("gbForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const ta = document.getElementById("gbText");
+      const v = ta.value.trim();
+      if (!v) return;
+      const { error } = await sb.from("ob_guestbook").insert({ user_id: obUser.id, content: v });
+      if (error) { toast("등록에 실패했어요. 잠시 후 다시 시도해 주세요."); return; }
+      ta.value = ""; toast("방명록이 등록됐어요 💛"); loadGuestbook();
+    });
+  }
+}
+function entryCard(g, table) {
+  const nick = (g.profile && g.profile.nickname) || "독자";
+  const ava = (g.profile && g.profile.avatar_url) || "";
+  return `
+    <div class="gb-card">
+      <div class="gb-top">
+        ${ava ? `<img class="gb-ava" src="${esc(ava)}" alt="" referrerpolicy="no-referrer" />` : `<span class="gb-ava gb-ava-t">${esc(nick[0] || "독")}</span>`}
+        <b>${esc(nick)}</b>
+        <span class="gb-date">${fmtDT(g.created_at)}</span>
+        ${obUser && obUser.id === g.user_id ? `<button class="gb-del" data-del="${g.id}" data-table="${table}">삭제</button>` : ""}
+      </div>
+      <p>${esc(g.content)}</p>
+    </div>`;
+}
+function bindDelete(root, reload) {
+  root.querySelectorAll("[data-del]").forEach((b) => b.addEventListener("click", async () => {
+    await sb.from(b.dataset.table).delete().eq("id", b.dataset.del);
+    toast("삭제했어요."); reload();
+  }));
+}
+async function loadGuestbook() {
+  if (!gbList) return;
+  const { data, error } = await sb.from("ob_guestbook")
+    .select("id, content, created_at, user_id, profile:ob_profiles(nickname, avatar_url)")
+    .order("created_at", { ascending: false }).limit(50);
+  if (error) { gbList.innerHTML = `<p class="gb-empty">방명록을 불러오지 못했어요.</p>`; return; }
+  if (!data.length) { gbList.innerHTML = `<p class="gb-empty">아직 첫 인사가 없어요 — 첫 번째 발자국을 남겨 주세요 👣</p>`; return; }
+  gbList.innerHTML = data.map((g) => entryCard(g, "ob_guestbook")).join("");
+  bindDelete(gbList, loadGuestbook);
+}
+loadGuestbook();
+
+/* ── 도서별 댓글 ── */
+function commentFormHtml(slug) {
+  return obUser
+    ? `<form class="gb-form cm-form" data-slug="${esc(slug)}">
+        <textarea rows="2" maxlength="300" placeholder="이 책에 대한 한마디를 남겨 주세요 (300자)"></textarea>
+        <button type="submit" class="btn btn-gold" data-tr="댓글:등록:${esc(slug)}">댓글 남기기</button>
+      </form>`
+    : `<div class="gb-login"><p>로그인하면 이 책에 댓글을 남길 수 있어요.</p><button class="btn btn-line cm-login-btn" data-tr="댓글:로그인유도">간편로그인 하고 댓글 남기기 💬</button></div>`;
+}
+async function loadComments(slug) {
+  const zone = document.getElementById("cmList-" + slug);
+  if (!zone) return;
+  const { data, error } = await sb.from("ob_book_comments")
+    .select("id, content, created_at, user_id, profile:ob_profiles(nickname, avatar_url)")
+    .eq("book_slug", slug).order("created_at", { ascending: false }).limit(50);
+  if (error) { zone.innerHTML = `<p class="gb-empty">댓글을 불러오지 못했어요.</p>`; return; }
+  zone.innerHTML = data.length ? data.map((c) => entryCard(c, "ob_book_comments")).join("") : `<p class="gb-empty">아직 댓글이 없어요 — 첫 댓글의 주인공이 되어 주세요 ✏️</p>`;
+  bindDelete(zone, () => loadComments(slug));
+}
+function bindCommentForm(slug) {
+  const wrap = document.getElementById("cmForm-" + slug);
+  if (!wrap) return;
+  const f = wrap.querySelector("form");
+  if (f) f.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const ta = f.querySelector("textarea");
+    const v = ta.value.trim();
+    if (!v) return;
+    const { error } = await sb.from("ob_book_comments").insert({ user_id: obUser.id, book_slug: slug, content: v });
+    if (error) { toast("댓글 등록에 실패했어요."); return; }
+    ta.value = ""; toast("댓글이 등록됐어요 💬"); loadComments(slug);
+  });
+  const lb = wrap.querySelector(".cm-login-btn");
+  if (lb) lb.addEventListener("click", openLogin);
+}
+function mountComments(slug) {
+  const card = document.querySelector(".detail-card");
+  if (!card || document.getElementById("cmZone-" + slug)) return;
+  const z = document.createElement("div");
+  z.className = "cm-zone"; z.id = "cmZone-" + slug;
+  z.innerHTML = `
+    <div class="rv-head"><span class="rv-badge cm-badge">💬 READER TALK</span><h4 class="serif">“독자의 한마디”</h4></div>
+    <div id="cmForm-${slug}">${commentFormHtml(slug)}</div>
+    <div id="cmList-${slug}"><p class="gb-empty">댓글을 불러오는 중…</p></div>`;
+  card.appendChild(z);
+  bindCommentForm(slug);
+  loadComments(slug);
+}
+function refreshCommentForms() {
+  document.querySelectorAll(".cm-zone").forEach((z) => {
+    const slug = z.id.replace("cmZone-", "");
+    const wrap = document.getElementById("cmForm-" + slug);
+    if (wrap) { wrap.innerHTML = commentFormHtml(slug); bindCommentForm(slug); }
+    loadComments(slug);
+  });
+}
+
+/* 책 상세가 열릴 때 댓글 영역을 함께 렌더 */
+const _openDetail = openDetail;
+openDetail = function (i) {
+  _openDetail(i);
+  const b = BOOKS[i];
+  track("view_book", b.title);
+  mountComments(b.slug);
+};
 </script>
 
 </body>
