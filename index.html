@@ -65,6 +65,8 @@
     .ds-quote{font-size:21px;line-height:1.75;color:var(--ink);margin-bottom:10px}
     .ds-src{color:var(--mut);font-size:12.5px;margin-bottom:6px}
     .ds-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+    .ds-btns .btn{position:relative}
+    .ds-cnt{position:absolute;top:-8px;right:-8px;min-width:19px;height:19px;padding:0 5px;border-radius:999px;background:var(--goldlt);color:#17130C;font-size:10.5px;font-weight:900;display:inline-flex;align-items:center;justify-content:center;line-height:1;box-shadow:0 2px 8px rgba(0,0,0,.4);border:2px solid var(--bg)}
     .ds-stats{color:var(--mut);font-size:12.5px;margin-top:14px}
     .ds-inner{max-width:640px;text-align:left}
     .ds-inner .sec-kicker{margin-top:8px}
@@ -1298,18 +1300,20 @@ async function loadDaily() {
   if (!dsCard) return;
   [dsTyping, dsRelay] = await Promise.all([pickDaily("typing"), pickDaily("relay")]);
   const day = kstDay();
-  const [rl, tp, streak] = await Promise.all([
+  const [rl, tpc, tp, streak] = await Promise.all([
     sb.from("ob_relay_lines").select("id", { count: "exact", head: true }).eq("day", day),
+    sb.from("ob_typing_scores").select("id", { count: "exact", head: true }).eq("day", day),
     sb.from("ob_typing_scores").select("accuracy, profile:ob_profiles(nickname)").eq("day", day)
       .order("accuracy", { ascending: false }).order("cpm", { ascending: false }).limit(1),
     myStreak(),
   ]);
   const top = tp.data && tp.data[0];
+  const cnt = (n) => n ? `<span class="ds-cnt">${n > 99 ? "99+" : n}</span>` : "";
   dsCard.innerHTML = `
     ${dsRelay ? `<div class="ds-quote serif">“${esc(dsRelay.content)}”</div><div class="ds-src">${esc(dsRelay.source || "")}</div>` : `<p class="gb-empty">오늘의 문장이 준비 중이에요.</p>`}
     <div class="ds-btns">
-      <button class="btn btn-gold" id="dsTypingBtn" data-tr="오늘의문장:필사">✒️ 필사하기</button>
-      <button class="btn btn-line" id="dsRelayBtn" data-tr="오늘의문장:이어쓰기">📝 이 문장 이어쓰기</button>
+      <button class="btn btn-gold" id="dsTypingBtn" data-tr="오늘의문장:필사">✒️ 필사하기${cnt(tpc.count)}</button>
+      <button class="btn btn-line" id="dsRelayBtn" data-tr="오늘의문장:이어쓰기">📝 이 문장 이어쓰기${cnt(rl.count)}</button>
     </div>
     <div class="ds-stats">
       ${rl.count ? `오늘 ${rl.count}명이 문장을 이어 썼어요` : "아직 아무도 잇지 않았어요 — 오늘의 첫 사람이 되어 보세요"}${top ? ` · 필사 1위 ${esc((top.profile && top.profile.nickname) || "독자")}님 (정확도 ${Number(top.accuracy).toFixed(1)}%)` : ""}${streak > 1 ? ` · 🔥 ${streak}일째 참여 중` : ""}
