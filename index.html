@@ -34,6 +34,20 @@
     .gb-del:hover{color:#E36A5C}
     .gb-card>p{font-size:14px;line-height:1.7;color:var(--ink);word-break:break-word}
     .gb-empty{color:var(--mut);font-size:14px;padding:8px 2px}
+    .gb-foot{display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap}
+    .lk-wrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0}
+    .lk-btn{border:1px solid var(--line);background:none;border-radius:999px;padding:3px 11px;cursor:pointer;font-size:13px;color:var(--mut);display:inline-flex;align-items:center;gap:5px;font-family:inherit}
+    .lk-btn:hover{border-color:var(--gold);color:var(--gold)}
+    .lk-btn.on{border-color:var(--gold);color:var(--gold);background:rgba(201,164,92,.1)}
+    .lk-cnt{font-weight:700}
+    .lk-names{font-size:12px;color:var(--mut);line-height:1.5}
+    .gb-rep-btn{border:none;background:none;color:var(--mut);font-size:13px;cursor:pointer;padding:3px 6px;font-family:inherit}
+    .gb-rep-btn:hover{color:var(--gold)}
+    .gb-replies{margin-top:4px}
+    .gb-card.gb-reply{margin:10px 0 0 24px;background:rgba(255,255,255,.02);border-left:2px solid var(--gold)}
+    .gb-reply-tag{font-size:11px;color:var(--gold);border:1px solid var(--gold);border-radius:4px;padding:0 5px;line-height:1.6}
+    .gb-repform{margin:10px 0 0 24px}
+    .gb-repform[hidden]{display:none}
     .cm-zone{margin-top:28px;border-top:1px dashed var(--line);padding-top:22px}
     .cm-badge{background:rgba(53,200,232,.12) !important;color:var(--cyan) !important}
     #obToast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:#22262E;color:var(--ink);border:1px solid var(--line);border-radius:24px;padding:10px 20px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:999;max-width:88vw}
@@ -468,84 +482,84 @@ const BOOKS = [
     cat: "자기계발 · AI시대 생존법", mission: true, missionUrl: HA_MISSION_URL, tilt: true,
     sc: "#15151D", st: "#35C8E8", sh: 300, sw: 58, sf: 17,
     desc: "AI시대 양손잡이 신인류가 생존하는 10가지 방법. 한 손에는 나의 코어, 다른 손에는 AI — 한 장을 읽을 때마다 '나의 것'으로 바꾸는 독자 미션이 웹에서 기다립니다. 지금 9개의 미션이 공개되어 있어요." },
-  { slug: "192495663", cover: "covers/192495663.jpg",
+  { slug: "192495663", isbn: "9791199881754", cover: "covers/192495663.jpg",
     title: "갓생은 모르겠고 나부터 찾겠습니다", author: "한혜주 외 4인", year: "2026",
     cat: "에세이", buy: "https://www.yes24.com/product/goods/192495663",
     sc: "#F2E45C", st: "#17130C", sh: 282, sw: 55, sf: 13.5,
     desc: "더 나은 사람이 되려다 자신을 잃어버린 2030 청년 다섯 명이 주체성·자존감·관계·습관·페이스 조절에 관해 나누는 진솔한 이야기. '나를 잃지 않는 법'을 다섯 가지 목소리로 전합니다.",
     quote: "분명 열심히 살았는데, 왜 자꾸 '나'는 사라질까?",
     intro: ["갓생이 당연한 시대, 더 나은 사람이 되려다 '나'를 놓쳐버린 2030 다섯 청년의 솔직한 고백. '주체성·자존감·관계 속 감정·습관·페이스 조절'의 다섯 가지 주제로 나다운 삶을 찾아가는 진짜 이야기.", "새벽 기상과 운동 인증, 빈틈없는 계획표로 대표되는 '갓생'은 한 시대의 보편적 문화가 되었지만, 유행처럼 문화를 따르던 청년들이 어느 순간 멈춰서기 시작했다. 보장되는 미래 없이 끊임없이 자신을 증명해야 한다는 압박에 지쳤기 때문이다. 한 조사에서는 대학생 1,000명 중 응답자의 절반 이상이 최근 1년 안에 '번아웃'을 경험했다고 답했다. 열심히 살수록 더 지치는 역설 앞에서, 사람들의 질문은 '어떻게 더 잘 해낼까'에서 '어떻게 나를 잃지 않을까'로 옮겨가고 있다.", "『갓생은 모르겠고 나부터 찾겠습니다』는 바로 그 질문의 한가운데 놓인 책이다. 이 책은 더 부지런해지라고 다그치지 않는다. 대신, 같은 시대를 통과하는 청년 다섯 명이 \"나는 어디에 있었을까\"라는 물음 앞에 나란히 서서, 각자가 어떻게 흔들렸고 어떻게 다시 일어섰는지를 들려준다. 각자만의 갓생을 살다 어느 순간 자기 자신을 놓쳐버린 20·30대 청년 저자 다섯 명은 나이도, 직업도, 살아온 길도 다르지만 이들이 마주한 방황의 모양은 닮아 있다.", "갓생 담론이 넘쳐나지만, 정작 '나를 잃어버린 경험'을 솔직하게 꺼내놓는 책은 드물다. 성공한 사람의 루틴 공개가 아니라, 헤매고 넘어지고 다시 일어서는 평범한 청년의 생생한 체험담이 필요한 이유다. 이 책은 '더 나은 나'가 되는 법을 알려주지 않는다. 대신 '나를 잃지 않는 법'을 다섯 가지 목소리로 이야기한다."] },
-  { slug: "189528188", cover: "covers/189528188.jpg",
+  { slug: "189528188", isbn: "9791199881709", cover: "covers/189528188.jpg",
     title: "삶을 노래하듯이", author: "김수", year: "2026",
     cat: "에세이", buy: "https://www.yes24.com/product/goods/189528188",
     sc: "#415C45", st: "#F3F0E6", sh: 262, sw: 48, sf: 15,
     desc: "무대 위의 성악가가 무대 아래에서 일상을 바라보는 50편의 시선집. 따뜻함을 사수하기로 한 한 사람이 작은 장면 앞에 어떻게 멈춰 서는지를 정직하게 기록했습니다.",
     quote: "책장을 덮고 창밖을 한 번 더 바라보게 하는, 작은 멈춤을 권하는 책",
     intro: ["『삶을 노래하듯이』는 무대 위에서 노래하는 사람이 무대 아래에서 어떤 마음으로 살아가는지를 담은 50편의 시선집이다. 작가는 '시선'을 세상을 어떤 온도로 바라볼지 결정하는 방법이라 정의하며, 따뜻함을 사수하기로 한 한 사람이 일상의 작은 장면 앞에 어떻게 멈춰 서는지를 정직하게 기록한다.", "작가는 자신의 시선이 모두 빌려 온 것이라 말한다. 어머니의 꽃 보는 눈, 선생들의 너그러움, 동료들의 단단함을 받아 시야를 만들었다고. 그래서 글들은 감각을 자랑하기보다 자신을 만들어 준 이들에게 보내는 답신처럼 읽힌다. 사랑을 다루는 자세 역시 자랑도 원망도 없이 정제된 다정함으로 채워진다.", "50편은 한 호흡의 짧은 글과 차분한 긴 산문이 번갈아 흐르고, 처음부터든 아무 페이지든 펼쳐 읽을 수 있다. 부록 '작가와의 대화'에는 시선집이 만들어진 1년이 담겼다. 작가가 바라는 건 거창하지 않다. \"나도 한 번 찾아봐야지\"라는 마음 한 줄. 책장을 덮고 창밖을 한 번 더 바라보게 하는, 작은 멈춤을 권하는 책이다."] },
-  { slug: "183234736", cover: "covers/183234736.jpg",
+  { slug: "183234736", isbn: "9791198456182", cover: "covers/183234736.jpg",
     title: "잃고 싶지 않아, 낭만", author: "윤성화", year: "2026",
     cat: "산문집", buy: "https://www.yes24.com/product/goods/183234736",
     sc: "#D8D2C2", st: "#37507A", sh: 274, sw: 52, sf: 15,
     desc: "날씨, 커피, 겨울 귤 같은 평범한 풍경 속 감정과 관계의 의미를 발견하는 산문집. 낭만은 특별한 날이 아니라 지금 이 순간에서 시작되며, 그것을 선택하는 일이 삶을 아름답게 만드는 조용한 용기임을 이야기합니다.",
     quote: "낭만은 특별한 날에만 찾아오는 것이 아니라, 지금 이 자리에서 이미 시작된 것",
     intro: ["날씨, 커피, 볼펜, 겨울 귤처럼 무심히 지나쳤던 일상의 풍경들이 사실은 우리의 감정과 관계, 삶의 결을 고스란히 담고 있다. 『잃고 싶지 않아, 낭만』은 빠르게 흘러가는 하루 속에서도 작은 순간의 온기를 붙들어두고 싶은 이들을 위한 산문집이다.", "저자 윤성화는 50개의 일상적 단어들을 통해 낭만이란 특별한 날에만 찾아오는 것이 아니라, 지금 이 자리에서 이미 시작된 것임을, 그리고 그것을 선택하는 것이 삶을 아름답게 만드는 가장 조용한 용기임을 이야기한다."] },
-  { slug: "170526498", cover: "covers/170526498.jpg",
+  { slug: "170526498", isbn: "9791198456168", cover: "covers/170526498.jpg",
     title: "기록이 날 구원할지도 몰라", author: "경화", year: "2025",
     cat: "에세이", buy: "https://www.yes24.com/product/goods/170526498",
     sc: "#D2838B", st: "#FFF6F1", sh: 288, sw: 54, sf: 14,
     desc: "기록하는 방법이 아니라, 기록하며 살아가는 마음을 다룬 에세이. 완벽하지 않은 기록과 빈 페이지도 가치 있음을 전하며, 기록이 힘든 날들을 견디게 돕는 위로임을 이야기합니다.",
     quote: "잘 기록하는 법이 아니라, 기록하며 살아가는 마음을 다룬 에세이",
     intro: ["『기록이 날 구원할지도 몰라』는 '잘 기록하는 법'을 알려주는 책이 아니다. 대신 기록을 하며 살아온 한 사람의 마음을 따라가는 에세이다. 매일 쓰지 못한 날들, 쓰다 만 다이어리, 빈칸으로 남겨진 페이지 앞에서 느꼈던 죄책감까지. 이 책은 그런 순간들을 실패로 규정하지 않는다.", "작가는 기록을 목표나 성취의 수단이 아니라, 자신을 판단하지 않고 곁에 남아 있던 존재로 이야기한다. 기록 덕분에 인생이 달라지지는 않았지만, 감당하기 힘든 날들을 지나올 수 있었다는 고백은 기록을 대하는 태도 자체를 바꾸어 놓는다."] },
-  { slug: "154723991", cover: "covers/154723991.jpg",
+  { slug: "154723991", isbn: "9791198456144", cover: "covers/154723991.jpg",
     title: "그래서 제가 어떻게 쉬면 되나요?", author: "윤성화", year: "2025",
     cat: "자기계발", buy: "https://www.yes24.com/product/goods/154723991", mission: true, missionUrl: MU_MISSION_URL,
     sc: "#6E7034", st: "#F5F0DC", sh: 292, sw: 57, sf: 13.5,
     desc: "번아웃의 시대, 진짜 휴식을 찾기 위한 10단계 로드맵. 나의 특성에 맞는 휴식을 설계해 삶의 활력을 회복하도록 안내합니다.",
     quote: "휴식은 '더 나은 나를 위한 필수 조건'이자 '존재의 예술'",
     intro: ["2025년 대한민국은 끊임없는 성과 압박, 디지털 과의존, 그리고 휴식에 대한 죄책감으로 인해 국민 10명 중 7명 이상이 스트레스로 인한 정신건강 문제를 겪고 있다. 『그래서 제가 어떻게 쉬면 되나요?』는 이러한 시대적 고통에 대한 명쾌한 해답을 제시한다.", "이 책은 단순히 몸을 쉬게 하는 '가짜 휴식'의 함정에서 벗어나, 심리학, 뇌과학, 그리고 저자의 15년 실증 데이터를 기반으로 개인의 생물학적 리듬과 문화적 배경, 직업적 특성을 종합적으로 고려한 '나다운 효능적 휴식'을 설계하는 10단계 로드맵을 제공한다.", "번아웃과 무기력을 넘어 삶의 활력과 창의성을 회복하고, 궁극적으로 휴식을 '더 나은 나를 위한 필수 조건'이자 '존재의 예술'로 승화시킬 방법을 제시하는 이 책은, 쉼을 잃어버린 현대 사회에 새로운 패러다임을 던질 것이다."] },
-  { slug: "146524508", cover: "covers/146524508.jpg",
+  { slug: "146524508", isbn: "9791198456113", cover: "covers/146524508.jpg",
     title: "하나님께 DM이 왔습니다", author: "류하은", year: "2025",
     cat: "신앙 에세이", buy: "https://www.yes24.com/product/goods/146524508",
     sc: "#38516F", st: "#FBD1C7", sh: 258, sw: 50, sf: 14,
     desc: "청년 크리스천이 겪는 우울감·불안·자존감의 고민에 하나님의 관점으로 답하는 묵상집. 일상의 고민에 대한 기도 형식의 응답으로 위로와 사랑을 전합니다.",
     quote: "이런 나도 하나님은 만나주실까? 몇 번이고 의심하게 된다면",
     intro: ["우선순위가 다르고, 삶의 기준이 다른 세상에서 하나님의 자녀답게 살아가는 삶은 지난하기만 하다. 열심히 잘 살아보려고 노력하거나 주어지는 사역들을 마다하지 않고 다 감당하려고 애쓸 때, 또는 부족하고 못난 자기 모습에 자존감이 고꾸라져도 이미 성경을 통해 알려주신 하나님의 하나님 되심과 하나님의 사랑을 잊기 십상이다. 이런 나도 하나님은 만나주실까? 몇 번이고 의심하게 된다면, 『하나님께 DM이 왔습니다』를 추천한다.", "류하은 작가는 '매일 삶에서 만나는 하나님의 말씀을 묵상하고 나눈다'는 의미의 '하묵(hamuk_365)' 계정을 운영한다. 『하나님께 DM이 왔습니다』는 인스타그램에 카드뉴스 형식으로 업로드되는 작가의 묵상 글을 엮어 한 권의 책으로 제작한 묵상집이다. 특별히 인스타그램 콘텐츠에는 없는 누구나 한 번쯤 해봤을 고민과 궁금한 점들을 하나님께 드리는 기도 형식으로 담아 공감할 지점을 더했다. 이 책을 통해 하나님의 사랑과 위로가 청년들의 마음에 닿기를 기도한다."] },
-  { slug: "143830983", cover: "covers/143830983.jpg",
+  { slug: "143830983", isbn: "9791198456151", cover: "covers/143830983.jpg",
     title: "봄 내음보다 너를", author: "강설", year: "2025",
     cat: "펫로스 소설", buy: "https://www.yes24.com/product/goods/143830983",
     sc: "#09657F", st: "#EAF4EF", sh: 268, sw: 49, sf: 15,
     desc: "무지개다리를 건넌 반려견 '보미'가 가족과의 첫 만남부터 이별까지를 추억하며 전하는 편지. 반려인 20여 명의 인터뷰를 바탕으로 함께한 순간들을 그려낸 펫로스 소설입니다.",
     quote: "\"사랑해\", \"고마워\", \"행복했어\", \"보고싶어\"",
     intro: ["첫 반려견 '보미'가 무지개다리를 건너면서 남기는 편지. 가족보다 더 가족 같았던 반려견 '보미', 너도 함께한 모든 순간들이 행복했을까?", "사랑하는 반려동물이 세상을 떠난 후 남겨진 반려인들은 인터뷰에서 늘 이 말을 한 번만이라도 더 전하고 싶어 했다. 어쩌면 반려인들이 그들의 반려동물에게 듣고 싶었을 이야기를 책을 통해 전해야겠다는 생각이 들었다. 무지개다리를 건넌 반려견 '보미'가 추억 날개를 입고 반려 가족과의 첫 만남부터 이별의 순간까지 여행하며 반려인에게 미처 전하지 못했던 말과 마음을 편지로 담았다."] },
-  { slug: "142637821", cover: "covers/142637821.jpg",
+  { slug: "142637821", isbn: "9791198456137", cover: "covers/142637821.jpg",
     title: "핑계보다 방법을 찾는 사람", author: "윤성화", year: "2025",
     cat: "에세이", buy: "https://www.yes24.com/product/goods/142637821",
     sc: "#2A7A81", st: "#E8F6F4", sh: 284, sw: 55, sf: 14,
     desc: "'핑계도 습관이다.' 문제 속에서도 해결책을 찾고 행동으로 나아가는 태도에 관한 에세이. 지금 주어진 조건 속에서 방법을 모색하는 삶의 자세를 제시합니다.",
     quote: "핑계도 습관이다! 지금 주어진 것에 집중하고, 변명 대신 행동으로 다시 시작하라.",
     intro: ["삶에서 작은 변화를 만들어내는 사람들은 '태도'부터 다르다. 핑계보다 방법을 찾는 사람들은 문제 속에서도 해결책을 모색해 앞으로 나아간다. 『핑계보다 방법을 찾는 사람』은 더 이상 청년들이 실패하고 낙담한 상태로만 머물러 있지 않도록, 그 태도를 길러내는 구체적인 방법들을 담았다."] },
-  { slug: "133199376", cover: "covers/133199376.jpg",
+  { slug: "133199376", isbn: "9791198456199", cover: "covers/133199376.jpg",
     title: "저의 보호자는 고양이입니다", author: "슬로", year: "2024",
     cat: "에세이", buy: "https://www.yes24.com/product/goods/133199376",
     sc: "#9AA17D", st: "#232A18", sh: 254, sw: 51, sf: 13.5,
     desc: "깊은 우울에서 벗어난 작가가 버려진 고양이 도도를 입양하며 겪은 4년의 이야기. 작고 연약한 존재가 집사에게 남긴 회복의 기록입니다.",
     quote: "반려묘 '도도'를 통해 삶을 살아가는 '지혜'를 배우다",
     intro: ["반려묘 도도와 슬로 집사의 우당탕탕 현실 동거 이야기.", "이 책은 깊은 우울과 무기력에 빠져있던 작가가 버려진 고양이 '도도'를 데려와 동거하는 지난 4년의 이야기가 담겨있다. 작가는 도도를 만나기 전과 후의 삶이 크게 달라졌다고 말하며, 작고 연약한 존재가 집사에게 끼친 영향을 고스란히 담고자 했다. 귀엽게 생긴 외모와 다르게 행동은 결코 귀엽지 않은 도도의 이야기에 작가 특유의 위트가 묻어있다."] },
-  { slug: "127972671", cover: "covers/127972671.jpg",
+  { slug: "127972671", isbn: "9791198456106", cover: "covers/127972671.jpg",
     title: "그래서 제가 뭘 하면 되나요?", author: "윤성화", year: "2024 개정판",
     cat: "진로 · 자기계발", buy: "https://www.yes24.com/product/goods/127972671", mission: true, missionUrl: MU_MISSION_URL,
     sc: "#F1E5BC", st: "#6B4E1E", sh: 296, sw: 58, sf: 13.5,
     desc: "15년 경력의 진로 교육가가 안내하는 자아발견·비전발견·멘토발견의 3단계 로드맵. 청년들이 자신의 중심을 잡고 실질적인 변화를 이루도록 돕는 책입니다.",
     quote: "책장을 덮고 나면 가슴이 뛸 것이다! 변화된 내 모습이 선명하게 그려질 테니까!",
     intro: ["15년 동안 교육과 상담으로 청년들을 만나며 쌓아온 노하우를 모두 담았다. 언제까지 남들의 성공과 성장에 박수를 보내기만 할 것인가? 『그래서 제가 뭘 하면 되나요?』는 당신도 충분히 해 낼 수 있다고 말한다. 그리고 결심에만 그치지 않고, 실제 행동의 변화를 끌어내는 실제적 사례를 제공한다."] },
-  { slug: "126438110", cover: "covers/126438110.jpg",
+  { slug: "126438110", isbn: "9791198456120", cover: "covers/126438110.jpg",
     title: "하나님, 저희 잘가고 있는 거 맞나요?", author: "소꾸부부", year: "2024",
     cat: "신앙 에세이", buy: "https://www.yes24.com/product/goods/126438110",
     sc: "#407469", st: "#EFE6C8", sh: 264, sw: 53, sf: 12.5,
     desc: "신혼부부가 예상치 못한 질병과 창업의 터널을 지나며 배운 동행의 의미. 연약함마저 활용하시는 하나님의 사역 방식을 담은 신앙 에세이입니다.",
     quote: "\"아직 우리 이야기는 완성되지 않았다!\"",
     intro: ["하나님과 진짜 동행하는 삶을 살아간다는 것에 대해 말하다.", "이 책은 부부가 하나의 비전을 품고 나아가면서 능력 밖의 문제들을 허락하시는 하나님을 의지하며 기꺼이 하나님의 부르심에 동참하고자 하는 이야기를 담았다. 성숙한 크리스천으로 성장하는 과정이 생각만큼 쉽지 않지만 '감사'하며 나아갈 수 있는 이유와 방법을 소개하고자 한다."] },
-  { slug: "122490082", cover: "covers/122490082.jpg",
+  { slug: "122490082", isbn: "9791198456175", cover: "covers/122490082.jpg",
     title: "12 POWERS", author: "윤성화 · 최대열", year: "2023",
     cat: "자기계발", buy: "https://www.yes24.com/product/goods/122490082", mission: true, missionUrl: MU_MISSION_URL,
     sc: "#231917", st: "#C9A24B", sh: 278, sw: 56, sf: 16,
@@ -631,7 +645,8 @@ function openDetail(i) {
           <p class="desc" style="color:var(--mut); font-size:14px;">📖 책의 한 장이 끝날 때마다 독자 미션이 하나씩 열립니다 — 닉네임+PIN만으로 시작해요.</p>
           ${missionGridHtml()}` : ""}
         <div class="btn-row">
-          ${b.buy ? `<a class="btn ${b.mission ? "btn-line" : "btn-gold"}" href="${b.buy}" target="_blank" rel="noopener" data-tr="구매:${b.title}">구매하러 가기 →</a>` : ""}
+          ${b.buy ? `<a class="btn btn-line" href="${b.buy}" target="_blank" rel="noopener" data-tr="구매:예스24:${b.title}">예스24 구매 →</a>` : ""}
+          ${b.buy && b.isbn ? `<a class="btn btn-line" href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=${b.isbn}" target="_blank" rel="noopener" data-tr="구매:알라딘:${b.title}">알라딘 구매 →</a><a class="btn btn-line" href="https://www.kyobobook.co.kr/product/detailViewKor.laf?barcode=${b.isbn}" target="_blank" rel="noopener" data-tr="구매:교보문고:${b.title}">교보문고 구매 →</a>` : ""}
           ${b.mission ? `<a class="btn btn-gold" href="${b.missionUrl}" target="_blank" rel="noopener" data-tr="미션웹:${b.title}">미션 페이지로 이동하기 →</a>` : ""}
         </div>
       </div>
@@ -868,18 +883,21 @@ function renderGbForm() {
     });
   }
 }
-function entryCard(g, table) {
+function entryCard(g, table, foot, nested) {
   const nick = (g.profile && g.profile.nickname) || "독자";
   const ava = (g.profile && g.profile.avatar_url) || "";
   return `
-    <div class="gb-card">
+    <div class="gb-card${g.parent_id ? " gb-reply" : ""}">
       <div class="gb-top">
         ${ava ? `<img class="gb-ava" src="${esc(ava)}" alt="" referrerpolicy="no-referrer" />` : `<span class="gb-ava gb-ava-t">${esc(nick[0] || "독")}</span>`}
         <b>${esc(nick)}</b>
+        ${g.parent_id ? `<span class="gb-reply-tag">답글</span>` : ""}
         <span class="gb-date">${fmtDT(g.created_at)}</span>
         ${obUser && obUser.id === g.user_id ? `<button class="gb-del" data-del="${g.id}" data-table="${table}">삭제</button>` : ""}
       </div>
       <p>${esc(g.content)}</p>
+      ${foot || ""}
+      ${nested || ""}
     </div>`;
 }
 function bindDelete(root, reload) {
@@ -888,15 +906,85 @@ function bindDelete(root, reload) {
     toast("삭제했어요."); reload();
   }));
 }
+
+/* ── 좋아요 공통 ── */
+async function fetchLikes(kind, ids) {
+  if (!ids.length) return {};
+  const { data } = await sb.from("ob_likes")
+    .select("target_id, user_id, profile:ob_profiles(nickname)")
+    .eq("target_type", kind).in("target_id", ids);
+  const map = {};
+  (data || []).forEach((l) => { (map[l.target_id] = map[l.target_id] || []).push(l); });
+  return map;
+}
+function likeBarHtml(kind, id, likers) {
+  likers = likers || [];
+  const mine = obUser && likers.some((l) => l.user_id === obUser.id);
+  const names = likers.map((l) => esc((l.profile && l.profile.nickname) || "독자"));
+  return `<div class="lk-wrap">
+      <button class="lk-btn${mine ? " on" : ""}" data-like="${id}" data-kind="${kind}" title="${mine ? "좋아요 취소" : "좋아요"}">👍<span class="lk-cnt">${likers.length || ""}</span></button>
+      ${names.length ? `<span class="lk-names">${names.slice(0, 6).join(", ")}${names.length > 6 ? ` 외 ${names.length - 6}명` : ""}님이 좋아해요</span>` : ""}
+    </div>`;
+}
+function bindLikes(root, reload) {
+  root.querySelectorAll("[data-like]").forEach((b) => b.addEventListener("click", async () => {
+    if (!obUser) { openLogin(); return; }
+    b.disabled = true;
+    if (b.classList.contains("on")) {
+      await sb.from("ob_likes").delete().eq("target_type", b.dataset.kind).eq("target_id", b.dataset.like).eq("user_id", obUser.id);
+    } else {
+      const { error } = await sb.from("ob_likes").insert({ target_type: b.dataset.kind, target_id: b.dataset.like, user_id: obUser.id });
+      if (error && error.code !== "23505") { toast("좋아요에 실패했어요. 잠시 후 다시 시도해 주세요."); b.disabled = false; return; }
+      track("like", b.dataset.kind + ":" + b.dataset.like);
+    }
+    reload();
+  }));
+}
+
 async function loadGuestbook() {
   if (!gbList) return;
   const { data, error } = await sb.from("ob_guestbook")
-    .select("id, content, created_at, user_id, profile:ob_profiles(nickname, avatar_url)")
-    .order("created_at", { ascending: false }).limit(50);
+    .select("id, content, created_at, user_id, parent_id, profile:ob_profiles(nickname, avatar_url)")
+    .order("created_at", { ascending: true }).limit(200);
   if (error) { gbList.innerHTML = `<p class="gb-empty">방명록을 불러오지 못했어요.</p>`; return; }
-  if (!data.length) { gbList.innerHTML = `<p class="gb-empty">아직 첫 인사가 없어요 — 첫 번째 발자국을 남겨 주세요 👣</p>`; return; }
-  gbList.innerHTML = data.map((g) => entryCard(g, "ob_guestbook")).join("");
+  const parents = data.filter((g) => !g.parent_id).reverse();
+  if (!parents.length) { gbList.innerHTML = `<p class="gb-empty">아직 첫 인사가 없어요 — 첫 번째 발자국을 남겨 주세요 👣</p>`; return; }
+  const reps = {};
+  data.filter((g) => g.parent_id).forEach((r) => { (reps[r.parent_id] = reps[r.parent_id] || []).push(r); });
+  const likeMap = await fetchLikes("guestbook", data.map((g) => g.id));
+  gbList.innerHTML = parents.map((g) => {
+    const rr = reps[g.id] || [];
+    const rHtml = rr.map((r) => entryCard(r, "ob_guestbook", `<div class="gb-foot">${likeBarHtml("guestbook", r.id, likeMap[r.id])}</div>`)).join("");
+    const foot = `<div class="gb-foot">${likeBarHtml("guestbook", g.id, likeMap[g.id])}<button class="gb-rep-btn" data-rep="${g.id}" data-tr="방명록:답글버튼">💬 답글${rr.length ? " " + rr.length : ""}</button></div>`;
+    const zone = `<div class="gb-replies">${rHtml}<div class="gb-repform" id="gbRepForm-${g.id}" hidden></div></div>`;
+    return entryCard(g, "ob_guestbook", foot, zone);
+  }).join("");
   bindDelete(gbList, loadGuestbook);
+  bindLikes(gbList, loadGuestbook);
+  bindReplies();
+}
+function bindReplies() {
+  gbList.querySelectorAll("[data-rep]").forEach((b) => b.addEventListener("click", () => {
+    if (!obUser) { openLogin(); return; }
+    const box = document.getElementById("gbRepForm-" + b.dataset.rep);
+    if (!box) return;
+    if (!box.hidden) { box.hidden = true; box.innerHTML = ""; return; }
+    box.hidden = false;
+    box.innerHTML = `<form class="gb-form">
+        <textarea rows="2" maxlength="300" placeholder="${esc((obProfile && obProfile.nickname) || "독자")}님의 이름으로 답글이 달려요 (300자)"></textarea>
+        <button type="submit" class="btn btn-gold" data-tr="방명록:답글등록">답글 남기기</button>
+      </form>`;
+    const f = box.querySelector("form");
+    f.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const v = f.querySelector("textarea").value.trim();
+      if (!v) return;
+      const { error } = await sb.from("ob_guestbook").insert({ user_id: obUser.id, content: v, parent_id: b.dataset.rep });
+      if (error) { toast("답글 등록에 실패했어요."); return; }
+      toast("답글이 등록됐어요 💬"); loadGuestbook();
+    });
+    f.querySelector("textarea").focus();
+  }));
 }
 loadGuestbook();
 
@@ -916,8 +1004,11 @@ async function loadComments(slug) {
     .select("id, content, created_at, user_id, profile:ob_profiles(nickname, avatar_url)")
     .eq("book_slug", slug).order("created_at", { ascending: false }).limit(50);
   if (error) { zone.innerHTML = `<p class="gb-empty">댓글을 불러오지 못했어요.</p>`; return; }
-  zone.innerHTML = data.length ? data.map((c) => entryCard(c, "ob_book_comments")).join("") : `<p class="gb-empty">아직 댓글이 없어요 — 첫 댓글의 주인공이 되어 주세요 ✏️</p>`;
+  if (!data.length) { zone.innerHTML = `<p class="gb-empty">아직 댓글이 없어요 — 첫 댓글의 주인공이 되어 주세요 ✏️</p>`; return; }
+  const likeMap = await fetchLikes("comment", data.map((c) => c.id));
+  zone.innerHTML = data.map((c) => entryCard(c, "ob_book_comments", `<div class="gb-foot">${likeBarHtml("comment", c.id, likeMap[c.id])}</div>`)).join("");
   bindDelete(zone, () => loadComments(slug));
+  bindLikes(zone, () => loadComments(slug));
 }
 function bindCommentForm(slug) {
   const wrap = document.getElementById("cmForm-" + slug);
