@@ -127,6 +127,22 @@ td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
     </section>
 
     <section class="panel">
+      <h3>📜 오늘의 문장 관리</h3>
+      <p class="hint">필사 발췌문과 이어쓰기 첫 문장이 매일 자동으로 돌아가며 나옵니다 · 출간작 본문 발췌를 계속 추가해 주세요</p>
+      <div class="af-write">
+        <select id="dsKind" style="background:var(--bg);border:1px solid var(--line);border-radius:12px;color:var(--ink);padding:10px 12px;font-size:13.5px;font-family:inherit">
+          <option value="typing">✒️ 필사 발췌문 (책 본문 3~4줄)</option>
+          <option value="relay">📝 이어쓰기 첫 문장</option>
+        </select>
+        <textarea id="dsText" rows="3" maxlength="1000" placeholder="문장 내용" style="margin-top:10px"></textarea>
+        <input class="code-input" id="dsSource" type="text" placeholder="출처 (예: 『호모 앰비덱스』 3장 중에서)" style="text-align:left;letter-spacing:0;margin-top:10px;margin-bottom:0" />
+        <div class="af-row"><button class="btn-gold" id="dsAdd">추가하기</button></div>
+        <div class="err" id="dsErr"></div>
+      </div>
+      <div id="dsAdmin"></div>
+    </section>
+
+    <section class="panel">
       <h3>👥 작가 권한 관리</h3>
       <p class="hint">간편로그인으로 한 번이라도 로그인한 회원 목록 · 「작가 지정」을 누르면 그 회원이 홈페이지 「작가의 오늘」에 직접 글을 쓸 수 있어요</p>
       <div id="authorAdmin"></div>
@@ -312,8 +328,32 @@ async function loadDash() {
       ? sessions.slice(0, 20).map(s => `<tr><td>${fmtDT(s.started)}</td><td>${esc(s.nickname)}</td><td class="num">${fmtDur(s.seconds)}</td><td class="num">${s.events}</td></tr>`).join("")
       : `<tr><td colspan="4" class="empty">아직 세션이 없어요.</td></tr>`);
 
-  loadModeration(); loadAuthorAdmin(); loadUnanswered(); loadAuthors();
+  loadModeration(); loadAuthorAdmin(); loadUnanswered(); loadAuthors(); loadDsAdmin();
 }
+
+/* ── 오늘의 문장 관리 ── */
+async function loadDsAdmin() {
+  const { data } = await sb.from("ob_daily_sentences").select("id, kind, content, source, created_at").order("kind").order("created_at", { ascending:false }).limit(300);
+  const rows = data || [];
+  const lbl = { typing: "✒️ 필사", relay: "📝 이어쓰기" };
+  $("dsAdmin").innerHTML = rows.length
+    ? rows.map(s => `<div class="mod-card"><span class="meta">${lbl[s.kind] || s.kind}<br />${esc((s.source || "").slice(0, 24))}</span><span class="txt">${esc(s.content.length > 120 ? s.content.slice(0, 120) + "…" : s.content)}</span><button data-delds="${s.id}">삭제</button></div>`).join("")
+    : `<p class="empty">등록된 문장이 없어요.</p>`;
+  document.querySelectorAll("#dsAdmin [data-delds]").forEach(b => b.addEventListener("click", async () => {
+    if (!confirm("이 문장을 삭제할까요?")) return;
+    await sb.from("ob_daily_sentences").delete().eq("id", b.dataset.delds);
+    loadDsAdmin();
+  }));
+}
+$("dsAdd").addEventListener("click", async () => {
+  const v = $("dsText").value.trim();
+  const errEl = $("dsErr"); errEl.textContent = "";
+  if (!v) { errEl.textContent = "문장 내용을 입력해 주세요."; return; }
+  const { error } = await sb.from("ob_daily_sentences").insert({ kind: $("dsKind").value, content: v, source: $("dsSource").value.trim() || null });
+  if (error) { errEl.textContent = "추가에 실패했어요: " + error.message; return; }
+  $("dsText").value = ""; $("dsSource").value = "";
+  loadDsAdmin();
+});
 
 /* ── 작가 권한 관리 ── */
 async function loadAuthors() {

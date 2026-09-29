@@ -61,6 +61,29 @@
     .af-file-lb:hover{color:var(--gold);border-color:var(--gold)}
     .af-file-name{font-size:12px;color:var(--mut);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .af-write-row .btn{margin-left:auto}
+    .ds-card{border:1px solid var(--line);border-radius:16px;background:var(--bg2);padding:34px 28px;text-align:center}
+    .ds-quote{font-size:21px;line-height:1.75;color:var(--ink);margin-bottom:10px}
+    .ds-src{color:var(--mut);font-size:12.5px;margin-bottom:6px}
+    .ds-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+    .ds-stats{color:var(--mut);font-size:12.5px;margin-top:14px}
+    .ds-inner{max-width:640px;text-align:left}
+    .ds-inner .sec-kicker{margin-top:8px}
+    .ds-title{font-size:24px;margin-bottom:18px}
+    .ds-guide{color:var(--mut);font-size:13.5px;line-height:1.7;margin-bottom:16px}
+    .tp-target{border:1px solid var(--gold);border-radius:14px;background:var(--bg2);padding:18px 20px;line-height:1.9;font-size:16px;user-select:none;-webkit-user-select:none;margin-bottom:6px}
+    #tpInput{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:14px;color:var(--ink);padding:14px 16px;font-family:inherit;font-size:15px;line-height:1.8;resize:vertical;margin-top:12px}
+    #tpInput:focus{outline:none;border-color:var(--gold)}
+    .tp-result{border:1px solid var(--line);border-radius:12px;background:var(--bg2);padding:14px 18px;margin-top:16px;font-size:15px;text-align:center}
+    .tp-result b{color:var(--gold)}
+    .ds-rank-title{margin:26px 0 10px;font-size:15px}
+    .ds-rank-row{display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line);padding:8px 4px;font-size:13.5px}
+    .ds-rank-row.me{background:rgba(201,164,92,.07);border-radius:8px}
+    .ds-rank-no{width:22px;text-align:center;color:var(--gold);font-weight:700}
+    .ds-rank-nick{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .ds-rank-val{color:var(--mut);font-variant-numeric:tabular-nums}
+    .ds-inner .ds-quote{font-size:19px;text-align:center;margin-top:6px}
+    .ds-inner .ds-src{text-align:center;margin-bottom:18px}
+    .ds-inner .gb-card{text-align:left}
     .cm-zone{margin-top:28px;border-top:1px dashed var(--line);padding-top:22px}
     .cm-badge{background:rgba(53,200,232,.12) !important;color:var(--cyan) !important}
     #obToast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:#22262E;color:var(--ink);border:1px solid var(--line);border-radius:24px;padding:10px 20px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:999;max-width:88vw}
@@ -86,6 +109,7 @@
       <a href="#shelf">서재</a>
       <a href="#about">출판사 소개</a>
       <a href="#authorfeed">작가의 오늘</a>
+      <a href="#daily">오늘의 문장</a>
       <a href="#guestbook">방명록</a>
       <a href="#" id="navMission">미션 웹</a>
       <span class="auth-area" id="authArea"></span>
@@ -195,6 +219,15 @@
   </div>
 </section>
 
+<section id="daily" class="gb">
+  <div class="wrap">
+    <div class="sec-kicker">TODAY'S SENTENCE</div>
+    <h2 class="sec-title serif">오늘의 문장</h2>
+    <p class="gb-desc">매일 자정, 문장이 바뀝니다. 필사로 마음에 새기고, 이어쓰기로 함께 완성해 보세요.</p>
+    <div class="ds-card" id="dsCard"><p class="gb-empty">오늘의 문장을 불러오는 중…</p></div>
+  </div>
+</section>
+
 <section id="guestbook" class="gb">
   <div class="wrap">
     <div class="sec-kicker">GUESTBOOK</div>
@@ -204,6 +237,24 @@
     <div id="gbList"><p class="gb-empty">방명록을 불러오는 중…</p></div>
   </div>
 </section>
+
+<div id="typingOverlay" class="mission-overlay" hidden>
+  <div class="mo-inner ds-inner">
+    <button class="mo-close" id="tpClose" aria-label="닫기">✕</button>
+    <div class="sec-kicker">HANDWRITE</div>
+    <h3 class="serif ds-title">필사의 방</h3>
+    <div id="tpBody"></div>
+  </div>
+</div>
+
+<div id="relayOverlay" class="mission-overlay" hidden>
+  <div class="mo-inner ds-inner">
+    <button class="mo-close" id="rlClose" aria-label="닫기">✕</button>
+    <div class="sec-kicker">RELAY</div>
+    <h3 class="serif ds-title">이어쓰기 릴레이</h3>
+    <div id="rlBody"></div>
+  </div>
+</div>
 
 <div id="loginOverlay" class="mission-overlay" hidden>
   <div class="mo-inner login-inner">
@@ -857,7 +908,9 @@ async function setUser(session) {
     const { data } = await sb.from("ob_profiles").select("nickname, avatar_url, is_admin, is_author").eq("id", obUser.id).maybeSingle();
     obProfile = data || { nickname: "독자", avatar_url: "", is_admin: false, is_author: false };
   }
-  renderAuth(); renderGbForm(); refreshCommentForms(); loadGuestbook(); renderAfForm(); loadAuthorFeed(); checkNotifications();
+  renderAuth(); renderGbForm(); refreshCommentForms(); loadGuestbook(); renderAfForm(); loadAuthorFeed(); loadDaily(); checkNotifications();
+  const rlo = document.getElementById("relayOverlay");
+  if (rlo && !rlo.hidden) { renderRelayForm(); loadRelayLines(); }
 }
 function renderAuth() {
   if (!obUser) {
@@ -1204,6 +1257,182 @@ async function loadAuthorFeed() {
   }));
 }
 loadAuthorFeed();
+
+/* ── 오늘의 문장 ── */
+const dsCard = document.getElementById("dsCard");
+const kstNow = () => new Date(Date.now() + 9 * 3600 * 1000);
+const kstDay = () => kstNow().toISOString().slice(0, 10);
+let dsTyping = null, dsRelay = null;
+async function pickDaily(kind) {
+  const head = await sb.from("ob_daily_sentences").select("id", { count: "exact", head: true }).eq("kind", kind);
+  const n = head.count || 0;
+  if (!n) return null;
+  const idx = Math.floor((Date.now() + 9 * 3600 * 1000) / 86400000) % n;
+  const { data } = await sb.from("ob_daily_sentences").select("id, content, source").eq("kind", kind)
+    .order("created_at", { ascending: true }).order("id", { ascending: true }).range(idx, idx);
+  return (data && data[0]) || null;
+}
+async function myStreak() {
+  if (!obUser) return 0;
+  const [a, b] = await Promise.all([
+    sb.from("ob_typing_scores").select("day").eq("user_id", obUser.id).order("day", { ascending: false }).limit(60),
+    sb.from("ob_relay_lines").select("day").eq("user_id", obUser.id).order("day", { ascending: false }).limit(120),
+  ]);
+  const days = new Set([...(a.data || []), ...(b.data || [])].map((r) => r.day));
+  let n = 0;
+  const d = kstNow();
+  if (!days.has(d.toISOString().slice(0, 10))) d.setUTCDate(d.getUTCDate() - 1);
+  while (days.has(d.toISOString().slice(0, 10))) { n++; d.setUTCDate(d.getUTCDate() - 1); }
+  return n;
+}
+async function loadDaily() {
+  if (!dsCard) return;
+  [dsTyping, dsRelay] = await Promise.all([pickDaily("typing"), pickDaily("relay")]);
+  const day = kstDay();
+  const [rl, tp, streak] = await Promise.all([
+    sb.from("ob_relay_lines").select("id", { count: "exact", head: true }).eq("day", day),
+    sb.from("ob_typing_scores").select("accuracy, profile:ob_profiles(nickname)").eq("day", day)
+      .order("accuracy", { ascending: false }).order("cpm", { ascending: false }).limit(1),
+    myStreak(),
+  ]);
+  const top = tp.data && tp.data[0];
+  dsCard.innerHTML = `
+    ${dsRelay ? `<div class="ds-quote serif">“${esc(dsRelay.content)}”</div><div class="ds-src">${esc(dsRelay.source || "")}</div>` : `<p class="gb-empty">오늘의 문장이 준비 중이에요.</p>`}
+    <div class="ds-btns">
+      <button class="btn btn-gold" id="dsTypingBtn" data-tr="오늘의문장:필사">✒️ 필사하기</button>
+      <button class="btn btn-line" id="dsRelayBtn" data-tr="오늘의문장:이어쓰기">📝 이 문장 이어쓰기</button>
+    </div>
+    <div class="ds-stats">
+      ${rl.count ? `오늘 ${rl.count}명이 문장을 이어 썼어요` : "아직 아무도 잇지 않았어요 — 오늘의 첫 사람이 되어 보세요"}${top ? ` · 필사 1위 ${esc((top.profile && top.profile.nickname) || "독자")}님 (정확도 ${Number(top.accuracy).toFixed(1)}%)` : ""}${streak > 1 ? ` · 🔥 ${streak}일째 참여 중` : ""}
+    </div>`;
+  document.getElementById("dsTypingBtn").addEventListener("click", openTyping);
+  document.getElementById("dsRelayBtn").addEventListener("click", openRelay);
+}
+loadDaily();
+
+/* ── 필사의 방 ── */
+const tpOverlay = document.getElementById("typingOverlay");
+const tpBody = document.getElementById("tpBody");
+document.getElementById("tpClose").addEventListener("click", () => { tpOverlay.hidden = true; loadDaily(); });
+let tpStart = 0;
+function openTyping() {
+  if (!dsTyping) { toast("오늘의 필사 문장이 준비 중이에요."); return; }
+  track("open_typing", "");
+  tpOverlay.hidden = false; tpStart = 0;
+  tpBody.innerHTML = `
+    <p class="ds-guide">아래 글을 소리 내어 읽듯, 그대로 따라 써 보세요. 첫 글자를 입력하는 순간부터 시간이 흐릅니다.</p>
+    <div class="tp-target">${esc(dsTyping.content)}</div>
+    <div class="ds-src" style="text-align:left">— ${esc(dsTyping.source || "")}</div>
+    <textarea id="tpInput" rows="5" placeholder="여기에 따라 써 보세요 (붙여넣기는 안 돼요)" autocomplete="off" spellcheck="false"></textarea>
+    <div class="ds-btns"><button class="btn btn-gold" id="tpDone" data-tr="필사:완료">다 썼어요</button></div>
+    <div id="tpResult"></div>
+    <div id="tpRank"></div>`;
+  const inp = document.getElementById("tpInput");
+  inp.addEventListener("paste", (e) => { e.preventDefault(); toast("필사는 붙여넣기 없이, 손으로 🙂"); });
+  inp.addEventListener("input", () => { if (!tpStart) tpStart = Date.now(); });
+  document.getElementById("tpDone").addEventListener("click", finishTyping);
+  loadTypingRank();
+}
+function typingAccuracy(target, typed) {
+  const t = target.replace(/\s+/g, " ").trim();
+  const y = typed.replace(/\s+/g, " ").trim();
+  const len = Math.max(t.length, y.length);
+  let ok = 0;
+  for (let i = 0; i < Math.min(t.length, y.length); i++) if (t[i] === y[i]) ok++;
+  return len ? (ok / len) * 100 : 0;
+}
+async function finishTyping() {
+  const inp = document.getElementById("tpInput");
+  const typed = inp.value;
+  if (!typed.trim() || !tpStart) { toast("먼저 따라 써 주세요 🙂"); return; }
+  const ms = Date.now() - tpStart;
+  const acc = Math.min(100, typingAccuracy(dsTyping.content, typed));
+  const chars = typed.replace(/\s+/g, "").length;
+  const cpm = Math.min(3000, Math.round(chars / (ms / 60000)));
+  const el = document.getElementById("tpResult");
+  el.innerHTML = `<div class="tp-result">정확도 <b>${acc.toFixed(1)}%</b> · 분당 <b>${cpm}</b>타 · ${(ms / 1000).toFixed(1)}초</div>`;
+  track("typing_done", acc.toFixed(1) + "%");
+  tpStart = 0;
+  if (!obUser) {
+    el.innerHTML += `<div class="gb-login" style="margin-top:12px"><p>로그인하면 오늘의 랭킹에 이름이 올라가요.</p><button class="btn btn-line" id="tpLoginBtn">간편로그인 하기</button></div>`;
+    document.getElementById("tpLoginBtn").addEventListener("click", openLogin);
+    return;
+  }
+  if (acc < 30) { toast("정확도 30%를 넘으면 랭킹에 기록돼요 ✍️"); return; }
+  const day = kstDay();
+  const { data: prev } = await sb.from("ob_typing_scores").select("accuracy, cpm").eq("user_id", obUser.id).eq("day", day).maybeSingle();
+  const better = !prev || acc > Number(prev.accuracy) || (acc === Number(prev.accuracy) && cpm > Number(prev.cpm));
+  if (better) {
+    const { error } = await sb.from("ob_typing_scores").upsert({ user_id: obUser.id, day, accuracy: acc, cpm, ms }, { onConflict: "user_id,day" });
+    if (!error) toast(prev ? "오늘의 기록을 경신했어요 🏆" : "오늘의 랭킹에 올랐어요 🏆");
+  } else {
+    toast("오늘의 최고 기록은 그대로예요 — 한 번 더 도전!");
+  }
+  loadTypingRank();
+}
+async function loadTypingRank() {
+  const zone = document.getElementById("tpRank");
+  if (!zone) return;
+  const { data } = await sb.from("ob_typing_scores")
+    .select("accuracy, cpm, user_id, profile:ob_profiles(nickname, is_admin, is_author)")
+    .eq("day", kstDay()).order("accuracy", { ascending: false }).order("cpm", { ascending: false }).limit(10);
+  zone.innerHTML = `<h4 class="ds-rank-title">🏆 오늘의 필사 랭킹 <span style="color:var(--mut);font-weight:400;font-size:12px">(자정에 새로 시작돼요)</span></h4>` +
+    ((data && data.length)
+      ? data.map((r, i) => `<div class="ds-rank-row${obUser && r.user_id === obUser.id ? " me" : ""}"><span class="ds-rank-no">${i + 1}</span><span class="ds-rank-nick">${esc((r.profile && r.profile.nickname) || "독자")}${r.profile && (r.profile.is_admin || r.profile.is_author) ? " ✍️" : ""}</span><span class="ds-rank-val">${Number(r.accuracy).toFixed(1)}% · ${Math.round(r.cpm)}타</span></div>`).join("")
+      : `<p class="gb-empty">아직 오늘의 기록이 없어요 — 1위 자리가 비어 있습니다!</p>`);
+}
+
+/* ── 이어쓰기 릴레이 ── */
+const rlOverlay = document.getElementById("relayOverlay");
+const rlBody = document.getElementById("rlBody");
+document.getElementById("rlClose").addEventListener("click", () => { rlOverlay.hidden = true; loadDaily(); });
+function openRelay() {
+  if (!dsRelay) { toast("오늘의 첫 문장이 준비 중이에요."); return; }
+  track("open_relay", "");
+  rlOverlay.hidden = false;
+  rlBody.innerHTML = `
+    <div class="ds-quote serif">“${esc(dsRelay.content)}”</div>
+    <div class="ds-src">${esc(dsRelay.source || "")}</div>
+    <p class="ds-guide">이 문장 뒤에 이어질 한두 문장을 자유롭게 써 주세요. 정답은 없습니다 — 자정이 되면 새 문장으로 다시 시작돼요.</p>
+    <div id="rlForm"></div>
+    <div id="rlList"><p class="gb-empty">이어쓴 문장들을 불러오는 중…</p></div>`;
+  renderRelayForm();
+  loadRelayLines();
+}
+function renderRelayForm() {
+  const w = document.getElementById("rlForm");
+  if (!w) return;
+  w.innerHTML = obUser
+    ? `<form class="gb-form" id="rlWrite"><textarea rows="2" maxlength="200" placeholder="이어질 문장을 써 보세요 (200자)"></textarea><button type="submit" class="btn btn-gold" data-tr="이어쓰기:등록">잇기</button></form>`
+    : `<div class="gb-login"><p>로그인하면 문장을 이어 쓸 수 있어요.</p><button class="btn btn-line" id="rlLoginBtn">간편로그인 하기</button></div>`;
+  const f = document.getElementById("rlWrite");
+  if (f) f.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const ta = f.querySelector("textarea");
+    const v = ta.value.trim();
+    if (!v) return;
+    const { error } = await sb.from("ob_relay_lines").insert({ user_id: obUser.id, day: kstDay(), content: v });
+    if (error) { toast("등록에 실패했어요."); return; }
+    ta.value = ""; toast("문장이 이어졌어요 📝");
+    track("relay_write", "");
+    loadRelayLines();
+  });
+  const lb = document.getElementById("rlLoginBtn");
+  if (lb) lb.addEventListener("click", openLogin);
+}
+async function loadRelayLines() {
+  const zone = document.getElementById("rlList");
+  if (!zone) return;
+  const { data, error } = await sb.from("ob_relay_lines")
+    .select("id, content, created_at, user_id, profile:ob_profiles(nickname, avatar_url, is_admin, is_author)")
+    .eq("day", kstDay()).order("created_at", { ascending: false }).limit(100);
+  if (error) { zone.innerHTML = `<p class="gb-empty">이어쓴 문장을 불러오지 못했어요.</p>`; return; }
+  if (!data.length) { zone.innerHTML = `<p class="gb-empty">아직 아무도 잇지 않았어요 — 첫 문장을 이어 보세요 ✨</p>`; return; }
+  const likeMap = await fetchLikes("relay", data.map((l) => l.id));
+  zone.innerHTML = data.map((l) => entryCard(l, "ob_relay_lines", `<div class="gb-foot">${likeBarHtml("relay", l.id, likeMap[l.id])}</div>`)).join("");
+  bindDelete(zone, loadRelayLines);
+  bindLikes(zone, loadRelayLines);
+}
 
 /* ── 답글 알림 ── */
 let obNotified = false;
