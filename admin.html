@@ -62,6 +62,12 @@ td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
 .mod-card button:hover { color:#E36A5C; border-color:#E36A5C; }
 .empty { color:var(--mut); font-size:13.5px; padding:10px 4px; }
 .err { color:#E36A5C; font-size:13px; margin-top:8px; }
+.af-write { background:var(--bg2); border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:14px; }
+.af-write textarea { width:100%; background:var(--bg); border:1px solid var(--line); border-radius:12px; color:var(--ink); padding:12px 14px; font-size:14px; font-family:inherit; resize:vertical; min-height:96px; }
+.af-write textarea:focus { outline:none; border-color:var(--gold); }
+.af-row { display:flex; gap:12px; align-items:center; margin-top:10px; flex-wrap:wrap; }
+.af-row input[type="file"] { color:var(--mut); font-size:12.5px; flex:1; min-width:180px; }
+.af-row .btn-gold { width:auto; margin-bottom:0; padding:10px 22px; }
 .cols { display:grid; grid-template-columns:1fr 1fr; gap:26px; }
 @media (max-width:840px) { .cols { grid-template-columns:1fr; } }
 </style>
@@ -105,6 +111,26 @@ td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
     </div>
 
     <div class="tiles" id="tiles"></div>
+
+    <section class="panel">
+      <h3>✍️ 작가의 오늘 — 새 글 쓰기</h3>
+      <p class="hint">홈페이지 「작가의 오늘」 피드에 바로 게시됩니다 · 사진은 선택(5MB 이하)</p>
+      <div class="af-write">
+        <textarea id="afText" rows="4" maxlength="2000" placeholder="오늘의 이야기를 남겨 주세요 — 집필 근황, 읽고 있는 책, 하루의 단상 (2000자)"></textarea>
+        <div class="af-row">
+          <input type="file" id="afImg" accept="image/*" />
+          <button class="btn-gold" id="afPost">게시하기</button>
+        </div>
+        <div class="err" id="afErr"></div>
+      </div>
+      <div id="afAdmin"></div>
+    </section>
+
+    <section class="panel">
+      <h3>💌 작가 답글을 기다리는 글</h3>
+      <p class="hint">작가 답글이 아직 없는 방명록·도서 댓글 — 홈페이지에서 답글을 달면 독자에게 알림이 갑니다</p>
+      <div id="unansweredList"></div>
+    </section>
 
     <section class="panel">
       <h3>👤 방문자별 집계</h3>
@@ -280,7 +306,65 @@ async function loadDash() {
       ? sessions.slice(0, 20).map(s => `<tr><td>${fmtDT(s.started)}</td><td>${esc(s.nickname)}</td><td class="num">${fmtDur(s.seconds)}</td><td class="num">${s.events}</td></tr>`).join("")
       : `<tr><td colspan="4" class="empty">아직 세션이 없어요.</td></tr>`);
 
-  loadModeration();
+  loadModeration(); loadAuthorAdmin(); loadUnanswered();
+}
+
+/* ── 작가의 오늘 관리 ── */
+async function loadAuthorAdmin() {
+  const { data } = await sb.from("ob_author_posts").select("id, content, image_url, created_at").order("created_at", { ascending:false }).limit(20);
+  $("afAdmin").innerHTML = (data && data.length)
+    ? data.map(p => `<div class="mod-card"><span class="meta">${fmtDT(p.created_at)}${p.image_url ? "<br />🖼 사진 포함" : ""}</span><span class="txt">${esc(p.content.length > 140 ? p.content.slice(0, 140) + "…" : p.content)}</span><button data-delpost="${p.id}">삭제</button></div>`).join("")
+    : `<p class="empty">아직 게시한 글이 없어요 — 첫 이야기를 남겨 보세요.</p>`;
+  document.querySelectorAll("#afAdmin [data-delpost]").forEach(b => b.addEventListener("click", async () => {
+    if (!confirm("이 글을 삭제할까요? 달린 한마디와 좋아요도 함께 사라져요.")) return;
+    await sb.from("ob_author_posts").delete().eq("id", b.dataset.delpost);
+    loadAuthorAdmin();
+  }));
+}
+$("afPost").addEventListener("click", async () => {
+  const v = $("afText").value.trim();
+  const errEl = $("afErr"); errEl.textContent = "";
+  if (!v) { errEl.textContent = "내용을 입력해 주세요."; return; }
+  $("afPost").disabled = true;
+  try {
+    let image_url = null;
+    const f = $("afImg").files[0];
+    if (f) {
+      if (f.size > 5 * 1024 * 1024) throw new Error("사진은 5MB 이하만 올릴 수 있어요.");
+      const ext = (f.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+      const path = Date.now() + "-" + Math.random().toString(36).slice(2, 8) + "." + ext;
+      const up = await sb.storage.from("ob-posts").upload(path, f, { contentType: f.type || "image/jpeg" });
+      if (up.error) throw up.error;
+      image_url = sb.storage.from("ob-posts").getPublicUrl(path).data.publicUrl;
+    }
+    const ins = await sb.from("ob_author_posts").insert({ content: v, image_url });
+    if (ins.error) throw ins.error;
+    $("afText").value = ""; $("afImg").value = "";
+    loadAuthorAdmin();
+  } catch (e) {
+    errEl.textContent = "게시에 실패했어요: " + (e.message || e);
+  }
+  $("afPost").disabled = false;
+});
+
+/* ── 작가 답글을 기다리는 글 ── */
+async function loadUnanswered() {
+  const [gb, cm] = await Promise.all([
+    sb.from("ob_guestbook").select("id, content, created_at, parent_id, profile:ob_profiles(nickname, is_admin)").order("created_at", { ascending:false }).limit(100),
+    sb.from("ob_book_comments").select("id, content, created_at, parent_id, book_slug, profile:ob_profiles(nickname, is_admin)").order("created_at", { ascending:false }).limit(100),
+  ]);
+  const build = (rows, label) => {
+    const all = rows || [];
+    const answered = new Set(all.filter(x => x.parent_id && x.profile && x.profile.is_admin).map(x => x.parent_id));
+    return all
+      .filter(x => !x.parent_id && !(x.profile && x.profile.is_admin) && !answered.has(x.id))
+      .map(x => ({ ...x, label: label || "📕 " + (x.book_slug || "") }));
+  };
+  const list = [...build(gb.data, "📖 방명록"), ...build(cm.data, null)]
+    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 20);
+  $("unansweredList").innerHTML = list.length
+    ? list.map(x => `<div class="mod-card"><span class="meta">${fmtDT(x.created_at)}<br /><b style="color:var(--ink)">${esc((x.profile && x.profile.nickname) || "독자")}</b><br />${esc(x.label)}</span><span class="txt">${esc(x.content)}</span></div>`).join("")
+    : `<p class="empty">모든 글에 작가의 답글이 달렸어요 👏</p>`;
 }
 
 /* ── 방명록/댓글 관리 ── */
