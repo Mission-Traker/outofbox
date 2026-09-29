@@ -152,8 +152,23 @@ let user = null, profile = null, days = 30;
 const $ = (id) => document.getElementById(id);
 function show(view) { ["viewLogin","viewClaim","viewDash"].forEach(v => $(v).hidden = (v !== view)); }
 
-/* ── 네이버 콜백 토큰 ── */
+/* ── 네이버 콜백 토큰 + 로그인 안내 메시지 ── */
 (async () => {
+  const msg = location.hash.match(/ob_login_msg=([^&]+)/);
+  if (msg) {
+    history.replaceState(null, "", location.pathname);
+    const M = {
+      naver_not_ready: "네이버 로그인은 준비 중이에요 — 키 등록 후 사용할 수 있어요.",
+      naver_cancel: "네이버 로그인이 취소됐어요.",
+      naver_error: "네이버 로그인 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요.",
+    };
+    const t = document.createElement("div");
+    t.style.cssText = "position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#22262E;color:#F2EFE8;border:1px solid #262A31;border-radius:24px;padding:10px 20px;font-size:14px;z-index:99;max-width:88vw";
+    t.textContent = M[decodeURIComponent(msg[1])] || "로그인에 실패했어요.";
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 4000);
+    return;
+  }
   const m = location.hash.match(/ob_naver_token=([^&]+)/);
   if (!m) return;
   history.replaceState(null, "", location.pathname);

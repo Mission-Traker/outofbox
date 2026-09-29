@@ -789,8 +789,19 @@ document.getElementById("btnNaver").addEventListener("click", () => {
   location.href = SB_URL + "/functions/v1/naver-login?action=start&site=" + encodeURIComponent(location.origin + location.pathname);
 });
 
-/* 네이버 콜백 토큰 → 세션 교환 */
+/* 네이버 콜백 토큰 → 세션 교환 + 로그인 안내 메시지 처리 */
 (async () => {
+  const msg = location.hash.match(/ob_login_msg=([^&]+)/);
+  if (msg) {
+    history.replaceState(null, "", location.pathname + location.search);
+    const M = {
+      naver_not_ready: "네이버 로그인은 준비 중이에요 — 키 등록이 끝나면 바로 열립니다!",
+      naver_cancel: "네이버 로그인이 취소됐어요.",
+      naver_error: "네이버 로그인 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요.",
+    };
+    setTimeout(() => toast(M[decodeURIComponent(msg[1])] || "로그인에 실패했어요."), 400);
+    return;
+  }
   const m = location.hash.match(/ob_naver_token=([^&]+)/);
   if (!m) return;
   history.replaceState(null, "", location.pathname + location.search);
