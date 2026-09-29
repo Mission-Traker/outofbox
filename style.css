@@ -254,6 +254,10 @@ footer { border-top: 1px solid var(--line); padding: 34px 0; font-size: 13px; co
 footer .foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; align-items: baseline; }
 footer .brand { font-family: "Noto Serif KR", serif; font-weight: 900; color: var(--ink); }
 footer a { color: var(--goldlt); }
+footer .foot-biz { font-size: 12px; line-height: 1.9; text-align: right; }
+footer .foot-biz a { color: var(--mut); text-decoration: none; }
+footer .foot-biz a:hover { color: var(--goldlt); }
+@media (max-width: 560px) { footer .foot-biz { text-align: left; } }
 
 /* ── 미션 서가 오버레이 ── */
 .mission-overlay {
