@@ -106,6 +106,13 @@
     .au-set .chk{display:flex;gap:8px;align-items:center;color:var(--ink);font-size:13.5px;margin:8px 0 0}
     .detail-info .au-chip{display:inline-block;margin:-4px 6px 12px 0;font-size:12.5px;color:var(--goldlt);border:1px solid rgba(201,164,92,.5);border-radius:999px;padding:3px 11px;cursor:pointer;background:none;font-family:inherit}
     .detail-info .au-chip:hover{background:rgba(201,164,92,.1)}
+    .auth-shelf{font-size:12px;color:#17130C;background:var(--goldlt);border:none;border-radius:20px;padding:5px 11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
+    .auth-shelf:hover{background:var(--gold)}
+    .au-shelf-jump{border-color:var(--gold)!important;color:var(--goldlt)!important}
+    .sh-section{border:1px solid rgba(201,164,92,.55);border-radius:16px;padding:18px 18px 16px;margin:6px 0 10px;background:linear-gradient(180deg,rgba(201,164,92,.07),rgba(201,164,92,0) 60%);scroll-margin-top:20px}
+    .sh-sub{color:var(--mut);font-size:13px;line-height:1.7;margin:-4px 0 12px}
+    @keyframes shFlash{0%{box-shadow:0 0 0 0 rgba(227,183,110,.75)}100%{box-shadow:0 0 0 14px rgba(227,183,110,0)}}
+    .sh-flash{animation:shFlash 1.1s ease-out 2}
     .sh-only{font-family:"Noto Sans KR",sans-serif;font-size:11px;font-weight:700;color:var(--goldlt);border:1px solid rgba(201,164,92,.5);border-radius:999px;padding:1px 8px;vertical-align:middle;margin-left:6px}
     .sh-scroll{padding:30px 4px 0}
     .sh-shelf{gap:6px;padding:0 8px}
@@ -1032,8 +1039,8 @@ async function setUser(session) {
   }
   renderAuth(); renderGbForm(); refreshCommentForms(); loadGuestbook(); renderAfForm(); loadAuthorFeed(); loadDaily(); checkNotifications();
   const auo = document.getElementById("authorOverlay");
-  const am = location.hash.match(/^#author\/([^&]+)/);
-  if (auo && !auo.hidden && am) showAuthor(decodeURIComponent(am[1]));
+  const am = parseAuthorHash();
+  if (auo && !auo.hidden && am) showAuthor(am.key, am.shelf);
   const rlo = document.getElementById("relayOverlay");
   if (rlo && !rlo.hidden) { renderRelayForm(); loadRelayLines(); }
 }
@@ -1045,10 +1052,13 @@ function renderAuth() {
   }
   const p = obProfile || { nickname: "독자", avatar_url: "", is_admin: false };
   authArea.innerHTML = `
+    ${p.is_admin || p.is_author ? `<button class="auth-shelf" id="authShelfBtn" data-tr="상단:내서재">📖 내 서재</button>` : ""}
     ${p.is_admin ? `<a class="auth-admin" href="admin.html">관리자</a>` : ""}
     <span class="auth-chip">${p.avatar_url ? `<img src="${esc(p.avatar_url)}" alt="" referrerpolicy="no-referrer" />` : "🙂"}<span class="nick">${esc(p.nickname)}님</span></span>
     <button class="btn-logout" id="authOutBtn">로그아웃</button>`;
   document.getElementById("authOutBtn").addEventListener("click", async () => { await sb.auth.signOut(); toast("로그아웃 됐어요."); });
+  const sb2 = document.getElementById("authShelfBtn");
+  if (sb2) sb2.addEventListener("click", openMyShelf);
 }
 let obToastedLogin = false;
 sb.auth.onAuthStateChange((ev, session) => {
@@ -1285,6 +1295,7 @@ function renderAfForm() {
         <b>💡 오늘의 글감</b><span class="q" id="afPromptQ">불러오는 중…</span>
         <button type="button" class="af-mini" id="afPromptUse" data-tr="피드:글감사용">이 질문으로 시작</button>
         <button type="button" class="af-mini" id="afMyPage" data-tr="피드:내작가페이지">👤 내 작가 페이지</button>
+        <button type="button" class="af-mini" id="afMyShelf" data-tr="피드:내서재">📖 내 서재</button>
       </div>
       <div class="af-preview" id="afPrevWrap" hidden>
         <img id="afPrevImg" alt="첨부한 사진 미리보기" />
@@ -1309,6 +1320,7 @@ function renderAfForm() {
     ta.focus();
     ta.setSelectionRange(ta.value.length, ta.value.length);
   });
+  document.getElementById("afMyShelf").addEventListener("click", openMyShelf);
   document.getElementById("afMyPage").addEventListener("click", () => {
     openAuthor((obProfile && obProfile.handle) || obUser.id);
   });
@@ -1452,8 +1464,12 @@ async function loadAuthors() {
       </button>`).join("");
     strip.querySelectorAll("[data-author]").forEach((b) => b.addEventListener("click", () => openAuthor(b.dataset.author)));
   }
-  const m = location.hash.match(/^#author\/([^&]+)/);
-  if (m) showAuthor(decodeURIComponent(m[1]));
+  const m = parseAuthorHash();
+  if (m) showAuthor(m.key, m.shelf);
+}
+function parseAuthorHash() {
+  const m = location.hash.match(/^#author\/([^/&]+)(\/shelf)?/);
+  return m ? { key: decodeURIComponent(m[1]), shelf: !!m[2] } : null;
 }
 const auOverlay = document.getElementById("authorOverlay");
 const auBody = document.getElementById("auBody");
@@ -1462,16 +1478,26 @@ function closeAuthor() {
   if (/^#author\//.test(location.hash)) history.replaceState(null, "", location.pathname + location.search);
 }
 document.getElementById("auClose").addEventListener("click", closeAuthor);
-function openAuthor(key) {
+function openAuthor(key, shelf) {
   if (!key) return;
-  history.replaceState(null, "", location.pathname + location.search + "#author/" + encodeURIComponent(key));
-  showAuthor(key);
+  history.replaceState(null, "", location.pathname + location.search + "#author/" + encodeURIComponent(key) + (shelf ? "/shelf" : ""));
+  showAuthor(key, shelf);
+}
+function openMyShelf() {
+  if (!obUser) { openLogin(); return; }
+  openAuthor((obProfile && obProfile.handle) || obUser.id, true);
 }
 window.addEventListener("hashchange", () => {
-  const m = location.hash.match(/^#author\/([^&]+)/);
-  if (m) showAuthor(decodeURIComponent(m[1]));
+  const m = parseAuthorHash();
+  if (m) showAuthor(m.key, m.shelf);
 });
-async function showAuthor(key) {
+function focusShelf() {
+  const sec = document.getElementById("auShelfSec");
+  if (!sec) return;
+  sec.scrollIntoView({ behavior: "smooth", block: "start" });
+  sec.classList.remove("sh-flash"); void sec.offsetWidth; sec.classList.add("sh-flash");
+}
+async function showAuthor(key, wantShelf) {
   auOverlay.hidden = false;
   auBody.innerHTML = `<p class="gb-empty">작가 페이지를 불러오는 중…</p>`;
   let a = obAuthors.find((x) => (x.handle && x.handle.toLowerCase() === String(key).toLowerCase()) || x.id === key);
@@ -1496,14 +1522,18 @@ async function showAuthor(key) {
       </div>
     </div>
     <div class="au-actions">
+      <button class="af-mini au-shelf-jump" id="auShelfJump" data-tr="작가페이지:서재바로가기">📖 ${mine ? "내 서재 관리" : "작가의 서재 보기"}</button>
       <button class="af-mini" id="auCopy" data-tr="작가페이지:링크복사">🔗 작가 페이지 링크 복사</button>
       ${mine ? `<button class="af-mini" id="auSetBtn" data-tr="작가페이지:설정">⚙️ 내 소개·알림 설정</button>` : ""}
     </div>
     <div id="auSet"></div>
+    <section class="sh-section" id="auShelfSec">
+      <h4 class="au-sub serif" style="margin-top:0">📖 ${esc(a.nickname || "작가")}의 서재 <span class="sh-only">인증 독자 전용</span></h4>
+      <p class="sh-sub">${mine ? "작가님이 요즘 읽는 책을 꽂고 독서 기록을 남기는 공간이에요. 책 속 퀴즈로 인증한 독자만 들어와 댓글을 남길 수 있어요." : "작가가 요즘 읽는 책과 독서 기록 — 작가의 책을 읽은 독자에게만 열려요."}</p>
+      <div id="auShelf"><p class="gb-empty">서재를 여는 중…</p></div>
+    </section>
     ${books.length ? `<h4 class="au-sub serif">📚 ${esc(a.nickname || "작가")}의 책</h4>
       <div class="au-books">${books.map(({ b, i }) => `<button class="au-book" data-i="${i}" data-tr="작가페이지:책:${esc(b.title)}"><img src="${b.cover}" alt="" loading="lazy" />${esc(b.title)}</button>`).join("")}</div>` : ""}
-    <h4 class="au-sub serif">📖 ${esc(a.nickname || "작가")}의 서재 <span class="sh-only">인증 독자 전용</span></h4>
-    <div id="auShelf"><p class="gb-empty">서재를 여는 중…</p></div>
     <h4 class="au-sub serif">✍️ 작가의 오늘</h4>
     <div id="auPosts"><p class="gb-empty">이야기를 불러오는 중…</p></div>
     ${books.length ? `<h4 class="au-sub serif">💬 책에 남겨진 독자의 한마디</h4><div id="auReviews"><p class="gb-empty">불러오는 중…</p></div>` : ""}`;
@@ -1513,6 +1543,7 @@ async function showAuthor(key) {
   });
   const sbtn = document.getElementById("auSetBtn");
   if (sbtn) sbtn.addEventListener("click", () => renderAuthorSettings(a));
+  document.getElementById("auShelfJump").addEventListener("click", focusShelf);
   auBody.querySelectorAll(".au-book").forEach((el) => el.addEventListener("click", () => {
     closeAuthor();
     openDetail(Number(el.dataset.i));
@@ -1522,7 +1553,7 @@ async function showAuthor(key) {
   const postsEl = document.getElementById("auPosts");
   const reloadPosts = () => renderPostFeed(postsEl, a.id, reloadPosts);
   reloadPosts();
-  renderShelf(a);
+  renderShelf(a).then(() => { if (wantShelf) setTimeout(focusShelf, 150); });
   if (books.length) {
     const { data: rv } = await sb.from("ob_book_comments")
       .select("id, content, created_at, user_id, parent_id, book_slug, profile:ob_profiles(nickname, avatar_url, is_admin, is_author)")
@@ -1558,7 +1589,7 @@ async function renderShelf(a) {
   const { data: books, error } = await sb.from("ob_shelf_books").select("*").eq("user_id", a.id).order("created_at", { ascending: false });
   if (error) { el.innerHTML = `<p class="gb-empty">서재를 불러오지 못했어요.</p>`; return; }
   el.innerHTML = `
-    ${mine ? `<div class="ds-btns" style="justify-content:flex-start;margin:0 0 10px"><button class="af-mini" id="shAddBtn" data-tr="작가서재:책꽂기열기">＋ 읽고 있는 책 꽂기</button></div><div id="shAdd"></div>` : ""}
+    ${mine ? `<div class="ds-btns" style="justify-content:flex-start;margin:0 0 10px"><button class="${books.length ? "af-mini" : "btn btn-gold"}" id="shAddBtn" data-tr="작가서재:책꽂기열기">＋ 읽고 있는 책 꽂기</button></div><div id="shAdd"></div>` : ""}
     ${books.length
       ? `<div class="shelf-scroll sh-scroll"><div class="shelf sh-shelf">${books.map(shelfBookHtml).join("")}</div></div><div class="board-wrap sh-board"><div class="board"></div></div>
          <p class="sh-hint">책을 누르면 ${mine ? "독서 기록을 남길 수 있어요" : "작가의 독서 기록이 펼쳐져요"}</p>`
