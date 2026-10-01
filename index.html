@@ -106,6 +106,60 @@
     .au-set .chk{display:flex;gap:8px;align-items:center;color:var(--ink);font-size:13.5px;margin:8px 0 0}
     .detail-info .au-chip{display:inline-block;margin:-4px 6px 12px 0;font-size:12.5px;color:var(--goldlt);border:1px solid rgba(201,164,92,.5);border-radius:999px;padding:3px 11px;cursor:pointer;background:none;font-family:inherit}
     .detail-info .au-chip:hover{background:rgba(201,164,92,.1)}
+    .sh-only{font-family:"Noto Sans KR",sans-serif;font-size:11px;font-weight:700;color:var(--goldlt);border:1px solid rgba(201,164,92,.5);border-radius:999px;padding:1px 8px;vertical-align:middle;margin-left:6px}
+    .sh-scroll{padding:30px 4px 0}
+    .sh-shelf{gap:6px;padding:0 8px}
+    .sh-board{padding:0}
+    .sh-book .spine .t{max-height:70%}
+    .sh-book .spine .m{font-size:8.5px;letter-spacing:.02em;opacity:.8}
+    .sh-nocover{width:100%;height:100%;display:flex;align-items:center;justify-content:center;text-align:center;padding:12px;background:var(--sc);color:var(--st);font-size:14px;line-height:1.5}
+    .sh-hint{color:var(--mut);font-size:12.5px;margin-top:10px}
+    .sh-lock{position:relative;border:1px dashed var(--line);border-radius:14px;overflow:hidden;background:var(--bg2)}
+    .sh-ghosts{display:flex;align-items:flex-end;gap:6px;justify-content:center;padding:24px 16px 0;filter:blur(5px);opacity:.45;height:190px}
+    .sh-ghosts span{width:36px;border-radius:3px 5px 5px 3px;display:block}
+    .sh-lock-body{padding:6px 20px 22px;text-align:center}
+    .sh-lock-t{font-size:16px;color:var(--ink);margin:8px 0 6px;line-height:1.6}
+    .sh-lock-s{color:var(--mut);font-size:13px;margin-bottom:14px;line-height:1.7}
+    .sh-quiz{border:1px solid var(--line);border-radius:12px;background:var(--bg);padding:14px 16px;margin-top:10px;text-align:left}
+    .sh-quiz-book{font-size:12.5px;color:var(--goldlt);margin-bottom:6px}
+    .sh-quiz-q{font-size:15px;color:var(--ink);margin-bottom:10px;line-height:1.6}
+    .sh-quiz-row,.sh-row{display:flex;gap:8px}
+    .sh-quiz-row input,.au-set input[type=text],.au-set select{flex:1;width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;color:var(--ink);padding:10px 12px;font-family:inherit;font-size:14px}
+    .sh-quiz-row input:focus,.au-set select:focus{outline:none;border-color:var(--gold)}
+    .sh-quiz-msg{color:#E36A5C;font-size:12.5px;margin-top:8px;min-height:1em}
+    .sh-results{display:flex;gap:10px;overflow-x:auto;padding:10px 0 4px}
+    .sh-results:empty{display:none}
+    .sh-res{flex:0 0 auto;width:86px;background:none;border:1px solid transparent;border-radius:8px;padding:4px;cursor:pointer;text-align:left;color:var(--ink);font-family:inherit;font-size:11.5px;line-height:1.35}
+    .sh-res img,.sh-res-ph{width:76px;height:108px;object-fit:cover;border-radius:4px;display:flex;align-items:center;justify-content:center;background:var(--bg);margin-bottom:4px;font-size:24px}
+    .sh-res em{display:block;color:var(--mut);font-style:normal;font-size:10.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .sh-res span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .sh-res.on,.sh-res:hover{border-color:var(--gold)}
+    .sh-form-grid{display:grid;grid-template-columns:96px 1fr;gap:14px;margin-top:6px}
+    .sh-cover-pre{width:96px;height:138px;border:1px dashed var(--line);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--mut);font-size:12px;overflow:hidden;margin-top:30px}
+    .sh-cover-pre img{width:100%;height:100%;object-fit:cover}
+    .sh-up{cursor:pointer;color:var(--mut)!important;border:1px dashed var(--line);border-radius:10px;padding:8px 12px;display:inline-block!important;margin-top:12px!important}
+    .sh-up:hover{color:var(--gold)!important;border-color:var(--gold)}
+    .sh-swatches{display:flex;gap:8px;flex-wrap:wrap}
+    .sh-sw{width:28px;height:28px;border-radius:6px;border:2px solid transparent;cursor:pointer}
+    .sh-sw.on{border-color:var(--ink);box-shadow:0 0 0 2px var(--gold)}
+    .sh-card{border:1px solid var(--line);border-radius:14px;background:var(--bg2);padding:18px;margin-top:18px}
+    .sh-head{display:flex;gap:16px;align-items:flex-start;margin-bottom:14px}
+    .sh-head img{width:72px;height:104px;object-fit:cover;border-radius:5px;border:1px solid var(--line);flex:none}
+    .sh-head-t{flex:1;min-width:0}
+    .sh-title{font-size:18px;margin-bottom:4px;line-height:1.45}
+    .sh-meta{color:var(--mut);font-size:13px}
+    .sh-badge{color:var(--goldlt);border:1px solid rgba(201,164,92,.5);border-radius:999px;padding:0 8px;font-size:11.5px}
+    .sh-own{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}
+    .sh-own select{background:var(--bg);border:1px solid var(--line);border-radius:999px;color:var(--ink);padding:4px 10px;font-family:inherit;font-size:12px}
+    .sh-note-form{border-top:1px dashed var(--line);padding-top:14px;margin-bottom:6px}
+    .sh-note-form input,.sh-note-form textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;color:var(--ink);padding:10px 12px;font-family:inherit;font-size:14px;margin-bottom:8px;resize:vertical}
+    .sh-note-form input{max-width:200px}
+    .sh-note-form input:focus,.sh-note-form textarea:focus{outline:none;border-color:var(--gold)}
+    .sh-note{border-top:1px solid var(--line);padding:14px 0 6px}
+    .sh-note-top{display:flex;align-items:center;gap:8px}
+    .sh-page{font-size:11.5px;color:#17130C;background:var(--goldlt);border-radius:4px;padding:1px 7px;font-weight:700}
+    .sh-cms{margin-top:6px}
+    .sh-cm-form{margin-top:10px;margin-bottom:6px}
     .ds-card{border:1px solid var(--line);border-radius:16px;background:var(--bg2);padding:34px 28px;text-align:center}
     .ds-quote{font-size:21px;line-height:1.75;color:var(--ink);margin-bottom:10px}
     .ds-src{color:var(--mut);font-size:12.5px;margin-bottom:6px}
@@ -1052,6 +1106,7 @@ function entryCard(g, table, foot, nested) {
 function bindDelete(root, reload) {
   root.querySelectorAll("[data-del]").forEach((b) => b.addEventListener("click", async () => {
     if (b.dataset.table === "ob_author_posts" && !confirm("이 글을 삭제할까요? 달린 한마디와 좋아요도 함께 사라져요.")) return;
+    if (b.dataset.table === "ob_shelf_notes" && !confirm("이 독서 기록을 삭제할까요? 달린 댓글도 함께 사라져요.")) return;
     await sb.from(b.dataset.table).delete().eq("id", b.dataset.del);
     toast("삭제했어요."); reload();
   }));
@@ -1447,6 +1502,8 @@ async function showAuthor(key) {
     <div id="auSet"></div>
     ${books.length ? `<h4 class="au-sub serif">📚 ${esc(a.nickname || "작가")}의 책</h4>
       <div class="au-books">${books.map(({ b, i }) => `<button class="au-book" data-i="${i}" data-tr="작가페이지:책:${esc(b.title)}"><img src="${b.cover}" alt="" loading="lazy" />${esc(b.title)}</button>`).join("")}</div>` : ""}
+    <h4 class="au-sub serif">📖 ${esc(a.nickname || "작가")}의 서재 <span class="sh-only">인증 독자 전용</span></h4>
+    <div id="auShelf"><p class="gb-empty">서재를 여는 중…</p></div>
     <h4 class="au-sub serif">✍️ 작가의 오늘</h4>
     <div id="auPosts"><p class="gb-empty">이야기를 불러오는 중…</p></div>
     ${books.length ? `<h4 class="au-sub serif">💬 책에 남겨진 독자의 한마디</h4><div id="auReviews"><p class="gb-empty">불러오는 중…</p></div>` : ""}`;
@@ -1465,6 +1522,7 @@ async function showAuthor(key) {
   const postsEl = document.getElementById("auPosts");
   const reloadPosts = () => renderPostFeed(postsEl, a.id, reloadPosts);
   reloadPosts();
+  renderShelf(a);
   if (books.length) {
     const { data: rv } = await sb.from("ob_book_comments")
       .select("id, content, created_at, user_id, parent_id, book_slug, profile:ob_profiles(nickname, avatar_url, is_admin, is_author)")
@@ -1474,6 +1532,262 @@ async function showAuthor(key) {
       ? rv.map((c) => entryCard(c, "ob_book_comments", `<div class="gb-foot"><span class="lk-names">📕 ${esc((BOOKS.find((b) => b.slug === c.book_slug) || {}).title || "")}</span></div>`)).join("")
       : `<p class="gb-empty">아직 남겨진 한마디가 없어요 — 책 상세에서 첫 리뷰를 남겨 주세요.</p>`;
   }
+}
+/* ── 작가의 서재 (인증 독자 전용) ── */
+const SH_COLORS = ["#2E4A6B", "#8C3B3B", "#3E5C45", "#C9A24B", "#5B4A7A", "#2B2B2B", "#D9CBB0", "#3F6E73", "#B0654A", "#6E7F99"];
+const SH_LIGHT = ["#C9A24B", "#D9CBB0"];
+const SH_STATUS = { reading: "읽는 중", done: "완독", want: "읽을 책" };
+const shTextFor = (c) => (SH_LIGHT.includes(c) ? "#1F1B16" : "#F2EFE8");
+function shHash(s) { let h = 0; for (const ch of String(s)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return h; }
+function shelfBookHtml(b) {
+  const h = shHash(b.id);
+  const sh = 178 + (h % 38), sw = 34 + (h % 11), fw = Math.round(sh * 0.68);
+  return `<div class="book sh-book" data-sb="${b.id}" data-tr="작가서재:책:${esc(b.title)}"
+      style="--sc:${b.spine_color};--st:${b.spine_text};--sh:${sh}px;--sw:${sw}px;--sf:13px;--fw:${fw}px">
+    <div class="spine"><span class="t serif">${esc(b.title)}</span><span class="a">${esc(b.book_author || "")}</span><span class="m">${SH_STATUS[b.status] || ""}</span></div>
+    <div class="face">${b.cover_url ? `<img src="${esc(b.cover_url)}" alt="" loading="lazy" referrerpolicy="no-referrer" />` : `<div class="sh-nocover serif">${esc(b.title)}</div>`}</div>
+  </div>`;
+}
+async function renderShelf(a) {
+  const el = document.getElementById("auShelf");
+  if (!el) return;
+  const mine = !!(obUser && obUser.id === a.id);
+  let canView = false;
+  if (obUser) { const r = await sb.rpc("ob_can_view_shelf", { p_author: a.id }); canView = !!r.data; }
+  if (!canView) return renderShelfLocked(a, el);
+  const { data: books, error } = await sb.from("ob_shelf_books").select("*").eq("user_id", a.id).order("created_at", { ascending: false });
+  if (error) { el.innerHTML = `<p class="gb-empty">서재를 불러오지 못했어요.</p>`; return; }
+  el.innerHTML = `
+    ${mine ? `<div class="ds-btns" style="justify-content:flex-start;margin:0 0 10px"><button class="af-mini" id="shAddBtn" data-tr="작가서재:책꽂기열기">＋ 읽고 있는 책 꽂기</button></div><div id="shAdd"></div>` : ""}
+    ${books.length
+      ? `<div class="shelf-scroll sh-scroll"><div class="shelf sh-shelf">${books.map(shelfBookHtml).join("")}</div></div><div class="board-wrap sh-board"><div class="board"></div></div>
+         <p class="sh-hint">책을 누르면 ${mine ? "독서 기록을 남길 수 있어요" : "작가의 독서 기록이 펼쳐져요"}</p>`
+      : `<p class="gb-empty">${mine ? "아직 꽂힌 책이 없어요 — 지금 읽고 있는 책을 꽂아 보세요 📚" : "아직 서재에 꽂힌 책이 없어요."}</p>`}
+    <div id="shDetail"></div>`;
+  el.querySelectorAll(".sh-book").forEach((bk) => bk.addEventListener("click", () => {
+    el.querySelectorAll(".sh-book").forEach((x) => x.classList.toggle("front", x === bk));
+    renderShelfBook(a, books.find((b) => b.id === bk.dataset.sb));
+  }));
+  const ab = document.getElementById("shAddBtn");
+  if (ab) ab.addEventListener("click", () => renderShelfAddForm(a));
+}
+async function renderShelfLocked(a, el) {
+  const { data: t } = await sb.rpc("ob_shelf_teaser", { p_author: a.id });
+  const tz = t || { books: 0, reading: 0, notes: 0, comments: 0 };
+  const hasBooks = (a.book_slugs || []).length > 0;
+  el.innerHTML = `
+    <div class="sh-lock">
+      <div class="sh-ghosts">${[0, 1, 2, 3, 4, 5].map((i) => `<span style="height:${120 + ((i * 37) % 50)}px;background:${SH_COLORS[i]}"></span>`).join("")}</div>
+      <div class="sh-lock-body">
+        <p class="sh-lock-t serif">🔒 ${esc(a.nickname || "작가")} 작가의 책을 읽은 독자에게만 열리는 서재예요</p>
+        <p class="sh-lock-s">지금 읽고 있는 책 ${tz.reading}권 · 꽂힌 책 ${tz.books}권 · 독서 기록 ${tz.notes}개 · 독자 댓글 ${tz.comments}개</p>
+        ${hasBooks ? `<button class="btn btn-gold" id="shQuizBtn" data-tr="작가서재:인증시작">📖 책 속 퀴즈로 독자 인증하기</button>` : `<p class="sh-lock-s">이 작가님의 책 연결이 준비 중이에요.</p>`}
+        <div id="shQuiz"></div>
+      </div>
+    </div>`;
+  const qb = document.getElementById("shQuizBtn");
+  if (qb) qb.addEventListener("click", () => openShelfQuiz(a));
+}
+async function openShelfQuiz(a) {
+  const box = document.getElementById("shQuiz");
+  if (!obUser) { toast("먼저 간편로그인을 해 주세요 🙂"); openLogin(); return; }
+  box.innerHTML = `<p class="sh-lock-s">문제를 불러오는 중…</p>`;
+  const { data, error } = await sb.rpc("ob_quiz_for_author", { p_author: a.id });
+  if (error || !data || !data.length) { box.innerHTML = `<p class="sh-lock-s">아직 인증 문제가 준비 중이에요 — 조금만 기다려 주세요 🙏</p>`; return; }
+  track("shelf_quiz_open", authorKey(a));
+  box.innerHTML = `<p class="sh-lock-s" style="margin-top:14px">가지고 계신 책 하나만 골라 답해 주세요. 띄어쓰기·문장부호는 상관없어요.</p>` +
+    data.map((q) => `
+      <div class="sh-quiz" data-q="${q.quiz_id}">
+        <div class="sh-quiz-book">📕 ${esc(q.book_title)}</div>
+        <div class="sh-quiz-q">Q. ${esc(q.question)}</div>
+        <div class="sh-quiz-row"><input type="text" placeholder="정답 입력" maxlength="60" /><button class="btn btn-gold" data-tr="작가서재:인증제출">확인</button></div>
+        <div class="sh-quiz-msg"></div>
+      </div>`).join("");
+  box.querySelectorAll(".sh-quiz").forEach((qe) => {
+    const inp = qe.querySelector("input"), btn = qe.querySelector("button"), msg = qe.querySelector(".sh-quiz-msg");
+    const go = async () => {
+      const v = inp.value.trim();
+      if (!v) { inp.focus(); return; }
+      btn.disabled = true;
+      const { data: ok, error: er } = await sb.rpc("ob_verify_reader", { p_quiz_id: qe.dataset.q, p_answer: v });
+      btn.disabled = false;
+      if (er) { msg.textContent = /too_many/.test(er.message) ? "잠시 쉬었다가 다시 시도해 주세요 (1시간에 8번까지)." : "확인 중 문제가 생겼어요. 다시 시도해 주세요."; return; }
+      if (ok) { toast("인증 완료! 작가의 서재가 열립니다 📖"); track("shelf_verified", authorKey(a)); renderShelf(a); }
+      else { msg.textContent = "정답이 아니에요 — 책을 다시 펼쳐 확인해 보세요 📖"; inp.select(); }
+    };
+    btn.addEventListener("click", go);
+    inp.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.isComposing) go(); });
+  });
+}
+function renderShelfAddForm(a) {
+  const box = document.getElementById("shAdd");
+  if (box.innerHTML) { box.innerHTML = ""; return; }
+  let color = SH_COLORS[Math.floor(Math.random() * SH_COLORS.length)];
+  box.innerHTML = `
+    <div class="au-set">
+      <label>책 검색 (제목이나 저자로 찾으면 표지가 자동으로 채워져요)</label>
+      <div class="sh-row"><input type="text" id="shQ" placeholder="예) 데미안, 헤르만 헤세" /><button type="button" class="af-mini" id="shQBtn">검색</button></div>
+      <div class="sh-results" id="shResults"></div>
+      <div class="sh-form-grid">
+        <div class="sh-cover-pre" id="shCoverPre"><span>표지</span></div>
+        <div>
+          <label>제목</label><input type="text" id="shTitle" maxlength="120" />
+          <label>저자</label><input type="text" id="shAuthor" maxlength="120" />
+          <label class="sh-up">📷 표지 사진 직접 올리기<input type="file" id="shCoverFile" accept="image/*" hidden /></label>
+        </div>
+      </div>
+      <label>책등 색</label>
+      <div class="sh-swatches">${SH_COLORS.map((c) => `<button type="button" class="sh-sw${c === color ? " on" : ""}" data-c="${c}" style="background:${c}"></button>`).join("")}</div>
+      <label>상태</label>
+      <select id="shStatus"><option value="reading">읽는 중</option><option value="done">완독</option><option value="want">읽을 책</option></select>
+      <div class="ds-btns" style="justify-content:flex-start"><button class="btn btn-gold" id="shSave" data-tr="작가서재:책꽂기">서재에 꽂기</button></div>
+    </div>`;
+  let coverUrl = null, coverFile = null;
+  const pre = document.getElementById("shCoverPre");
+  const setCover = (src) => { pre.innerHTML = src ? `<img src="${esc(src)}" alt="" referrerpolicy="no-referrer" />` : `<span>표지</span>`; };
+  box.querySelectorAll(".sh-sw").forEach((s) => s.addEventListener("click", () => {
+    color = s.dataset.c; box.querySelectorAll(".sh-sw").forEach((x) => x.classList.toggle("on", x === s));
+  }));
+  const search = async () => {
+    const q = document.getElementById("shQ").value.trim();
+    const res = document.getElementById("shResults");
+    if (q.length < 2) { res.innerHTML = ""; return; }
+    res.innerHTML = `<span class="sh-hint">찾는 중…</span>`;
+    try {
+      const r = await fetch(SB_URL + "/functions/v1/google-books?q=" + encodeURIComponent(q));
+      const j = await r.json();
+      const items = (j.items || []).slice(0, 8);
+      if (!items.length) { res.innerHTML = `<span class="sh-hint">검색 결과가 없어요 — 아래에 직접 입력해 주세요.</span>`; return; }
+      res.innerHTML = items.map((it, i) => {
+        const img = ((it.imageLinks && (it.imageLinks.thumbnail || it.imageLinks.smallThumbnail)) || "").replace(/^http:/, "https:");
+        return `<button type="button" class="sh-res" data-i="${i}">${img ? `<img src="${esc(img)}" alt="" referrerpolicy="no-referrer" />` : `<span class="sh-res-ph">📘</span>`}<span>${esc(it.title || "")}</span><em>${esc((it.authors || []).join(", "))}</em></button>`;
+      }).join("");
+      res.querySelectorAll(".sh-res").forEach((b) => b.addEventListener("click", () => {
+        const it = items[Number(b.dataset.i)];
+        document.getElementById("shTitle").value = it.title || "";
+        document.getElementById("shAuthor").value = (it.authors || []).join(", ");
+        coverUrl = ((it.imageLinks && (it.imageLinks.thumbnail || it.imageLinks.smallThumbnail)) || "").replace(/^http:/, "https:") || null;
+        coverFile = null; setCover(coverUrl);
+        res.querySelectorAll(".sh-res").forEach((x) => x.classList.toggle("on", x === b));
+      }));
+    } catch (e) { res.innerHTML = `<span class="sh-hint">검색에 실패했어요 — 직접 입력해 주세요.</span>`; }
+  };
+  document.getElementById("shQBtn").addEventListener("click", search);
+  document.getElementById("shQ").addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.isComposing) { e.preventDefault(); search(); } });
+  document.getElementById("shCoverFile").addEventListener("change", (e) => {
+    const f = e.target.files[0]; if (!f) return;
+    coverFile = f; coverUrl = null; setCover(URL.createObjectURL(f));
+  });
+  document.getElementById("shSave").addEventListener("click", async (e) => {
+    const title = document.getElementById("shTitle").value.trim();
+    if (!title) { toast("책 제목을 입력해 주세요."); return; }
+    e.target.disabled = true;
+    try {
+      let cover = coverUrl;
+      if (coverFile) cover = await afUploadImage(coverFile);
+      const { error } = await sb.from("ob_shelf_books").insert({
+        user_id: obUser.id, title, book_author: document.getElementById("shAuthor").value.trim() || null,
+        cover_url: cover, spine_color: color, spine_text: shTextFor(color), status: document.getElementById("shStatus").value,
+      });
+      if (error) throw error;
+      toast("서재에 책을 꽂았어요 📚");
+      renderShelf(a);
+    } catch (err) { toast("저장에 실패했어요: " + (err.message || err)); e.target.disabled = false; }
+  });
+}
+async function renderShelfBook(a, b) {
+  const box = document.getElementById("shDetail");
+  if (!box || !b) return;
+  const mine = !!(obUser && obUser.id === a.id);
+  box.innerHTML = `
+    <div class="sh-card">
+      <div class="sh-head">
+        ${b.cover_url ? `<img src="${esc(b.cover_url)}" alt="" referrerpolicy="no-referrer" />` : ""}
+        <div class="sh-head-t">
+          <div class="serif sh-title">${esc(b.title)}</div>
+          <div class="sh-meta">${esc(b.book_author || "")}${b.book_author ? " · " : ""}<span class="sh-badge">${SH_STATUS[b.status] || ""}</span></div>
+          ${mine ? `<div class="sh-own">
+              <select id="shStatusEdit">${Object.entries(SH_STATUS).map(([k, v]) => `<option value="${k}"${k === b.status ? " selected" : ""}>${v}</option>`).join("")}</select>
+              <button class="af-mini" id="shDel">서재에서 빼기</button></div>` : ""}
+        </div>
+      </div>
+      ${mine ? `<form class="sh-note-form" id="shNoteForm">
+          <input type="text" id="shPage" maxlength="30" placeholder="쪽수·장 (선택) 예) p.124" />
+          <textarea id="shNoteText" rows="3" maxlength="2000" placeholder="이 책을 읽으며 남기고 싶은 문장, 생각, 질문을 기록해 보세요 (2000자)"></textarea>
+          <div class="ds-btns" style="justify-content:flex-end;margin-top:8px"><button class="btn btn-gold" data-tr="작가서재:기록">기록 남기기</button></div>
+        </form>` : ""}
+      <div id="shNotes"><p class="gb-empty">기록을 불러오는 중…</p></div>
+    </div>`;
+  if (mine) {
+    document.getElementById("shStatusEdit").addEventListener("change", async (e) => {
+      const { error } = await sb.from("ob_shelf_books").update({ status: e.target.value }).eq("id", b.id);
+      if (error) { toast("변경에 실패했어요."); return; }
+      b.status = e.target.value; toast("상태를 바꿨어요."); renderShelf(a).then(() => renderShelfBook(a, b));
+    });
+    document.getElementById("shDel").addEventListener("click", async () => {
+      if (!confirm("이 책을 서재에서 뺄까요? 남긴 기록과 독자 댓글도 함께 사라져요.")) return;
+      await sb.from("ob_shelf_books").delete().eq("id", b.id);
+      toast("서재에서 뺐어요."); renderShelf(a);
+    });
+    document.getElementById("shNoteForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const content = document.getElementById("shNoteText").value.trim();
+      if (!content) return;
+      const { error } = await sb.from("ob_shelf_notes").insert({
+        shelf_book_id: b.id, user_id: obUser.id, content, page_label: document.getElementById("shPage").value.trim() || null,
+      });
+      if (error) { toast("기록에 실패했어요. 쓰신 글은 그대로 있어요."); return; }
+      document.getElementById("shNoteText").value = ""; document.getElementById("shPage").value = "";
+      toast("독서 기록을 남겼어요 📖"); loadShelfNotes(a, b);
+    });
+  }
+  loadShelfNotes(a, b);
+  box.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+async function loadShelfNotes(a, b) {
+  const wrap = document.getElementById("shNotes");
+  if (!wrap) return;
+  const mine = !!(obUser && obUser.id === a.id);
+  const { data: notes } = await sb.from("ob_shelf_notes").select("id, content, page_label, created_at").eq("shelf_book_id", b.id).order("created_at", { ascending: false });
+  if (!notes || !notes.length) { wrap.innerHTML = `<p class="gb-empty">${mine ? "첫 독서 기록을 남겨 보세요 ✏️" : "아직 남겨진 기록이 없어요."}</p>`; return; }
+  const { data: cms } = await sb.from("ob_shelf_comments")
+    .select("id, note_id, parent_id, content, created_at, user_id, profile:ob_profiles(nickname, avatar_url, is_admin, is_author)")
+    .in("note_id", notes.map((n) => n.id)).order("created_at", { ascending: true });
+  const byNote = {};
+  (cms || []).forEach((c) => { (byNote[c.note_id] = byNote[c.note_id] || []).push(c); });
+  wrap.innerHTML = notes.map((n) => {
+    const all = byNote[n.id] || [];
+    const tops = all.filter((c) => !c.parent_id);
+    const reps = {}; all.filter((c) => c.parent_id).forEach((r) => { (reps[r.parent_id] = reps[r.parent_id] || []).push(r); });
+    const cmHtml = tops.map((c) => {
+      const rr = reps[c.id] || [];
+      const foot = mine && c.user_id !== a.id ? `<div class="gb-foot"><button class="gb-rep-btn" data-rep="${c.id}" data-tr="작가서재:대댓글">💬 답글${rr.length ? " " + rr.length : ""}</button></div>` : "";
+      const nested = `<div class="gb-replies">${rr.map((r) => entryCard(r, "ob_shelf_comments")).join("")}<div class="gb-repform" data-repform="${c.id}" hidden></div></div>`;
+      return entryCard(c, "ob_shelf_comments", foot, nested);
+    }).join("");
+    return `
+      <div class="sh-note" data-note="${n.id}">
+        <div class="sh-note-top">${n.page_label ? `<span class="sh-page">${esc(n.page_label)}</span>` : ""}<span class="gb-date">${fmtDT(n.created_at)}</span>
+          ${mine ? `<button class="gb-del" data-del="${n.id}" data-table="ob_shelf_notes">삭제</button>` : ""}</div>
+        <p class="af-text">${esc(n.content)}</p>
+        <div class="sh-cms">${cmHtml}</div>
+        ${mine ? "" : `<form class="gb-form sh-cm-form"><textarea rows="2" maxlength="500" placeholder="작가의 기록에 댓글을 남겨 주세요 (500자)"></textarea><button type="submit" class="btn btn-gold" data-tr="작가서재:댓글">남기기</button></form>`}
+      </div>`;
+  }).join("");
+  const reload = () => loadShelfNotes(a, b);
+  wrap.querySelectorAll(".sh-note").forEach((ne) => {
+    bindDelete(ne, reload);
+    if (mine) bindReplyUI(ne, "ob_shelf_comments", { note_id: ne.dataset.note }, reload);
+    const f = ne.querySelector(".sh-cm-form");
+    if (f) f.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const ta = f.querySelector("textarea"); const v = ta.value.trim();
+      if (!v) return;
+      const { error } = await sb.from("ob_shelf_comments").insert({ note_id: ne.dataset.note, user_id: obUser.id, content: v });
+      if (error) { toast("댓글 등록에 실패했어요. 쓰신 글은 그대로 있어요."); return; }
+      ta.value = ""; toast("작가에게 댓글이 전해졌어요 💬"); track("shelf_comment", authorKey(a)); reload();
+    });
+  });
 }
 async function renderAuthorSettings(a) {
   const box = document.getElementById("auSet");
