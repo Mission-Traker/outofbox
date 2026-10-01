@@ -1654,7 +1654,7 @@ function renderShelfAddForm(a) {
     if (q.length < 2) { res.innerHTML = ""; return; }
     res.innerHTML = `<span class="sh-hint">찾는 중…</span>`;
     try {
-      const r = await fetch(SB_URL + "/functions/v1/google-books?q=" + encodeURIComponent(q));
+      const r = await fetch(SB_URL + "/functions/v1/book-search?q=" + encodeURIComponent(q));
       const j = await r.json();
       const items = (j.items || []).slice(0, 8);
       if (!items.length) { res.innerHTML = `<span class="sh-hint">검색 결과가 없어요 — 아래에 직접 입력해 주세요.</span>`; return; }
