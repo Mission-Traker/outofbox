@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>아웃오브박스 — 서재를 구경하듯</title>
   <meta name="description" content="출판사 아웃오브박스의 서재. 책등을 하나씩 꺼내 보세요 — 『호모 앰비덱스』 독자 미션 웹도 여기에서 시작합니다." />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="아웃오브박스" />
+  <meta property="og:title" content="아웃오브박스 — 작가와 독자가 친구가 되는 서재" />
+  <meta property="og:description" content="책등을 꺼내 보고, 작가의 오늘을 읽고, 오늘의 문장을 함께 써 보세요." />
+  <meta property="og:url" content="https://outofbox-books.vercel.app/" />
+  <meta property="og:image" content="https://outofbox-books.vercel.app/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
@@ -65,6 +74,38 @@
     .af-preview img{display:block;max-width:100%;max-height:320px;border-radius:12px;border:1px solid var(--line);object-fit:contain;background:var(--bg)}
     .af-prev-x{position:absolute;top:8px;right:8px;background:rgba(16,18,22,.78);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:4px 11px;font-size:12px;cursor:pointer;font-family:inherit}
     .af-prev-x:hover{border-color:var(--gold);color:var(--gold)}
+    .af-prompt{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13.5px;color:var(--mut);border:1px dashed var(--line);border-radius:12px;padding:10px 14px}
+    .af-prompt b{color:var(--goldlt);font-weight:700}
+    .af-prompt .q{flex:1;min-width:180px;color:var(--ink)}
+    .af-mini{background:none;border:1px solid var(--line);color:var(--mut);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:inherit;white-space:nowrap}
+    .af-mini:hover{border-color:var(--gold);color:var(--gold)}
+    .au-strip{display:flex;gap:14px;overflow-x:auto;padding:2px 2px 16px;margin-bottom:6px;scrollbar-width:thin}
+    .au-strip:empty{display:none}
+    .au-pill{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:none;color:var(--mut);font-size:12px;cursor:pointer;font-family:inherit;width:64px}
+    .au-pill img,.au-pill .au-ph{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid var(--line);transition:border-color .2s}
+    .au-pill .au-ph{display:flex;align-items:center;justify-content:center;background:var(--bg2);font-size:18px}
+    .au-pill:hover img,.au-pill:hover .au-ph{border-color:var(--gold)}
+    .au-pill span{max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .au-link{cursor:pointer}
+    .au-link:hover{color:var(--goldlt);text-decoration:underline;text-underline-offset:3px}
+    .au-head{display:flex;gap:18px;align-items:center;margin:10px 0 18px}
+    .au-head img,.au-head .au-ph{width:76px;height:76px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);flex:none}
+    .au-head .au-ph{display:flex;align-items:center;justify-content:center;background:var(--bg2);font-size:30px}
+    .au-name{font-size:24px;margin-bottom:4px}
+    .au-bio{color:var(--mut);font-size:14px;line-height:1.7;white-space:pre-wrap}
+    .au-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+    .au-sub{font-size:15px;margin:26px 0 12px}
+    .au-books{display:flex;gap:14px;flex-wrap:wrap}
+    .au-book{background:none;border:none;padding:0;cursor:pointer;width:92px;text-align:left;color:var(--mut);font-size:12px;font-family:inherit;line-height:1.4}
+    .au-book img{width:92px;height:132px;object-fit:cover;border-radius:6px;border:1px solid var(--line);display:block;margin-bottom:6px;transition:transform .2s}
+    .au-book:hover img{transform:translateY(-3px)}
+    .au-set{border:1px solid var(--line);border-radius:14px;background:var(--bg2);padding:16px;margin-bottom:20px}
+    .au-set label{display:block;font-size:12.5px;color:var(--mut);margin:10px 0 6px}
+    .au-set textarea,.au-set input[type=email]{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;color:var(--ink);padding:10px 12px;font-family:inherit;font-size:14px}
+    .au-set textarea:focus,.au-set input:focus{outline:none;border-color:var(--gold)}
+    .au-set .chk{display:flex;gap:8px;align-items:center;color:var(--ink);font-size:13.5px;margin:8px 0 0}
+    .detail-info .au-chip{display:inline-block;margin:-4px 6px 12px 0;font-size:12.5px;color:var(--goldlt);border:1px solid rgba(201,164,92,.5);border-radius:999px;padding:3px 11px;cursor:pointer;background:none;font-family:inherit}
+    .detail-info .au-chip:hover{background:rgba(201,164,92,.1)}
     .ds-card{border:1px solid var(--line);border-radius:16px;background:var(--bg2);padding:34px 28px;text-align:center}
     .ds-quote{font-size:21px;line-height:1.75;color:var(--ink);margin-bottom:10px}
     .ds-src{color:var(--mut);font-size:12.5px;margin-bottom:6px}
@@ -227,6 +268,7 @@
     <div class="sec-kicker">AUTHOR'S DAY</div>
     <h2 class="sec-title serif">작가의 오늘</h2>
     <p class="gb-desc">작가들의 일상과 집필 근황 — 이 서재에서만 만날 수 있는 이야기입니다.</p>
+    <div class="au-strip" id="afAuthors"></div>
     <div id="afFormWrap"></div>
     <div id="afList"><p class="gb-empty">작가의 이야기를 불러오는 중…</p></div>
   </div>
@@ -250,6 +292,13 @@
     <div id="gbList"><p class="gb-empty">방명록을 불러오는 중…</p></div>
   </div>
 </section>
+
+<div id="authorOverlay" class="mission-overlay" hidden>
+  <div class="mo-inner ds-inner au-inner">
+    <button class="mo-close" id="auClose" aria-label="닫기">✕</button>
+    <div id="auBody"></div>
+  </div>
+</div>
 
 <div id="typingOverlay" class="mission-overlay" hidden>
   <div class="mo-inner ds-inner">
@@ -924,10 +973,13 @@ async function setUser(session) {
   obUser = session ? session.user : null;
   obProfile = null;
   if (obUser) {
-    const { data } = await sb.from("ob_profiles").select("nickname, avatar_url, is_admin, is_author").eq("id", obUser.id).maybeSingle();
-    obProfile = data || { nickname: "독자", avatar_url: "", is_admin: false, is_author: false };
+    const { data } = await sb.from("ob_profiles").select("nickname, avatar_url, is_admin, is_author, handle").eq("id", obUser.id).maybeSingle();
+    obProfile = data || { nickname: "독자", avatar_url: "", is_admin: false, is_author: false, handle: null };
   }
   renderAuth(); renderGbForm(); refreshCommentForms(); loadGuestbook(); renderAfForm(); loadAuthorFeed(); loadDaily(); checkNotifications();
+  const auo = document.getElementById("authorOverlay");
+  const am = location.hash.match(/^#author\/([^&]+)/);
+  if (auo && !auo.hidden && am) showAuthor(decodeURIComponent(am[1]));
   const rlo = document.getElementById("relayOverlay");
   if (rlo && !rlo.hidden) { renderRelayForm(); loadRelayLines(); }
 }
@@ -1174,6 +1226,11 @@ function renderAfForm() {
   if (!(obProfile && (obProfile.is_author || obProfile.is_admin))) { afFormWrap.innerHTML = ""; return; }
   afFormWrap.innerHTML = `
     <form class="gb-form af-col" id="afWriteForm">
+      <div class="af-prompt" id="afPrompt">
+        <b>💡 오늘의 글감</b><span class="q" id="afPromptQ">불러오는 중…</span>
+        <button type="button" class="af-mini" id="afPromptUse" data-tr="피드:글감사용">이 질문으로 시작</button>
+        <button type="button" class="af-mini" id="afMyPage" data-tr="피드:내작가페이지">👤 내 작가 페이지</button>
+      </div>
       <div class="af-preview" id="afPrevWrap" hidden>
         <img id="afPrevImg" alt="첨부한 사진 미리보기" />
         <button type="button" class="af-prev-x" id="afPrevX">✕ 사진 빼기</button>
@@ -1185,6 +1242,21 @@ function renderAfForm() {
         <button type="submit" class="btn btn-gold" data-tr="피드:게시">게시하기</button>
       </div>
     </form>`;
+  pickDaily("prompt").then((p) => {
+    const qEl = document.getElementById("afPromptQ");
+    if (!qEl) return;
+    qEl.textContent = p ? p.content : "오늘 하루 중 문장으로 남겨 두고 싶은 장면 하나.";
+  });
+  document.getElementById("afPromptUse").addEventListener("click", () => {
+    const ta = document.getElementById("afWriteText");
+    const q = document.getElementById("afPromptQ").textContent;
+    if (!ta.value.trim()) ta.value = "Q. " + q + "\n\n";
+    ta.focus();
+    ta.setSelectionRange(ta.value.length, ta.value.length);
+  });
+  document.getElementById("afMyPage").addEventListener("click", () => {
+    openAuthor((obProfile && obProfile.handle) || obUser.id);
+  });
   const fileInp = document.getElementById("afWriteImg");
   const prevWrap = document.getElementById("afPrevWrap");
   const prevImg = document.getElementById("afPrevImg");
@@ -1239,14 +1311,17 @@ function afCommentFormHtml(postId) {
       </form>`
     : `<div class="gb-login"><p>로그인하면 작가에게 한마디를 남길 수 있어요.</p><button class="btn btn-line af-login-btn" data-tr="피드:로그인유도">간편로그인 하고 한마디 남기기 💬</button></div>`;
 }
-async function loadAuthorFeed() {
-  if (!afList) return;
-  const openZones = new Set(Array.from(afList.querySelectorAll(".af-cms:not([hidden])")).map((z) => z.id));
-  const { data, error } = await sb.from("ob_author_posts")
-    .select("id, content, image_url, created_at, user_id, profile:ob_profiles(nickname, avatar_url)")
-    .order("created_at", { ascending: false }).limit(10);
-  if (error) { afList.innerHTML = `<p class="gb-empty">이야기를 불러오지 못했어요.</p>`; return; }
-  if (!data.length) { afList.innerHTML = `<p class="gb-empty">아직 첫 이야기가 준비 중이에요 — 곧 작가의 일상이 열립니다 ✍️</p>`; return; }
+async function loadAuthorFeed() { return renderPostFeed(afList, null, loadAuthorFeed); }
+async function renderPostFeed(listEl, onlyUserId, reload) {
+  if (!listEl) return;
+  const openZones = new Set(Array.from(listEl.querySelectorAll(".af-cms:not([hidden])")).map((z) => z.dataset.cms));
+  let q = sb.from("ob_author_posts")
+    .select("id, content, image_url, created_at, user_id, profile:ob_profiles(nickname, avatar_url, handle)")
+    .order("created_at", { ascending: false }).limit(onlyUserId ? 30 : 10);
+  if (onlyUserId) q = q.eq("user_id", onlyUserId);
+  const { data, error } = await q;
+  if (error) { listEl.innerHTML = `<p class="gb-empty">이야기를 불러오지 못했어요.</p>`; return; }
+  if (!data.length) { listEl.innerHTML = `<p class="gb-empty">${onlyUserId ? "아직 남긴 이야기가 없어요." : "아직 첫 이야기가 준비 중이에요 — 곧 작가의 일상이 열립니다 ✍️"}</p>`; return; }
   const ids = data.map((p) => p.id);
   const [likeMap, cms] = await Promise.all([
     fetchLikes("post", ids),
@@ -1257,14 +1332,15 @@ async function loadAuthorFeed() {
   const cmMap = {};
   (cms.data || []).forEach((c) => { (cmMap[c.post_id] = cmMap[c.post_id] || []).push(c); });
   const cmLikeMap = await fetchLikes("pcomment", (cms.data || []).map((c) => c.id));
-  afList.innerHTML = data.map((p) => {
+  listEl.innerHTML = data.map((p) => {
     const cc = cmMap[p.id] || [];
     const cmHtml = cc.map((c) => entryCard(c, "ob_post_comments", `<div class="gb-foot">${likeBarHtml("pcomment", c.id, cmLikeMap[c.id])}</div>`)).join("");
+    const akey = (p.profile && p.profile.handle) || p.user_id;
     return `
     <div class="gb-card af-card">
       <div class="gb-top">
-        ${p.profile && p.profile.avatar_url ? `<img class="gb-ava" src="${esc(p.profile.avatar_url)}" alt="" referrerpolicy="no-referrer" />` : `<span class="gb-ava gb-ava-t">✍️</span>`}
-        <b>${esc((p.profile && p.profile.nickname) || "아웃오브박스")}</b><span class="gb-author-tag">✍️ 작가</span>
+        ${p.profile && p.profile.avatar_url ? `<img class="gb-ava au-link" data-author="${esc(akey)}" src="${esc(p.profile.avatar_url)}" alt="" referrerpolicy="no-referrer" />` : `<span class="gb-ava gb-ava-t">✍️</span>`}
+        <b class="${onlyUserId ? "" : "au-link"}" data-author="${esc(akey)}">${esc((p.profile && p.profile.nickname) || "아웃오브박스")}</b><span class="gb-author-tag">✍️ 작가</span>
         <span class="gb-date">${fmtDT(p.created_at)}</span>
         ${obUser && (obUser.id === p.user_id || (obProfile && obProfile.is_admin)) ? `<button class="gb-del" data-del="${p.id}" data-table="ob_author_posts">삭제</button>` : ""}
       </div>
@@ -1274,20 +1350,21 @@ async function loadAuthorFeed() {
         ${likeBarHtml("post", p.id, likeMap[p.id])}
         <button class="gb-rep-btn af-cm-toggle" data-post="${p.id}" data-tr="피드:댓글열기">💬 한마디${cc.length ? " " + cc.length : ""}</button>
       </div>
-      <div class="af-cms" id="afCms-${p.id}" ${openZones.has("afCms-" + p.id) ? "" : "hidden"}>
+      <div class="af-cms" data-cms="${p.id}" ${openZones.has(p.id) ? "" : "hidden"}>
         ${cmHtml || `<p class="gb-empty">첫 한마디를 남겨 주세요 ✏️</p>`}
         <div class="af-cm-form-wrap">${afCommentFormHtml(p.id)}</div>
       </div>
     </div>`;
   }).join("");
-  bindLikes(afList, loadAuthorFeed);
-  bindDelete(afList, loadAuthorFeed);
-  afList.querySelectorAll(".af-cm-toggle").forEach((b) => b.addEventListener("click", () => {
-    const z = document.getElementById("afCms-" + b.dataset.post);
+  bindLikes(listEl, reload);
+  bindDelete(listEl, reload);
+  listEl.querySelectorAll(".au-link[data-author]").forEach((el) => el.addEventListener("click", () => openAuthor(el.dataset.author)));
+  listEl.querySelectorAll(".af-cm-toggle").forEach((b) => b.addEventListener("click", () => {
+    const z = listEl.querySelector(`[data-cms="${b.dataset.post}"]`);
     if (z) z.hidden = !z.hidden;
   }));
-  afList.querySelectorAll(".af-login-btn").forEach((b) => b.addEventListener("click", openLogin));
-  afList.querySelectorAll(".af-cm-form").forEach((f) => f.addEventListener("submit", async (e) => {
+  listEl.querySelectorAll(".af-login-btn").forEach((b) => b.addEventListener("click", openLogin));
+  listEl.querySelectorAll(".af-cm-form").forEach((f) => f.addEventListener("submit", async (e) => {
     e.preventDefault();
     const v = f.querySelector("textarea").value.trim();
     if (!v) return;
@@ -1295,12 +1372,141 @@ async function loadAuthorFeed() {
     if (error) { toast("등록에 실패했어요."); return; }
     toast("작가에게 한마디가 전해졌어요 💬");
     const pid = f.dataset.post;
-    await loadAuthorFeed();
-    const z = document.getElementById("afCms-" + pid);
+    await reload();
+    const z = listEl.querySelector(`[data-cms="${pid}"]`);
     if (z) z.hidden = false;
   }));
 }
 loadAuthorFeed();
+
+/* ── 작가 목록 · 작가 개인 페이지 ── */
+let obAuthors = [];
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const authorKey = (a) => a.handle || a.id;
+async function loadAuthors() {
+  const { data } = await sb.from("ob_profiles")
+    .select("id, nickname, avatar_url, handle, bio, book_slugs, is_author, is_admin")
+    .or("is_author.eq.true,is_admin.eq.true");
+  obAuthors = data || [];
+  const strip = document.getElementById("afAuthors");
+  if (strip) {
+    strip.innerHTML = obAuthors.map((a) => `
+      <button class="au-pill" data-author="${esc(authorKey(a))}" data-tr="작가목록:${esc(a.nickname || "")}">
+        ${a.avatar_url ? `<img src="${esc(a.avatar_url)}" alt="" referrerpolicy="no-referrer" />` : `<span class="au-ph">✍️</span>`}
+        <span>${esc(a.nickname || "작가")}</span>
+      </button>`).join("");
+    strip.querySelectorAll("[data-author]").forEach((b) => b.addEventListener("click", () => openAuthor(b.dataset.author)));
+  }
+  const m = location.hash.match(/^#author\/([^&]+)/);
+  if (m) showAuthor(decodeURIComponent(m[1]));
+}
+const auOverlay = document.getElementById("authorOverlay");
+const auBody = document.getElementById("auBody");
+function closeAuthor() {
+  auOverlay.hidden = true;
+  if (/^#author\//.test(location.hash)) history.replaceState(null, "", location.pathname + location.search);
+}
+document.getElementById("auClose").addEventListener("click", closeAuthor);
+function openAuthor(key) {
+  if (!key) return;
+  history.replaceState(null, "", location.pathname + location.search + "#author/" + encodeURIComponent(key));
+  showAuthor(key);
+}
+window.addEventListener("hashchange", () => {
+  const m = location.hash.match(/^#author\/([^&]+)/);
+  if (m) showAuthor(decodeURIComponent(m[1]));
+});
+async function showAuthor(key) {
+  auOverlay.hidden = false;
+  auBody.innerHTML = `<p class="gb-empty">작가 페이지를 불러오는 중…</p>`;
+  let a = obAuthors.find((x) => (x.handle && x.handle.toLowerCase() === String(key).toLowerCase()) || x.id === key);
+  if (!a) {
+    const col = UUID_RE.test(key) ? "id" : "handle";
+    const { data } = await sb.from("ob_profiles").select("id, nickname, avatar_url, handle, bio, book_slugs, is_author, is_admin")
+      .eq(col, col === "handle" ? String(key).toLowerCase() : key).maybeSingle();
+    if (data && (data.is_author || data.is_admin)) a = data;
+  }
+  if (!a) { auBody.innerHTML = `<p class="gb-empty">작가 페이지를 찾을 수 없어요.</p>`; return; }
+  track("view_author", authorKey(a));
+  const mine = obUser && obUser.id === a.id;
+  const books = BOOKS.map((b, i) => ({ b, i })).filter(({ b }) => (a.book_slugs || []).includes(b.slug));
+  const link = location.origin + "/#author/" + encodeURIComponent(authorKey(a));
+  auBody.innerHTML = `
+    <div class="sec-kicker">AUTHOR</div>
+    <div class="au-head">
+      ${a.avatar_url ? `<img src="${esc(a.avatar_url)}" alt="" referrerpolicy="no-referrer" />` : `<span class="au-ph">✍️</span>`}
+      <div>
+        <div class="au-name serif">${esc(a.nickname || "작가")} <span class="gb-author-tag">✍️ 작가</span></div>
+        <div class="au-bio">${a.bio ? esc(a.bio) : (mine ? "아직 소개가 없어요 — 아래 「내 소개·알림 설정」에서 한 줄 소개를 남겨 주세요." : "아웃오브박스와 함께하는 작가입니다.")}</div>
+      </div>
+    </div>
+    <div class="au-actions">
+      <button class="af-mini" id="auCopy" data-tr="작가페이지:링크복사">🔗 작가 페이지 링크 복사</button>
+      ${mine ? `<button class="af-mini" id="auSetBtn" data-tr="작가페이지:설정">⚙️ 내 소개·알림 설정</button>` : ""}
+    </div>
+    <div id="auSet"></div>
+    ${books.length ? `<h4 class="au-sub serif">📚 ${esc(a.nickname || "작가")}의 책</h4>
+      <div class="au-books">${books.map(({ b, i }) => `<button class="au-book" data-i="${i}" data-tr="작가페이지:책:${esc(b.title)}"><img src="${b.cover}" alt="" loading="lazy" />${esc(b.title)}</button>`).join("")}</div>` : ""}
+    <h4 class="au-sub serif">✍️ 작가의 오늘</h4>
+    <div id="auPosts"><p class="gb-empty">이야기를 불러오는 중…</p></div>
+    ${books.length ? `<h4 class="au-sub serif">💬 책에 남겨진 독자의 한마디</h4><div id="auReviews"><p class="gb-empty">불러오는 중…</p></div>` : ""}`;
+  document.getElementById("auCopy").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(link); toast("작가 페이지 링크를 복사했어요 🔗"); }
+    catch (e) { prompt("아래 링크를 복사해 주세요", link); }
+  });
+  const sbtn = document.getElementById("auSetBtn");
+  if (sbtn) sbtn.addEventListener("click", () => renderAuthorSettings(a));
+  auBody.querySelectorAll(".au-book").forEach((el) => el.addEventListener("click", () => {
+    closeAuthor();
+    openDetail(Number(el.dataset.i));
+    const d = document.getElementById("detail");
+    if (d) d.scrollIntoView({ behavior: "smooth", block: "start" });
+  }));
+  const postsEl = document.getElementById("auPosts");
+  const reloadPosts = () => renderPostFeed(postsEl, a.id, reloadPosts);
+  reloadPosts();
+  if (books.length) {
+    const { data: rv } = await sb.from("ob_book_comments")
+      .select("id, content, created_at, user_id, parent_id, book_slug, profile:ob_profiles(nickname, avatar_url, is_admin, is_author)")
+      .in("book_slug", a.book_slugs).is("parent_id", null).order("created_at", { ascending: false }).limit(8);
+    const rvEl = document.getElementById("auReviews");
+    if (rvEl) rvEl.innerHTML = (rv && rv.length)
+      ? rv.map((c) => entryCard(c, "ob_book_comments", `<div class="gb-foot"><span class="lk-names">📕 ${esc((BOOKS.find((b) => b.slug === c.book_slug) || {}).title || "")}</span></div>`)).join("")
+      : `<p class="gb-empty">아직 남겨진 한마디가 없어요 — 책 상세에서 첫 리뷰를 남겨 주세요.</p>`;
+  }
+}
+async function renderAuthorSettings(a) {
+  const box = document.getElementById("auSet");
+  if (!box) return;
+  if (box.innerHTML) { box.innerHTML = ""; return; }
+  const { data: pv } = await sb.from("ob_author_private").select("contact_email, notify_daily, notify_weekly").eq("user_id", a.id).maybeSingle();
+  const p = pv || { contact_email: "", notify_daily: true, notify_weekly: true };
+  box.innerHTML = `
+    <div class="au-set">
+      <label>한 줄 소개 (작가 페이지에 공개돼요 · 300자)</label>
+      <textarea id="auBio" rows="3" maxlength="300" placeholder="예) 매일 아침 한 문장을 모으는 에세이스트">${esc(a.bio || "")}</textarea>
+      <label>알림 받을 메일 (공개되지 않아요)</label>
+      <input type="email" id="auEmail" placeholder="example@naver.com" value="${esc(p.contact_email || "")}" />
+      <div class="chk"><input type="checkbox" id="auDaily" ${p.notify_daily ? "checked" : ""} /> <label for="auDaily" style="margin:0;color:var(--ink)">매일 저녁 8시, 독자 반응이 있는 날만 알림 메일 받기</label></div>
+      <div class="chk"><input type="checkbox" id="auWeekly" ${p.notify_weekly ? "checked" : ""} /> <label for="auWeekly" style="margin:0;color:var(--ink)">매주 월요일 아침, 지난주 리포트 받기 (조회·좋아요·구매 버튼 클릭)</label></div>
+      <div class="ds-btns" style="justify-content:flex-start"><button class="btn btn-gold" id="auSave" data-tr="작가페이지:설정저장">저장하기</button></div>
+    </div>`;
+  document.getElementById("auSave").addEventListener("click", async () => {
+    const bio = document.getElementById("auBio").value;
+    const email = document.getElementById("auEmail").value.trim();
+    if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { toast("메일 주소 형식을 확인해 주세요."); return; }
+    const { error } = await sb.rpc("ob_update_my_author_profile", {
+      p_bio: bio, p_email: email, p_daily: document.getElementById("auDaily").checked, p_weekly: document.getElementById("auWeekly").checked,
+    });
+    if (error) { toast("저장에 실패했어요: " + error.message); return; }
+    toast("저장했어요 ✍️");
+    a.bio = bio.trim() || null;
+    const ix = obAuthors.findIndex((x) => x.id === a.id);
+    if (ix >= 0) obAuthors[ix].bio = a.bio;
+    showAuthor(authorKey(a));
+  });
+}
+loadAuthors();
 
 /* ── 오늘의 문장 ── */
 const dsCard = document.getElementById("dsCard");
@@ -1555,6 +1761,14 @@ openDetail = function (i) {
   const b = BOOKS[i];
   track("view_book", b.title);
   mountComments(b.slug);
+  const linked = obAuthors.filter((a) => (a.book_slugs || []).includes(b.slug));
+  const meta = document.querySelector(".detail-info .meta");
+  if (meta && linked.length) {
+    const wrap = document.createElement("div");
+    wrap.innerHTML = linked.map((a) => `<button class="au-chip" data-author="${esc(authorKey(a))}" data-tr="책상세:작가페이지:${esc(a.nickname || "")}">✍️ ${esc(a.nickname || "작가")} 작가 페이지 →</button>`).join("");
+    meta.after(wrap);
+    wrap.querySelectorAll("[data-author]").forEach((el) => el.addEventListener("click", () => openAuthor(el.dataset.author)));
+  }
 };
 </script>
 
