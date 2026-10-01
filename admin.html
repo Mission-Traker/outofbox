@@ -28,11 +28,10 @@ h1 { font-size:24px; margin-bottom:6px; }
 .center-card { max-width:380px; margin:80px auto; background:var(--bg2); border:1px solid var(--line); border-radius:18px; padding:34px 30px; text-align:center; }
 .center-card h2 { font-size:19px; margin-bottom:10px; }
 .center-card p { color:var(--mut); font-size:13.5px; line-height:1.7; margin-bottom:20px; }
-.btn-kakao, .btn-naver, .btn-gold { display:block; width:100%; border:none; border-radius:12px; padding:13px; font-size:14.5px; font-weight:700; cursor:pointer; font-family:inherit; margin-bottom:10px; }
+.btn-kakao, .btn-gold { display:block; width:100%; border:none; border-radius:12px; padding:13px; font-size:14.5px; font-weight:700; cursor:pointer; font-family:inherit; margin-bottom:10px; }
 .btn-kakao { background:#FEE500; color:#191919; }
-.btn-naver { background:#03C75A; color:#fff; }
 .btn-gold { background:var(--gold); color:#17130C; }
-.btn-kakao:hover, .btn-naver:hover, .btn-gold:hover { filter:brightness(1.06); }
+.btn-kakao:hover, .btn-gold:hover { filter:brightness(1.06); }
 .code-input { width:100%; background:var(--bg); border:1px solid var(--line); border-radius:12px; color:var(--ink); padding:12px 14px; font-size:14px; margin-bottom:10px; font-family:inherit; text-align:center; letter-spacing:1px; }
 .code-input:focus { outline:none; border-color:var(--gold); }
 .range-row { display:flex; gap:8px; margin-bottom:22px; }
@@ -98,7 +97,13 @@ td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
     <h2>관리자 로그인</h2>
     <p>운영 통계와 방명록·댓글 관리는<br />관리자 계정으로만 볼 수 있어요.</p>
     <button class="btn-kakao" id="btnKakao">💬 카카오로 로그인</button>
-    <button class="btn-naver" id="btnNaver">N&nbsp; 네이버로 로그인</button>
+    <div style="display:flex;align-items:center;gap:10px;color:var(--mut);font-size:12px;margin:14px 0 10px"><span style="flex:1;height:1px;background:var(--line)"></span>또는 이메일<span style="flex:1;height:1px;background:var(--line)"></span></div>
+    <form id="emailLogin">
+      <input class="code-input" id="elEmail" type="email" placeholder="이메일" autocomplete="email" style="text-align:left;letter-spacing:0" />
+      <input class="code-input" id="elPw" type="password" placeholder="비밀번호" autocomplete="current-password" style="text-align:left;letter-spacing:0" />
+      <button class="btn-gold" type="submit">이메일로 로그인</button>
+      <div class="err" id="elErr"></div>
+    </form>
   </div>
 
   <!-- 로그인했지만 관리자 아님 -->
@@ -117,6 +122,7 @@ td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
       <a class="quick-btn gold" id="qbShelf" href="index.html" target="_blank">📖 내 서재 열기</a>
       <a class="quick-btn" id="qbPage" href="index.html" target="_blank">👤 내 작가 페이지</a>
       <a class="quick-btn" href="index.html#authorfeed" target="_blank">✍️ 작가의 오늘</a>
+      <a class="quick-btn" href="#qaSec">🙋 작가에게 묻다 <span id="qbQaCnt"></span></a>
       <a class="quick-btn" href="#qzSec">🔑 독자 인증 퀴즈 등록</a>
     </div>
     <h1 class="serif">홈페이지 방문 분석</h1>
@@ -184,6 +190,27 @@ td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
       <div id="authorAdmin"></div>
     </section>
 
+    <section class="panel" id="qaSec">
+      <h3>🙋 작가에게 묻다 — 독자 질문</h3>
+      <p class="hint">책마다 들어온 독자 질문이에요. 관리자는 모든 책에 답할 수 있고, 작가는 홈페이지 책 상세·작가 페이지에서 자기 책 질문에 답해요. 답을 달면 질문한 독자에게 알림이 가요.</p>
+      <div class="range-row" id="qaAdmFilter" style="margin-bottom:12px">
+        <button data-qaf="wait" class="on">답 기다리는 질문</button>
+        <button data-qaf="all">전체</button>
+        <button data-qaf="hidden">숨긴 질문</button>
+      </div>
+      <div id="qaAdmin"></div>
+    </section>
+
+    <section class="panel">
+      <h3>🔐 이메일 회원 비밀번호 재설정</h3>
+      <p class="hint">이메일로 가입한 회원이 비밀번호를 잊었을 때, 임시 비밀번호를 발급해 대표메일로 회신해 주세요. (카카오 회원은 카카오 로그인을 쓰면 돼요)</p>
+      <div style="display:flex;gap:8px;margin-bottom:10px;max-width:520px">
+        <input class="code-input" id="pwFindQ" placeholder="가입 이메일 또는 닉네임" style="text-align:left;letter-spacing:0;margin:0" />
+        <button class="btn-gold" id="pwFindBtn" style="width:auto;margin:0;padding:0 18px;white-space:nowrap">찾기</button>
+      </div>
+      <div id="pwFindList"></div>
+    </section>
+
     <section class="panel">
       <h3>💌 작가 답글을 기다리는 글</h3>
       <p class="hint">작가 답글이 아직 없는 방명록·도서 댓글 — 홈페이지에서 답글을 달면 독자에게 알림이 갑니다</p>
@@ -236,36 +263,16 @@ let user = null, profile = null, days = 30;
 const $ = (id) => document.getElementById(id);
 function show(view) { ["viewLogin","viewClaim","viewDash"].forEach(v => $(v).hidden = (v !== view)); }
 
-/* ── 네이버 콜백 토큰 + 로그인 안내 메시지 ── */
-(async () => {
-  const msg = location.hash.match(/ob_login_msg=([^&]+)/);
-  if (msg) {
-    history.replaceState(null, "", location.pathname);
-    const M = {
-      naver_not_ready: "네이버 로그인은 준비 중이에요 — 키 등록 후 사용할 수 있어요.",
-      naver_cancel: "네이버 로그인이 취소됐어요.",
-      naver_error: "네이버 로그인 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요.",
-    };
-    const t = document.createElement("div");
-    t.style.cssText = "position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#22262E;color:#F2EFE8;border:1px solid #262A31;border-radius:24px;padding:10px 20px;font-size:14px;z-index:99;max-width:88vw";
-    t.textContent = M[decodeURIComponent(msg[1])] || "로그인에 실패했어요.";
-    document.body.appendChild(t);
-    setTimeout(() => t.remove(), 4000);
-    return;
-  }
-  const m = location.hash.match(/ob_naver_token=([^&]+)/);
-  if (!m) return;
-  history.replaceState(null, "", location.pathname);
-  await sb.auth.verifyOtp({ type: "magiclink", token_hash: decodeURIComponent(m[1]) });
-})();
-
 /* ── 로그인 버튼 ── */
 $("btnKakao").addEventListener("click", async () => {
   const { data } = await sb.auth.signInWithOAuth({ provider:"kakao", options:{ redirectTo: location.origin + "/admin.html", skipBrowserRedirect:true } });
   if (data && data.url) location.href = data.url;
 });
-$("btnNaver").addEventListener("click", () => {
-  location.href = SB_URL + "/functions/v1/naver-login?action=start&site=" + encodeURIComponent(location.origin + "/admin.html");
+$("emailLogin").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  $("elErr").textContent = "";
+  const { error } = await sb.auth.signInWithPassword({ email: $("elEmail").value.trim().toLowerCase(), password: $("elPw").value });
+  if (error) $("elErr").textContent = "이메일 또는 비밀번호가 맞지 않아요.";
 });
 
 /* ── 관리자 클레임 ── */
@@ -367,7 +374,7 @@ async function loadDash() {
       ? sessions.slice(0, 20).map(s => `<tr><td>${fmtDT(s.started)}</td><td>${esc(s.nickname)}</td><td class="num">${fmtDur(s.seconds)}</td><td class="num">${s.events}</td></tr>`).join("")
       : `<tr><td colspan="4" class="empty">아직 세션이 없어요.</td></tr>`);
 
-  loadModeration(); loadAuthorAdmin(); loadUnanswered(); loadAuthors(); loadDsAdmin(); loadQuizAdmin();
+  loadModeration(); loadAuthorAdmin(); loadUnanswered(); loadAuthors(); loadDsAdmin(); loadQuizAdmin(); loadQaAdmin();
 }
 
 /* ── 독자 인증 퀴즈 ── */
@@ -459,7 +466,7 @@ async function loadAuthors() {
         ${p.is_admin ? "" : `<button data-author="${p.id}" data-flag="${p.is_author ? "0" : "1"}">${p.is_author ? "작가 해제" : "작가 지정"}</button>`}
         <div class="auset-box" id="auset-${p.id}" hidden style="flex-basis:100%"></div>
       </div>`; }).join("")
-    : `<p class="empty">아직 로그인한 회원이 없어요 — 작가님들께 홈페이지에서 카카오/네이버 로그인을 한 번 해달라고 부탁해 주세요.</p>`;
+    : `<p class="empty">아직 로그인한 회원이 없어요 — 작가님들께 홈페이지에서 카카오 로그인(또는 이메일 회원가입)을 한 번 해달라고 부탁해 주세요.</p>`;
   document.querySelectorAll("#authorAdmin [data-auset]").forEach(b => b.addEventListener("click", () => {
     const p = rows.find(r => r.id === b.dataset.auset);
     const box = $("auset-" + p.id);
@@ -575,6 +582,104 @@ async function loadUnanswered() {
     ? list.map(x => `<div class="mod-card"><span class="meta">${fmtDT(x.created_at)}<br /><b style="color:var(--ink)">${esc((x.profile && x.profile.nickname) || "독자")}</b><br />${esc(x.label)}</span><span class="txt">${esc(x.content)}</span></div>`).join("")
     : `<p class="empty">모든 글에 작가의 답글이 달렸어요 👏</p>`;
 }
+
+
+/* ── 작가에게 묻다: 독자 질문 관리 ── */
+let qaAdmFilter = "wait";
+$("qaAdmFilter").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-qaf]");
+  if (!b) return;
+  qaAdmFilter = b.dataset.qaf;
+  document.querySelectorAll("#qaAdmFilter button").forEach(x => x.classList.toggle("on", x === b));
+  loadQaAdmin();
+});
+async function loadQaAdmin() {
+  let qy = sb.from("ob_questions")
+    .select("id, book_slug, content, answer, answered_at, created_at, hidden, asker:ob_profiles!ob_questions_user_id_fkey(nickname), answerer:ob_profiles!ob_questions_answered_by_fkey(nickname)")
+    .order("created_at", { ascending:false }).limit(100);
+  if (qaAdmFilter === "wait") qy = qy.is("answer", null).eq("hidden", false);
+  if (qaAdmFilter === "hidden") qy = qy.eq("hidden", true);
+  const [{ data }, bk, waitCnt] = await Promise.all([
+    qy,
+    sb.from("ob_books").select("slug, title"),
+    sb.from("ob_questions").select("id", { count:"exact", head:true }).is("answer", null).eq("hidden", false),
+  ]);
+  const title = {}; (bk.data || []).forEach(b => { title[b.slug] = b.title; });
+  $("qbQaCnt").textContent = waitCnt.count ? `(${waitCnt.count})` : "";
+  const rows = data || [];
+  const ids = rows.map(r => r.id);
+  const likes = {};
+  if (ids.length) {
+    const { data: lk } = await sb.from("ob_likes").select("target_id").eq("target_type", "question").in("target_id", ids);
+    (lk || []).forEach(l => { likes[l.target_id] = (likes[l.target_id] || 0) + 1; });
+  }
+  $("qaAdmin").innerHTML = rows.length ? rows.map(q => `
+    <div class="mod-card" style="flex-wrap:wrap">
+      <span class="meta">${fmtDT(q.created_at)}<br /><b style="color:var(--ink)">${esc((q.asker && q.asker.nickname) || "독자")}</b><br />📕 ${esc(title[q.book_slug] || q.book_slug)}<br />🙋 ${likes[q.id] || 0}</span>
+      <span class="txt"><b>Q.</b> ${esc(q.content)}${q.hidden ? ` <span style="color:#E36A5C;font-size:12px">(숨김)</span>` : ""}
+        ${q.answer ? `<br /><span style="color:var(--goldlt)"><b>A.</b> ${esc(q.answer)}</span> <span style="color:var(--mut);font-size:12px">— ${esc((q.answerer && q.answerer.nickname) || "작가")} · ${fmtDT(q.answered_at)}</span>` : ""}</span>
+      <button data-qans="${q.id}">${q.answer ? "답변 수정" : "답하기"}</button>
+      <button data-qhide="${q.id}" data-v="${q.hidden ? "0" : "1"}">${q.hidden ? "다시 보이기" : "숨기기"}</button>
+      <button data-qdel="${q.id}">삭제</button>
+      <div id="qabox-${q.id}" hidden style="flex-basis:100%"></div>
+    </div>`).join("")
+    : `<p class="empty">${qaAdmFilter === "wait" ? "답을 기다리는 질문이 없어요 👏" : "질문이 없어요."}</p>`;
+  document.querySelectorAll("#qaAdmin [data-qans]").forEach(b => b.addEventListener("click", () => {
+    const q = rows.find(r => r.id === b.dataset.qans);
+    const box = $("qabox-" + q.id);
+    if (!box.hidden) { box.hidden = true; box.innerHTML = ""; return; }
+    box.hidden = false;
+    box.innerHTML = `<div class="af-write" style="margin:10px 0 0"><textarea maxlength="2000" placeholder="독자에게 건네는 답 (2000자)">${esc(q.answer || "")}</textarea>
+      <button class="btn-gold" style="margin:8px 0 0">${q.answer ? "수정 저장" : "답변 등록"}</button></div>`;
+    box.querySelector("button").addEventListener("click", async () => {
+      const v = box.querySelector("textarea").value.trim();
+      if (!v) return;
+      const { error } = await sb.rpc("ob_answer_question", { p_id: q.id, p_answer: v });
+      if (error) { alert("저장 실패: " + error.message); return; }
+      loadQaAdmin();
+    });
+  }));
+  document.querySelectorAll("#qaAdmin [data-qhide]").forEach(b => b.addEventListener("click", async () => {
+    await sb.from("ob_questions").update({ hidden: b.dataset.v === "1" }).eq("id", b.dataset.qhide);
+    loadQaAdmin();
+  }));
+  document.querySelectorAll("#qaAdmin [data-qdel]").forEach(b => b.addEventListener("click", async () => {
+    if (!confirm("이 질문을 삭제할까요? 답변과 '나도 궁금해요'도 함께 사라져요.")) return;
+    await sb.from("ob_questions").delete().eq("id", b.dataset.qdel);
+    loadQaAdmin();
+  }));
+}
+
+/* ── 이메일 회원 비밀번호 재설정 ── */
+async function findMembers() {
+  const q = $("pwFindQ").value.trim();
+  if (q.length < 2) { $("pwFindList").innerHTML = `<p class="empty">두 글자 이상 입력해 주세요.</p>`; return; }
+  const { data, error } = await sb.rpc("ob_admin_find_member", { p_q: q });
+  if (error) { $("pwFindList").innerHTML = `<p class="empty">검색 실패: ${esc(error.message)}</p>`; return; }
+  const rows = data || [];
+  $("pwFindList").innerHTML = rows.length ? rows.map(m => `
+    <div class="mod-card">
+      <span class="meta">${fmtDT(m.created_at)}</span>
+      <span class="txt"><b>${esc(m.nickname || "독자")}</b> · ${esc(m.email || "")} <span style="color:var(--mut);font-size:12px">${esc(m.provider)}</span><span id="pwres-${m.id}"></span></span>
+      ${m.provider === "email" ? `<button data-pwreset="${m.id}">임시 비밀번호 발급</button>` : `<span class="meta">카카오 회원</span>`}
+    </div>`).join("") : `<p class="empty">찾는 회원이 없어요.</p>`;
+  document.querySelectorAll("#pwFindList [data-pwreset]").forEach(b => b.addEventListener("click", async () => {
+    if (!confirm("이 회원의 비밀번호를 임시 비밀번호로 바꿀까요? 기존 비밀번호는 더 이상 쓸 수 없어요.")) return;
+    const { data: { session } } = await sb.auth.getSession();
+    const r = await fetch(SB_URL + "/functions/v1/ob-signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", apikey: SB_KEY, Authorization: "Bearer " + (session ? session.access_token : "") },
+      body: JSON.stringify({ action: "admin_reset", user_id: b.dataset.pwreset }),
+    });
+    const j = await r.json().catch(() => ({}));
+    const el = $("pwres-" + b.dataset.pwreset);
+    el.innerHTML = j.ok
+      ? `<br /><span style="color:var(--goldlt)">임시 비밀번호: <b style="user-select:all">${esc(j.temp_password)}</b> — 회원에게 전달 후 로그인하면 바로 쓸 수 있어요.</span>`
+      : `<br /><span style="color:#E36A5C">발급 실패 (${esc(j.error || r.status)})</span>`;
+  }));
+}
+$("pwFindBtn").addEventListener("click", findMembers);
+$("pwFindQ").addEventListener("keydown", (e) => { if (e.key === "Enter") findMembers(); });
 
 /* ── 방명록/댓글 관리 ── */
 function modCard(x, table, extra) {

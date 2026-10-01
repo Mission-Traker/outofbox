@@ -225,8 +225,63 @@
     .login-inner{max-width:420px}
     .login-btns{display:flex;flex-direction:column;gap:12px;max-width:300px;margin:26px auto 0}
     .btn-kakao{background:#FEE500;color:#191919;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
-    .btn-naver{background:#03C75A;color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
-    .btn-kakao:hover,.btn-naver:hover{filter:brightness(1.06)}
+    .btn-kakao:hover{filter:brightness(1.06)}
+    .lo-or{display:flex;align-items:center;gap:12px;color:var(--mut);font-size:12px;max-width:300px;margin:22px auto 14px}
+    .lo-or::before,.lo-or::after{content:"";flex:1;height:1px;background:var(--line)}
+    .lo-tabs{display:flex;max-width:300px;margin:0 auto 12px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+    .lo-tabs button{flex:1;background:none;border:none;color:var(--mut);padding:9px;font-size:13.5px;cursor:pointer;font-family:inherit}
+    .lo-tabs button.on{background:rgba(201,144,58,.14);color:var(--goldlt);font-weight:700}
+    .lo-form{display:flex;flex-direction:column;gap:9px;max-width:300px;margin:0 auto}
+    .lo-form input[type=email],.lo-form input[type=password],.lo-form input[type=text]{background:var(--bg);border:1px solid var(--line);border-radius:10px;color:var(--ink);padding:11px 13px;font-family:inherit;font-size:14px;width:100%}
+    .lo-form input:focus{outline:none;border-color:var(--gold)}
+    .lo-form .btn{width:100%;justify-content:center;margin-top:2px}
+    .lo-agree{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--mut);line-height:1.5;text-align:left;cursor:pointer}
+    .lo-agree input{margin-top:3px;accent-color:var(--gold)}
+    .lo-agree a{color:var(--goldlt);text-decoration:underline;cursor:pointer}
+    .lo-policy{font-size:12px;color:var(--mut);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;line-height:1.65;text-align:left}
+    .lo-err{color:#F08A7E;font-size:12.5px;min-height:1em;text-align:center}
+    .lo-forgot{background:none;border:none;color:var(--mut);font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;align-self:center}
+    .lo-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+    /* 작가에게 묻다 */
+    .qa-badge{background:rgba(227,183,110,.14) !important;color:var(--goldlt) !important}
+    .qa-desc{color:var(--mut);font-size:13.5px;text-align:center;margin:-8px 0 16px}
+    .qa-card{border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px;background:var(--bg2)}
+    .qa-card.answered{border-color:rgba(201,144,58,.45)}
+    .qa-q{display:flex;gap:10px}
+    .qa-mark{flex:none;width:24px;height:24px;border-radius:50%;background:rgba(53,200,232,.14);color:var(--cyan);font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center}
+    .qa-mark.a{background:var(--gold);color:#17130C}
+    .qa-body{flex:1;min-width:0}
+    .qa-body>p{font-size:14.5px;line-height:1.65;color:var(--ink);word-break:break-word;font-weight:600}
+    .qa-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--mut);margin-top:4px}
+    .qa-wait{color:var(--cyan);border:1px solid rgba(53,200,232,.4);border-radius:999px;padding:0 8px;font-size:11px}
+    .qa-book{display:inline-block;font-size:11.5px;color:var(--goldlt);margin-bottom:3px;cursor:pointer}
+    .qa-book:hover{text-decoration:underline}
+    .qa-ans{display:flex;gap:10px;margin-top:12px;padding:12px 12px 10px;border-radius:12px;background:linear-gradient(180deg,rgba(201,144,58,.10),rgba(201,144,58,.03))}
+    .qa-ans-head{display:flex;gap:7px;align-items:center;flex-wrap:wrap;font-size:12.5px;color:var(--mut);margin-bottom:4px}
+    .qa-ans-head b{color:var(--ink);font-size:13.5px}
+    .qa-ans-head img{width:22px;height:22px;border-radius:50%;object-fit:cover}
+    .qa-ans .qa-body>p{font-size:14px;line-height:1.75;color:var(--ink);white-space:pre-wrap;word-break:break-word;font-weight:400}
+    .qa-ansform{margin-top:10px}
+    .qa-ansform textarea{width:100%;background:var(--bg);border:1px solid var(--gold);border-radius:10px;color:var(--ink);padding:10px 12px;font-family:inherit;font-size:14px;min-height:90px;resize:vertical}
+    .qa-ansform .row{display:flex;gap:8px;justify-content:flex-end;margin-top:8px;flex-wrap:wrap}
+    .qa-ans-btn{padding:5px 14px !important;font-size:13px !important}
+    .qa-week{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:26px}
+    .qa-wk{border:1px solid rgba(201,144,58,.45);border-radius:16px;padding:16px;background:linear-gradient(180deg,rgba(201,144,58,.08),rgba(201,144,58,0) 70%);display:flex;flex-direction:column;gap:10px}
+    .qa-wk .q{font-size:14px;font-weight:700;line-height:1.6;color:var(--ink)}
+    .qa-wk .q small{display:block;font-weight:400;color:var(--mut);font-size:11.5px;margin-top:2px}
+    .qa-wk .a{font-size:13.5px;line-height:1.7;color:#CFD3DA;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-wrap}
+    .qa-wk .who{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--goldlt);margin-top:auto}
+    .qa-wk .who img,.qa-wk .who .au-ph{width:24px;height:24px;border-radius:50%;object-fit:cover;font-size:12px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg)}
+    .qa-wk .who .lk{margin-left:auto;color:var(--mut)}
+    .qa-chips{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 12px}
+    .qa-chips .af-mini.on{border-color:var(--gold);color:var(--goldlt);background:rgba(201,144,58,.1)}
+    .qa-form{display:flex;flex-direction:column;gap:8px;margin-bottom:22px}
+    .qa-form select{background:var(--bg2);border:1px solid var(--line);border-radius:10px;color:var(--ink);padding:10px 12px;font-family:inherit;font-size:14px}
+    .qa-form select:focus{outline:none;border-color:var(--gold)}
+    .qa-form .gb-form{margin-bottom:0}
+    .qa-cnt{display:inline-block;min-width:16px;padding:0 5px;border-radius:999px;background:var(--cyan);color:#0E1013;font-size:10.5px;font-weight:800;line-height:16px;text-align:center;margin-left:4px}
+    .qa-sec{border:1px solid rgba(53,200,232,.35);border-radius:16px;padding:16px 16px 8px;margin:18px 0 6px;scroll-margin-top:20px}
+    .qa-sec .au-sub{margin-top:0}
     .login-note{color:var(--mut);font-size:12.5px;margin-top:18px;line-height:1.7;text-align:center}
     @media (max-width:720px){ .auth-chip .nick{display:none} .gb-form{flex-direction:column} }
   </style>
@@ -243,6 +298,7 @@
       <a href="#shelf">서재</a>
       <a href="#about">출판사 소개</a>
       <a href="#authorfeed">작가의 오늘</a>
+      <a href="#ask">작가에게 묻다</a>
       <a href="#daily">오늘의 문장</a>
       <a href="#guestbook">방명록</a>
       <a href="#shelves">작가들의 서재</a>
@@ -355,6 +411,24 @@
   </div>
 </section>
 
+<section id="ask" class="gb">
+  <div class="wrap">
+    <div class="sec-kicker">ASK THE AUTHOR</div>
+    <h2 class="sec-title serif">작가에게 묻다</h2>
+    <p class="gb-desc">책을 읽다 생긴 궁금증을 작가에게 직접 물어보세요. 다른 독자들이 「🙋 나도 궁금해요」를 많이 누른 질문부터 작가가 답합니다.</p>
+    <h4 class="au-sub serif" id="qaWeekTitle">💌 이번 주 작가의 답</h4>
+    <div id="qaWeekly" class="qa-week"><p class="gb-empty">불러오는 중…</p></div>
+    <div id="qaHomeForm"></div>
+    <div class="qa-chips" id="qaChips">
+      <button class="af-mini on" data-qf="hot" data-tr="작가에게묻다:필터:궁금">🙋 많이 궁금한 질문</button>
+      <button class="af-mini" data-qf="wait" data-tr="작가에게묻다:필터:대기">⏳ 답을 기다리는 질문</button>
+      <button class="af-mini" data-qf="done" data-tr="작가에게묻다:필터:완료">💌 답이 달린 질문</button>
+    </div>
+    <div id="qaHomeList"><p class="gb-empty">질문을 불러오는 중…</p></div>
+    <div class="ds-btns" id="qaMoreWrap" style="display:none"><button class="af-mini" id="qaMore" data-tr="작가에게묻다:더보기">질문 더 보기</button></div>
+  </div>
+</section>
+
 <section id="daily" class="gb">
   <div class="wrap">
     <div class="sec-kicker">TODAY'S SENTENCE</div>
@@ -403,13 +477,39 @@
   <div class="mo-inner login-inner">
     <button class="mo-close" id="loClose" aria-label="닫기">✕</button>
     <div class="sec-kicker">SIGN IN</div>
-    <h2 class="sec-title serif">간편로그인</h2>
-    <p class="mo-desc">방명록과 도서 댓글은 로그인 후 이용할 수 있어요. 3초면 충분합니다.</p>
+    <h2 class="sec-title serif">로그인 · 회원가입</h2>
+    <p class="mo-desc">방명록·댓글·작가에게 묻다는 로그인 후 이용할 수 있어요.</p>
     <div class="login-btns">
-      <button class="btn-kakao" id="btnKakao">💬 카카오로 시작하기</button>
-      <button class="btn-naver" id="btnNaver">N &nbsp;네이버로 시작하기</button>
+      <button class="btn-kakao" id="btnKakao">💬 카카오로 3초 만에 시작하기</button>
     </div>
-    <p class="login-note">로그인 시 닉네임·프로필 이미지만 받아 방명록·댓글 표시와<br />방문 통계 목적으로만 사용해요.</p>
+    <div class="lo-or">또는 이메일로</div>
+    <div class="lo-tabs" role="tablist">
+      <button type="button" class="on" data-lomode="in" data-tr="로그인:탭:로그인">로그인</button>
+      <button type="button" data-lomode="up" data-tr="로그인:탭:회원가입">회원가입</button>
+    </div>
+    <form class="lo-form" id="loForm" novalidate>
+      <input type="email" id="loEmail" placeholder="이메일" autocomplete="email" maxlength="120" required />
+      <input type="password" id="loPw" placeholder="비밀번호" autocomplete="current-password" maxlength="72" required />
+      <div id="loUpFields" hidden>
+        <div class="lo-form">
+          <input type="password" id="loPw2" placeholder="비밀번호 확인" autocomplete="new-password" maxlength="72" />
+          <input type="text" id="loNick" placeholder="닉네임 (2~12자, 댓글에 표시돼요)" maxlength="12" autocomplete="nickname" />
+          <input type="text" id="loHp" class="lo-hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <label class="lo-agree"><input type="checkbox" id="loAgeOk" /> <span>만 14세 이상입니다 (필수)</span></label>
+          <label class="lo-agree"><input type="checkbox" id="loPrivOk" /> <span>개인정보 수집·이용에 동의합니다 (필수) <a id="loPolicyBtn">내용 보기</a></span></label>
+          <div class="lo-policy" id="loPolicy" hidden>
+            <b>수집 항목</b> 이메일, 비밀번호(암호화 저장), 닉네임<br />
+            <b>이용 목적</b> 회원 식별·로그인, 방명록·댓글·질문의 작성자 표시, 답글 알림<br />
+            <b>보유 기간</b> 회원 탈퇴 시까지 (탈퇴 요청: out_of_box_0_0@naver.com)<br />
+            동의를 거부할 수 있으나, 거부 시 회원가입이 제한돼요.
+          </div>
+        </div>
+      </div>
+      <p class="lo-err" id="loErr"></p>
+      <button type="submit" class="btn btn-gold" id="loSubmit" data-tr="로그인:이메일제출">이메일로 로그인</button>
+      <button type="button" class="lo-forgot" id="loForgot">비밀번호를 잊으셨나요?</button>
+    </form>
+    <p class="login-note">카카오 로그인 시 닉네임·프로필 이미지만 받아요.<br />모든 정보는 방명록·댓글 표시와 방문 통계에만 사용해요.</p>
   </div>
 </div>
 
@@ -1033,29 +1133,78 @@ document.getElementById("btnKakao").addEventListener("click", async () => {
     location.href = data.url;
   } catch (e) { location.href = data.url; }
 });
-document.getElementById("btnNaver").addEventListener("click", () => {
-  location.href = SB_URL + "/functions/v1/naver-login?action=start&site=" + encodeURIComponent(location.origin + location.pathname);
+/* ── 이메일 로그인 · 회원가입 (같은 회원 DB: auth.users + ob_profiles) ── */
+let loMode = "in";
+const loErr = document.getElementById("loErr");
+function setLoMode(m) {
+  loMode = m;
+  document.querySelectorAll("[data-lomode]").forEach((b) => b.classList.toggle("on", b.dataset.lomode === m));
+  document.getElementById("loUpFields").hidden = m !== "up";
+  document.getElementById("loSubmit").textContent = m === "up" ? "가입하고 시작하기" : "이메일로 로그인";
+  document.getElementById("loPw").setAttribute("autocomplete", m === "up" ? "new-password" : "current-password");
+  document.getElementById("loPw").placeholder = m === "up" ? "비밀번호 (영문+숫자 8자 이상)" : "비밀번호";
+  document.getElementById("loForgot").hidden = m === "up";
+  loErr.textContent = "";
+}
+document.querySelectorAll("[data-lomode]").forEach((b) => b.addEventListener("click", () => setLoMode(b.dataset.lomode)));
+document.getElementById("loPolicyBtn").addEventListener("click", (e) => {
+  e.preventDefault();
+  const el = document.getElementById("loPolicy"); el.hidden = !el.hidden;
 });
-
-/* 네이버 콜백 토큰 → 세션 교환 + 로그인 안내 메시지 처리 */
-(async () => {
-  const msg = location.hash.match(/ob_login_msg=([^&]+)/);
-  if (msg) {
-    history.replaceState(null, "", location.pathname + location.search);
-    const M = {
-      naver_not_ready: "네이버 로그인은 준비 중이에요 — 키 등록이 끝나면 바로 열립니다!",
-      naver_cancel: "네이버 로그인이 취소됐어요.",
-      naver_error: "네이버 로그인 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요.",
-    };
-    setTimeout(() => toast(M[decodeURIComponent(msg[1])] || "로그인에 실패했어요."), 400);
+document.getElementById("loForgot").addEventListener("click", () => {
+  loErr.textContent = "가입한 이메일을 적어 out_of_box_0_0@naver.com 으로 보내 주시면 임시 비밀번호를 안내해 드려요.";
+});
+document.getElementById("loForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = document.getElementById("loEmail").value.trim().toLowerCase();
+  const pw = document.getElementById("loPw").value;
+  const btn = document.getElementById("loSubmit");
+  loErr.textContent = "";
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { loErr.textContent = "이메일 주소를 확인해 주세요."; return; }
+  if (!pw) { loErr.textContent = "비밀번호를 입력해 주세요."; return; }
+  if (loMode === "up") {
+    const nick = document.getElementById("loNick").value.trim();
+    if (pw.length < 8 || !/[A-Za-z]/.test(pw) || !/[0-9]/.test(pw)) { loErr.textContent = "비밀번호는 영문과 숫자를 섞어 8자 이상으로 만들어 주세요."; return; }
+    if (pw !== document.getElementById("loPw2").value) { loErr.textContent = "비밀번호 확인이 일치하지 않아요."; return; }
+    if (nick.length < 2 || nick.length > 12) { loErr.textContent = "닉네임은 2~12자로 정해 주세요."; return; }
+    if (!document.getElementById("loAgeOk").checked || !document.getElementById("loPrivOk").checked) { loErr.textContent = "필수 항목 두 가지에 동의해 주세요."; return; }
+    btn.disabled = true; btn.textContent = "가입하는 중…";
+    try {
+      const r = await fetch(SB_URL + "/functions/v1/ob-signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", apikey: SB_KEY },
+        body: JSON.stringify({ email, password: pw, nickname: nick, agree_age: true, agree_privacy: true, website: document.getElementById("loHp").value }),
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || !j.ok) {
+        const M = {
+          exists: "이미 가입된 이메일이에요. 「로그인」 탭에서 로그인해 주세요.",
+          nickname_taken: "작가·운영진 이름과 같은 닉네임은 쓸 수 없어요. 다른 닉네임을 정해 주세요.",
+          nickname: "닉네임은 2~12자, 특수문자(< > \" ' `) 없이 정해 주세요.",
+          password: "비밀번호는 영문과 숫자를 섞어 8자 이상으로 만들어 주세요.",
+          email: "이메일 주소를 확인해 주세요.",
+          rate: "잠시 후 다시 시도해 주세요. (가입 시도가 너무 많아요)",
+          agree: "필수 항목 두 가지에 동의해 주세요.",
+        };
+        loErr.textContent = M[j.error] || "가입 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요.";
+        throw 0;
+      }
+      track("signup", "email");
+      const { error } = await sb.auth.signInWithPassword({ email, password: pw });
+      if (error) { loErr.textContent = "가입은 됐어요! 「로그인」 탭에서 로그인해 주세요."; setLoMode("in"); throw 0; }
+    } catch (err) { /* 메시지 표시됨 */ }
+    btn.disabled = false; btn.textContent = loMode === "up" ? "가입하고 시작하기" : "이메일로 로그인";
     return;
   }
-  const m = location.hash.match(/ob_naver_token=([^&]+)/);
-  if (!m) return;
-  history.replaceState(null, "", location.pathname + location.search);
-  const { error } = await sb.auth.verifyOtp({ type: "magiclink", token_hash: decodeURIComponent(m[1]) });
-  if (error) toast("네이버 로그인에 실패했어요. 다시 시도해 주세요.");
-})();
+  btn.disabled = true; btn.textContent = "로그인 중…";
+  const { error } = await sb.auth.signInWithPassword({ email, password: pw });
+  btn.disabled = false; btn.textContent = "이메일로 로그인";
+  if (error) {
+    loErr.textContent = /invalid/i.test(error.message || "")
+      ? "이메일 또는 비밀번호가 맞지 않아요. 카카오로 가입하셨다면 위의 카카오 버튼을 눌러 주세요."
+      : "로그인에 실패했어요. 잠시 후 다시 시도해 주세요.";
+  }
+});
 
 /* ── 인증 상태 ── */
 const authArea = document.getElementById("authArea");
@@ -1063,10 +1212,10 @@ async function setUser(session) {
   obUser = session ? session.user : null;
   obProfile = null;
   if (obUser) {
-    const { data } = await sb.from("ob_profiles").select("nickname, avatar_url, is_admin, is_author, handle").eq("id", obUser.id).maybeSingle();
-    obProfile = data || { nickname: "독자", avatar_url: "", is_admin: false, is_author: false, handle: null };
+    const { data } = await sb.from("ob_profiles").select("nickname, avatar_url, is_admin, is_author, handle, book_slugs").eq("id", obUser.id).maybeSingle();
+    obProfile = data || { nickname: "독자", avatar_url: "", is_admin: false, is_author: false, handle: null, book_slugs: [] };
   }
-  renderAuth(); renderGbForm(); refreshCommentForms(); loadGuestbook(); renderAfForm(); loadAuthorFeed(); loadDaily(); checkNotifications();
+  renderAuth(); renderGbForm(); refreshCommentForms(); refreshAskZones(); loadAskHome(); loadGuestbook(); renderAfForm(); loadAuthorFeed(); loadDaily(); checkNotifications();
   const auo = document.getElementById("authorOverlay");
   const am = parseAuthorHash();
   if (auo && !auo.hidden && am) showAuthor(am.key, am.shelf);
@@ -1296,7 +1445,7 @@ function mountComments(slug) {
   loadComments(slug);
 }
 function refreshCommentForms() {
-  document.querySelectorAll(".cm-zone").forEach((z) => {
+  document.querySelectorAll(".cm-zone:not(.qa-zone)").forEach((z) => {
     const slug = z.id.replace("cmZone-", "");
     const wrap = document.getElementById("cmForm-" + slug);
     if (wrap) { wrap.innerHTML = commentFormHtml(slug); bindCommentForm(slug); }
@@ -1325,6 +1474,7 @@ function renderAfForm() {
         <button type="button" class="af-mini" id="afPromptUse" data-tr="피드:글감사용">이 질문으로 시작</button>
         <button type="button" class="af-mini" id="afMyPage" data-tr="피드:내작가페이지">👤 내 작가 페이지</button>
         <button type="button" class="af-mini" id="afMyShelf" data-tr="피드:내서재">📖 내 서재</button>
+        <button type="button" class="af-mini" id="afMyQa" data-tr="피드:독자질문">🙋 독자 질문</button>
       </div>
       <div class="af-preview" id="afPrevWrap" hidden>
         <img id="afPrevImg" alt="첨부한 사진 미리보기" />
@@ -1350,6 +1500,8 @@ function renderAfForm() {
     ta.setSelectionRange(ta.value.length, ta.value.length);
   });
   document.getElementById("afMyShelf").addEventListener("click", openMyShelf);
+  document.getElementById("afMyQa").addEventListener("click", openMyQuestions);
+  updateAfQaCount();
   document.getElementById("afMyPage").addEventListener("click", () => {
     openAuthor((obProfile && obProfile.handle) || obUser.id);
   });
@@ -1563,6 +1715,11 @@ async function showAuthor(key, wantShelf) {
     </section>
     ${books.length ? `<h4 class="au-sub serif">📚 ${esc(a.nickname || "작가")}의 책</h4>
       <div class="au-books">${books.map(({ b, i }) => `<button class="au-book" data-i="${i}" data-tr="작가페이지:책:${esc(b.title)}"><img src="${b.cover}" alt="" loading="lazy" />${esc(b.title)}</button>`).join("")}</div>` : ""}
+    ${books.length ? `<section class="qa-sec" id="auQaSec">
+      <h4 class="au-sub serif">🙋 독자가 묻고, 작가가 답하다</h4>
+      ${mine ? `<p class="sh-sub">작가님 책에 들어온 질문이에요. 답을 기다리는 질문이 위에 있어요 — 답을 남기면 질문한 독자에게 알림이 가요.</p>` : ""}
+      <div id="auQa"><p class="gb-empty">불러오는 중…</p></div>
+    </section>` : ""}
     <h4 class="au-sub serif">✍️ 작가의 오늘</h4>
     <div id="auPosts"><p class="gb-empty">이야기를 불러오는 중…</p></div>
     ${books.length ? `<h4 class="au-sub serif">💬 책에 남겨진 독자의 한마디</h4><div id="auReviews"><p class="gb-empty">불러오는 중…</p></div>` : ""}`;
@@ -1583,6 +1740,12 @@ async function showAuthor(key, wantShelf) {
   const reloadPosts = () => renderPostFeed(postsEl, a.id, reloadPosts);
   reloadPosts();
   renderShelf(a).then(() => { if (wantShelf) setTimeout(focusShelf, 150); });
+  if (books.length) {
+    const qaEl = document.getElementById("auQa");
+    const reloadQa = () => renderQaList(qaEl, { slugs: a.book_slugs, filter: mine ? "pendingFirst" : "done", limit: mine ? 0 : 6, showBook: true,
+      empty: mine ? "아직 들어온 질문이 없어요." : "아직 답한 질문이 없어요 — 책 상세의 「작가에게 묻다」에서 첫 질문을 남겨 주세요." }, reloadQa);
+    reloadQa().then(() => { if (auFocusQa) { auFocusQa = false; setTimeout(focusQa, 200); } });
+  } else if (auFocusQa) { auFocusQa = false; toast("담당 책이 연결되면 독자 질문이 이곳에 모여요. 관리자에게 담당 책 지정을 요청해 주세요."); }
   if (books.length) {
     const { data: rv } = await sb.from("ob_book_comments")
       .select("id, content, created_at, user_id, parent_id, book_slug, profile:ob_profiles(nickname, avatar_url, is_admin, is_author)")
@@ -2200,12 +2363,254 @@ async function checkNotifications() {
   await sb.from("ob_notifications").update({ read: true }).in("id", data.map((n) => n.id));
 }
 
+
+/* ── 작가에게 묻다 (책별 독자 Q&A) ── */
+const QA_SEL = "id, book_slug, content, answer, answered_at, created_at, user_id, answered_by, asker:ob_profiles!ob_questions_user_id_fkey(nickname, avatar_url), answerer:ob_profiles!ob_questions_answered_by_fkey(nickname, avatar_url, handle)";
+const bookBySlug = (slug) => BOOKS.find((b) => b.slug === slug) || {};
+function canAnswerQ(slug) {
+  return !!(obProfile && (obProfile.is_admin || (obProfile.is_author && (obProfile.book_slugs || []).includes(slug))));
+}
+function qaLikeHtml(id, likers) {
+  likers = likers || [];
+  const mine = obUser && likers.some((l) => l.user_id === obUser.id);
+  const names = likers.map((l) => esc((l.profile && l.profile.nickname) || "독자"));
+  return `<div class="lk-wrap">
+      <button class="lk-btn${mine ? " on" : ""}" data-like="${id}" data-kind="question" title="${mine ? "취소" : "나도 궁금해요"}">🙋 나도 궁금해요<span class="lk-cnt">${likers.length || ""}</span></button>
+      ${names.length ? `<span class="lk-names">${names.slice(0, 4).join(", ")}${names.length > 4 ? ` 외 ${names.length - 4}명` : ""}님도 궁금해해요</span>` : ""}
+    </div>`;
+}
+function qaCardHtml(q, likers, showBook) {
+  const nick = (q.asker && q.asker.nickname) || "독자";
+  const can = canAnswerQ(q.book_slug);
+  const mine = obUser && obUser.id === q.user_id;
+  const w = q.answerer || {};
+  const ans = q.answer ? `<div class="qa-ans"><span class="qa-mark a">A</span><div class="qa-body">
+      <div class="qa-ans-head">${w.avatar_url ? `<img src="${esc(w.avatar_url)}" alt="" referrerpolicy="no-referrer" />` : ""}<b>${esc(w.nickname || "작가")}</b><span class="gb-author-tag">✍️ 작가의 답</span><span>${fmtDT(q.answered_at)}</span>
+      ${can ? `<button class="gb-rep-btn" data-qa-ans="${q.id}" data-tr="작가에게묻다:답변수정">수정</button>` : ""}</div>
+      <p>${esc(q.answer)}</p></div></div>` : "";
+  return `<div class="qa-card${q.answer ? " answered" : ""}">
+    <div class="qa-q"><span class="qa-mark">Q</span><div class="qa-body">
+      ${showBook ? `<span class="qa-book" data-qa-book="${esc(q.book_slug)}">📕 ${esc(bookBySlug(q.book_slug).title || "")}</span>` : ""}
+      <p>${esc(q.content)}</p>
+      <div class="qa-meta"><span>${esc(nick)}</span><span>${fmtDT(q.created_at)}</span>${q.answer ? "" : `<span class="qa-wait">답을 기다리는 중</span>`}
+        ${mine && !q.answer ? `<button class="gb-del" data-qa-del="${q.id}">삭제</button>` : ""}</div>
+    </div></div>
+    ${ans}
+    <div class="gb-foot">${qaLikeHtml(q.id, likers)}${can && !q.answer ? `<button class="btn btn-gold qa-ans-btn" data-qa-ans="${q.id}" data-tr="작가에게묻다:답하기">✍️ 답하기</button>` : ""}</div>
+    <div class="qa-ansform" data-qa-form="${q.id}" hidden></div>
+  </div>`;
+}
+function bindQa(root, rows, reload) {
+  bindLikes(root, reload);
+  root.querySelectorAll("[data-qa-book]").forEach((el) => el.addEventListener("click", () => openBookAsk(el.dataset.qaBook)));
+  root.querySelectorAll("[data-qa-del]").forEach((b) => b.addEventListener("click", async () => {
+    if (!confirm("이 질문을 삭제할까요?")) return;
+    await sb.from("ob_questions").delete().eq("id", b.dataset.qaDel);
+    toast("질문을 삭제했어요."); reload(); loadAskHome();
+  }));
+  root.querySelectorAll("[data-qa-ans]").forEach((b) => b.addEventListener("click", () => {
+    const id = b.dataset.qaAns;
+    const box = root.querySelector(`[data-qa-form="${id}"]`);
+    if (!box) return;
+    if (!box.hidden) { box.hidden = true; box.innerHTML = ""; return; }
+    const q = rows.find((x) => x.id === id) || {};
+    box.hidden = false;
+    box.innerHTML = `<textarea maxlength="2000" placeholder="독자에게 건네는 작가님의 답 (2000자)">${esc(q.answer || "")}</textarea>
+      <div class="row">
+        ${q.answer ? `<button type="button" class="af-mini" data-act="clear">답변 지우기</button>` : ""}
+        <button type="button" class="af-mini" data-act="cancel">취소</button>
+        <button type="button" class="btn btn-gold qa-ans-btn" data-act="save" data-tr="작가에게묻다:답변등록">${q.answer ? "수정 완료" : "답변 남기기"}</button>
+      </div>`;
+    const ta = box.querySelector("textarea");
+    ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
+    const run = async (text) => {
+      const { error } = await sb.rpc("ob_answer_question", { p_id: id, p_answer: text });
+      if (error) { toast("답변 저장에 실패했어요: " + (error.message || "")); return; }
+      toast(text ? (q.answer ? "답변을 고쳤어요 ✍️" : "답변이 등록됐어요 — 질문한 독자에게 알림이 갔어요 💌") : "답변을 지웠어요.");
+      track("qa_answer", bookBySlug(q.book_slug).title || q.book_slug);
+      reload(); loadAskHome(); updateAfQaCount();
+    };
+    box.querySelector('[data-act="save"]').addEventListener("click", () => { const v = ta.value.trim(); if (!v) { ta.focus(); return; } run(v); });
+    box.querySelector('[data-act="cancel"]').addEventListener("click", () => { box.hidden = true; box.innerHTML = ""; });
+    const cl = box.querySelector('[data-act="clear"]');
+    if (cl) cl.addEventListener("click", () => { if (confirm("답변을 지울까요? 질문은 다시 '답을 기다리는 질문'이 돼요.")) run(""); });
+  }));
+}
+/* opts: { slugs, filter: hot|wait|done|pendingFirst, limit, showBook, empty } */
+async function renderQaList(el, opts, reload) {
+  if (!el) return [];
+  let qy = sb.from("ob_questions").select(QA_SEL).eq("hidden", false).order("created_at", { ascending: false }).limit(200);
+  if (opts.slugs) qy = qy.in("book_slug", opts.slugs.length ? opts.slugs : ["__none__"]);
+  if (opts.filter === "wait") qy = qy.is("answer", null);
+  if (opts.filter === "done") qy = qy.not("answer", "is", null);
+  const { data, error } = await qy;
+  if (error) { el.innerHTML = `<p class="gb-empty">질문을 불러오지 못했어요.</p>`; return []; }
+  const likeMap = await fetchLikes("question", data.map((q) => q.id));
+  const cnt = (q) => (likeMap[q.id] || []).length;
+  const rows = data.slice();
+  if (opts.filter === "done") rows.sort((a, b) => (b.answered_at || "").localeCompare(a.answered_at || ""));
+  else if (opts.filter === "pendingFirst") rows.sort((a, b) => (!!a.answer - !!b.answer) || (cnt(b) - cnt(a)) || b.created_at.localeCompare(a.created_at));
+  else rows.sort((a, b) => (cnt(b) - cnt(a)) || b.created_at.localeCompare(a.created_at));
+  const shown = opts.limit ? rows.slice(0, opts.limit) : rows;
+  el.innerHTML = shown.length ? shown.map((q) => qaCardHtml(q, likeMap[q.id], opts.showBook)).join("")
+    : `<p class="gb-empty">${opts.empty || "아직 질문이 없어요 — 첫 질문을 남겨 주세요 🙋"}</p>`;
+  bindQa(el, shown, reload);
+  return rows;
+}
+function qaFormHtml(slug, withSelect) {
+  if (!obUser) return `<div class="gb-login"><p>로그인하면 작가에게 직접 질문할 수 있어요.</p><button class="btn btn-line qa-login-btn" data-tr="작가에게묻다:로그인유도">로그인하고 질문하기 🙋</button></div>`;
+  const t = slug ? bookBySlug(slug).title : "";
+  return `<form class="qa-form" data-slug="${esc(slug || "")}">
+      ${withSelect ? `<select class="qa-sel" aria-label="질문할 책"><option value="">📕 어떤 책에 대한 질문인가요?</option>${BOOKS.map((b) => `<option value="${esc(b.slug)}">${esc(b.title)}${b.author ? " — " + esc(b.author) : ""}</option>`).join("")}</select>` : ""}
+      <div class="gb-form">
+        <textarea rows="2" maxlength="300" placeholder="${t ? `『${esc(t)}』의 작가에게 묻고 싶은 것 (5~300자)` : "작가에게 묻고 싶은 것 (5~300자)"}"></textarea>
+        <button type="submit" class="btn btn-gold" data-tr="작가에게묻다:질문등록">질문하기</button>
+      </div>
+    </form>`;
+}
+function bindQaForm(wrap, onDone) {
+  const lb = wrap.querySelector(".qa-login-btn");
+  if (lb) lb.addEventListener("click", openLogin);
+  const f = wrap.querySelector("form.qa-form");
+  if (!f) return;
+  f.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const sel = f.querySelector(".qa-sel");
+    const slug = f.dataset.slug || (sel && sel.value);
+    const ta = f.querySelector("textarea");
+    const v = ta.value.trim();
+    if (!slug) { toast("어떤 책에 대한 질문인지 골라 주세요 📕"); if (sel) sel.focus(); return; }
+    if (v.length < 5) { toast("질문을 5자 이상 적어 주세요."); ta.focus(); return; }
+    const btn = f.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    const { error } = await sb.from("ob_questions").insert({ book_slug: slug, user_id: obUser.id, content: v });
+    btn.disabled = false;
+    if (error) { toast(/하루 10개/.test(error.message || "") ? "질문은 하루 10개까지 남길 수 있어요." : "질문 등록에 실패했어요. 잠시 후 다시 시도해 주세요."); return; }
+    ta.value = ""; if (sel) sel.value = "";
+    const hasAuthor = obAuthors.some((a) => (a.book_slugs || []).includes(slug));
+    toast(hasAuthor ? "질문이 등록됐어요 — 작가님께 알림이 갔어요 🙋" : "질문이 등록됐어요 — 작가님께 전해 드릴게요 🙋");
+    track("qa_ask", bookBySlug(slug).title || slug);
+    onDone && onDone(slug);
+  });
+}
+/* 책 상세 안의 「작가에게 묻다」 */
+function mountAsk(slug) {
+  const card = document.querySelector(".detail-card");
+  if (!card || document.getElementById("qaZone-" + slug)) return;
+  const z = document.createElement("div");
+  z.className = "cm-zone qa-zone"; z.id = "qaZone-" + slug; z.dataset.slug = slug;
+  z.style.scrollMarginTop = "80px";
+  z.innerHTML = `
+    <div class="rv-head"><span class="rv-badge qa-badge">🙋 ASK THE AUTHOR</span><h4 class="serif">“작가에게 묻다”</h4></div>
+    <p class="qa-desc">「나도 궁금해요」가 많은 질문부터 작가가 직접 답해요.</p>
+    <div id="qaForm-${slug}"></div>
+    <div id="qaList-${slug}"><p class="gb-empty">질문을 불러오는 중…</p></div>`;
+  card.appendChild(z);
+  renderAskZone(slug);
+}
+function renderAskZone(slug) {
+  const fw = document.getElementById("qaForm-" + slug);
+  if (!fw) return;
+  fw.innerHTML = qaFormHtml(slug, false);
+  const reload = () => renderQaList(document.getElementById("qaList-" + slug), { slugs: [slug], filter: canAnswerQ(slug) ? "pendingFirst" : "hot", empty: "아직 질문이 없어요 — 이 책의 첫 질문을 남겨 주세요 🙋" }, reload);
+  bindQaForm(fw, () => { reload(); loadAskHome(); });
+  reload();
+}
+function refreshAskZones() {
+  document.querySelectorAll('[id^="qaZone-"]').forEach((z) => renderAskZone(z.dataset.slug));
+}
+function openBookAsk(slug) {
+  const i = BOOKS.findIndex((b) => b.slug === slug);
+  if (i < 0) return;
+  if (typeof closeAuthor === "function" && !auOverlay.hidden) closeAuthor();
+  openDetail(i);
+  setTimeout(() => {
+    const z = document.getElementById("qaZone-" + slug);
+    if (z) z.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 120);
+}
+/* 홈: 이번 주 작가의 답 + 질문 목록 */
+let qaFilter = "hot", qaLimit = 6;
+async function loadWeeklyAnswers() {
+  const el = document.getElementById("qaWeekly");
+  if (!el) return;
+  const { data } = await sb.rpc("ob_weekly_answers", { p_limit: 3 });
+  const rows = data || [];
+  const title = document.getElementById("qaWeekTitle");
+  if (title) title.textContent = rows.some((r) => r.this_week) ? "💌 이번 주 작가의 답" : "💌 최근 작가의 답";
+  el.innerHTML = rows.length ? rows.map((r) => `
+      <div class="qa-wk">
+        <span class="qa-book" data-qa-book="${esc(r.book_slug)}">📕 ${esc(r.book_title)}</span>
+        <div class="q">Q. ${esc(r.content)}<small>${esc(r.asker)}님의 질문</small></div>
+        <div class="a">${esc(r.answer)}</div>
+        <div class="who">${r.answerer_avatar ? `<img src="${esc(r.answerer_avatar)}" alt="" referrerpolicy="no-referrer" />` : `<span class="au-ph">✍️</span>`}
+          <span data-author="${esc(r.answerer_key)}" style="cursor:pointer">${esc(r.answerer)} 작가의 답</span><span class="lk">🙋 ${r.likes}</span></div>
+      </div>`).join("")
+    : `<p class="gb-empty" style="grid-column:1/-1">아직 작가의 답이 없어요 — 첫 질문을 남기면 작가님이 직접 답해 드려요 ✍️</p>`;
+  el.querySelectorAll("[data-qa-book]").forEach((x) => x.addEventListener("click", () => openBookAsk(x.dataset.qaBook)));
+  el.querySelectorAll("[data-author]").forEach((x) => x.addEventListener("click", () => openAuthor(x.dataset.author)));
+}
+async function loadAskHome() {
+  const fw = document.getElementById("qaHomeForm");
+  if (!fw) return;
+  loadWeeklyAnswers();
+  fw.innerHTML = qaFormHtml(null, true);
+  bindQaForm(fw, () => { qaFilter = "wait"; syncQaChips(); loadQaHomeList(); });
+  loadQaHomeList();
+}
+async function loadQaHomeList() {
+  const el = document.getElementById("qaHomeList");
+  const rows = await renderQaList(el, { filter: qaFilter, limit: qaLimit, showBook: true,
+    empty: qaFilter === "done" ? "아직 답이 달린 질문이 없어요." : qaFilter === "wait" ? "답을 기다리는 질문이 없어요 — 작가님들이 모두 답했어요 👏" : undefined }, loadQaHomeList);
+  const mw = document.getElementById("qaMoreWrap");
+  if (mw) mw.style.display = rows.length > qaLimit ? "" : "none";
+}
+function syncQaChips() { document.querySelectorAll("[data-qf]").forEach((b) => b.classList.toggle("on", b.dataset.qf === qaFilter)); }
+document.querySelectorAll("[data-qf]").forEach((b) => b.addEventListener("click", () => { qaFilter = b.dataset.qf; qaLimit = 6; syncQaChips(); loadQaHomeList(); }));
+document.getElementById("qaMore").addEventListener("click", () => { qaLimit += 10; loadQaHomeList(); });
+/* 작가: 답을 기다리는 내 책 질문 수 */
+async function pendingQaCount() {
+  if (!obProfile || !(obProfile.is_author || obProfile.is_admin)) return 0;
+  let qy = sb.from("ob_questions").select("id", { count: "exact", head: true }).eq("hidden", false).is("answer", null);
+  if (!obProfile.is_admin) qy = qy.in("book_slug", (obProfile.book_slugs || []).length ? obProfile.book_slugs : ["__none__"]);
+  const { count } = await qy;
+  return count || 0;
+}
+async function updateAfQaCount() {
+  const b = document.getElementById("afMyQa");
+  if (!b) return;
+  const n = await pendingQaCount();
+  b.innerHTML = `🙋 독자 질문${n ? `<span class="qa-cnt">${n}</span>` : ""}`;
+}
+let auFocusQa = false;
+function openMyQuestions() {
+  if (!obUser) { openLogin(); return; }
+  auFocusQa = true;
+  openAuthor((obProfile && obProfile.handle) || obUser.id);
+}
+function focusQa() {
+  const sec = document.getElementById("auQaSec");
+  if (!sec) return;
+  sec.scrollIntoView({ behavior: "smooth", block: "start" });
+  sec.classList.remove("sh-flash"); void sec.offsetWidth; sec.classList.add("sh-flash");
+}
+/* #ask/<slug> 딥링크 */
+function handleAskHash() {
+  const m = location.hash.match(/^#ask\/([^/&]+)/);
+  if (!m) return;
+  history.replaceState(null, "", location.pathname + location.search + "#ask");
+  setTimeout(() => openBookAsk(decodeURIComponent(m[1])), 300);
+}
+window.addEventListener("hashchange", handleAskHash);
+handleAskHash();
+
 /* 책 상세가 열릴 때 댓글 영역을 함께 렌더 */
 const _openDetail = openDetail;
 openDetail = function (i) {
   _openDetail(i);
   const b = BOOKS[i];
   track("view_book", b.title);
+  mountAsk(b.slug);
   mountComments(b.slug);
   const linked = obAuthors.filter((a) => (a.book_slugs || []).includes(b.slug));
   const meta = document.querySelector(".detail-info .meta");
