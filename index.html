@@ -61,6 +61,10 @@
     .af-file-lb:hover{color:var(--gold);border-color:var(--gold)}
     .af-file-name{font-size:12px;color:var(--mut);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .af-write-row .btn{margin-left:auto}
+    .af-preview{position:relative}
+    .af-preview img{display:block;max-width:100%;max-height:320px;border-radius:12px;border:1px solid var(--line);object-fit:contain;background:var(--bg)}
+    .af-prev-x{position:absolute;top:8px;right:8px;background:rgba(16,18,22,.78);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:4px 11px;font-size:12px;cursor:pointer;font-family:inherit}
+    .af-prev-x:hover{border-color:var(--gold);color:var(--gold)}
     .ds-card{border:1px solid var(--line);border-radius:16px;background:var(--bg2);padding:34px 28px;text-align:center}
     .ds-quote{font-size:21px;line-height:1.75;color:var(--ink);margin-bottom:10px}
     .ds-src{color:var(--mut);font-size:12.5px;margin-bottom:6px}
@@ -1170,6 +1174,10 @@ function renderAfForm() {
   if (!(obProfile && (obProfile.is_author || obProfile.is_admin))) { afFormWrap.innerHTML = ""; return; }
   afFormWrap.innerHTML = `
     <form class="gb-form af-col" id="afWriteForm">
+      <div class="af-preview" id="afPrevWrap" hidden>
+        <img id="afPrevImg" alt="첨부한 사진 미리보기" />
+        <button type="button" class="af-prev-x" id="afPrevX">✕ 사진 빼기</button>
+      </div>
       <textarea id="afWriteText" rows="3" maxlength="2000" placeholder="${esc(obProfile.nickname || "작가")} 작가님, 오늘의 이야기를 남겨 주세요 (2000자)"></textarea>
       <div class="af-write-row">
         <label class="af-file-lb">📷 사진 첨부<input type="file" id="afWriteImg" accept="image/*" hidden /></label>
@@ -1178,8 +1186,29 @@ function renderAfForm() {
       </div>
     </form>`;
   const fileInp = document.getElementById("afWriteImg");
+  const prevWrap = document.getElementById("afPrevWrap");
+  const prevImg = document.getElementById("afPrevImg");
+  let prevUrl = null;
+  const clearPreview = () => {
+    if (prevUrl) { URL.revokeObjectURL(prevUrl); prevUrl = null; }
+    prevImg.removeAttribute("src");
+    prevWrap.hidden = true;
+    document.getElementById("afWriteImgName").textContent = "";
+  };
   fileInp.addEventListener("change", () => {
-    document.getElementById("afWriteImgName").textContent = fileInp.files[0] ? fileInp.files[0].name : "";
+    const f = fileInp.files[0];
+    if (!f) { clearPreview(); return; }
+    if (prevUrl) URL.revokeObjectURL(prevUrl);
+    prevUrl = URL.createObjectURL(f);
+    prevImg.src = prevUrl;
+    prevWrap.hidden = false;
+    document.getElementById("afWriteImgName").textContent = f.name;
+    const ta = document.getElementById("afWriteText");
+    if (ta) ta.focus();
+  });
+  document.getElementById("afPrevX").addEventListener("click", () => {
+    fileInp.value = "";
+    clearPreview();
   });
   document.getElementById("afWriteForm").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -1193,7 +1222,7 @@ function renderAfForm() {
       if (fileInp.files[0]) image_url = await afUploadImage(fileInp.files[0]);
       const ins = await sb.from("ob_author_posts").insert({ content: v, image_url, user_id: obUser.id });
       if (ins.error) throw ins.error;
-      ta.value = ""; fileInp.value = ""; document.getElementById("afWriteImgName").textContent = "";
+      ta.value = ""; fileInp.value = ""; clearPreview();
       toast("이야기가 게시됐어요 ✍️");
       loadAuthorFeed();
     } catch (err) {
