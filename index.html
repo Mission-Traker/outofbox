@@ -1914,7 +1914,7 @@ async function loadShelvesOverview() {
         </div>
         <div class="sv-shelf">${spines}</div>
         ${reading ? `<p class="sv-line">📖 요즘 읽는 책 ${reading}</p>` : ""}
-        ${r.latest_excerpt ? `<p class="sv-quote">“${esc(r.latest_excerpt)}”${r.latest_book ? `<span> — 『${esc(r.latest_book)}』를 읽으며</span>` : ""}</p>` : ""}
+        ${r.latest_excerpt ? `<p class="sv-quote">“${esc(r.latest_excerpt)}”${r.latest_book ? `<span> — 『${esc(r.latest_book)}』 독서 기록</span>` : ""}</p>` : ""}
         <button class="btn btn-line sv-go" data-author="${esc(key)}" data-tr="작가들의서재:둘러보기:${nick}">${nick} 작가의 서재 둘러보기 →</button>
       </div>`;
   }).join("");
