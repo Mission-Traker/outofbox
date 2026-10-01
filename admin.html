@@ -202,8 +202,8 @@ td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
     </section>
 
     <section class="panel">
-      <h3>🔐 이메일 회원 비밀번호 재설정</h3>
-      <p class="hint">이메일로 가입한 회원이 비밀번호를 잊었을 때, 임시 비밀번호를 발급해 대표메일로 회신해 주세요. (카카오 회원은 카카오 로그인을 쓰면 돼요)</p>
+      <h3>🔐 회원 찾기 · 비밀번호 재설정 · 탈퇴 처리</h3>
+      <p class="hint">이메일로 가입한 회원이 비밀번호를 잊었을 때, 임시 비밀번호를 발급해 대표메일로 회신해 주세요. (카카오 회원은 카카오 로그인을 쓰면 돼요) 대표메일로 탈퇴 요청이 오면 「탈퇴 처리」를 눌러 주세요.</p>
       <div style="display:flex;gap:8px;margin-bottom:10px;max-width:520px">
         <input class="code-input" id="pwFindQ" placeholder="가입 이메일 또는 닉네임" style="text-align:left;letter-spacing:0;margin:0" />
         <button class="btn-gold" id="pwFindBtn" style="width:auto;margin:0;padding:0 18px;white-space:nowrap">찾기</button>
@@ -662,7 +662,20 @@ async function findMembers() {
       <span class="meta">${fmtDT(m.created_at)}</span>
       <span class="txt"><b>${esc(m.nickname || "독자")}</b> · ${esc(m.email || "")} <span style="color:var(--mut);font-size:12px">${esc(m.provider)}</span><span id="pwres-${m.id}"></span></span>
       ${m.provider === "email" ? `<button data-pwreset="${m.id}">임시 비밀번호 발급</button>` : `<span class="meta">카카오 회원</span>`}
+      <button data-mdel="${m.id}" data-nick="${esc(m.nickname || "")}">탈퇴 처리</button>
     </div>`).join("") : `<p class="empty">찾는 회원이 없어요.</p>`;
+  document.querySelectorAll("#pwFindList [data-mdel]").forEach(b => b.addEventListener("click", async () => {
+    if (!confirm(`'${b.dataset.nick}' 회원을 탈퇴 처리할까요?\n이 회원이 남긴 글·댓글·질문도 함께 삭제되고 되돌릴 수 없어요.`)) return;
+    const { data: { session } } = await sb.auth.getSession();
+    const r = await fetch(SB_URL + "/functions/v1/ob-signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", apikey: SB_KEY, Authorization: "Bearer " + (session ? session.access_token : "") },
+      body: JSON.stringify({ action: "admin_delete", user_id: b.dataset.mdel }),
+    });
+    const j = await r.json().catch(() => ({}));
+    if (j.ok) { findMembers(); loadAuthors(); }
+    else alert(j.error === "admin_protected" ? "관리자 계정은 탈퇴 처리할 수 없어요." : "탈퇴 처리에 실패했어요 (" + (j.error || r.status) + ")");
+  }));
   document.querySelectorAll("#pwFindList [data-pwreset]").forEach(b => b.addEventListener("click", async () => {
     if (!confirm("이 회원의 비밀번호를 임시 비밀번호로 바꿀까요? 기존 비밀번호는 더 이상 쓸 수 없어요.")) return;
     const { data: { session } } = await sb.auth.getSession();
