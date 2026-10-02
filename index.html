@@ -226,6 +226,40 @@
     .login-btns{display:flex;flex-direction:column;gap:12px;max-width:300px;margin:26px auto 0}
     .btn-kakao{background:#FEE500;color:#191919;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
     .btn-kakao:hover{filter:brightness(1.06)}
+    /* 상단 메뉴: 작가 · 독자 · 출판사 토글 */
+    .nav-links{align-items:center}
+    .nv-grp{position:relative}
+    .nv-tog{background:none;border:none;color:var(--mut);font:inherit;font-weight:600;cursor:pointer;padding:6px 2px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+    .nv-tog:hover,.nv-grp.open .nv-tog{color:var(--ink)}
+    .nv-dot{width:6px;height:6px;border-radius:50%;display:inline-block;background:var(--mut)}
+    .nv-author .nv-dot{background:var(--goldlt)} .nv-reader .nv-dot{background:var(--cyan)} .nv-press .nv-dot{background:#D9CBB0}
+    .nv-car{font-size:9px;opacity:.7;transition:transform .2s}
+    .nv-grp.open .nv-car{transform:rotate(180deg)}
+    .nv-menu{position:absolute;top:calc(100% + 12px);left:50%;transform:translate(-50%,-6px);min-width:240px;background:#17191E;border:1px solid var(--line);border-radius:14px;padding:6px;box-shadow:0 16px 36px rgba(0,0,0,.5);opacity:0;visibility:hidden;transition:opacity .16s,transform .16s,visibility .16s;z-index:60}
+    .nv-menu::before{content:"";position:absolute;left:0;right:0;top:-14px;height:14px}
+    .nv-grp.open .nv-menu{opacity:1;visibility:visible;transform:translate(-50%,0)}
+    @media (hover:hover) and (min-width:761px){ .nv-grp:hover .nv-menu{opacity:1;visibility:visible;transform:translate(-50%,0)} .nv-grp:hover .nv-tog{color:var(--ink)} .nv-grp:hover .nv-car{transform:rotate(180deg)} }
+    .nv-head{font-size:10px;letter-spacing:.22em;color:var(--mut);font-weight:700;padding:8px 12px 6px}
+    .nv-author .nv-head{color:var(--goldlt)} .nv-reader .nv-head{color:var(--cyan)} .nv-press .nv-head{color:#D9CBB0}
+    .nav-links .nv-menu a{display:block;padding:9px 12px;border-radius:10px;white-space:normal;color:var(--ink)}
+    .nv-menu a b{display:block;font-size:14px;font-weight:600}
+    .nv-menu a small{display:block;color:var(--mut);font-size:12px;margin-top:2px;font-weight:400}
+    .nv-menu a:hover{background:rgba(255,255,255,.05)}
+    .nv-author .nv-menu a:hover b{color:var(--goldlt)} .nv-reader .nv-menu a:hover b{color:var(--cyan)} .nv-press .nv-menu a:hover b{color:#E8DCC2}
+    @media (max-width:760px){
+      .nv-grp{position:static}
+      .nv-menu{position:fixed;top:60px;left:12px;right:12px;min-width:0;transform:translateY(-6px)}
+      .nv-grp.open .nv-menu{transform:none}
+      header .wrap{padding:0 14px}
+      .nav{gap:10px}
+      .nav-links{gap:12px}
+      .nv-tog{gap:4px}
+      .auth-area{gap:6px}
+      .auth-shelf .t,.auth-admin .t{display:none}
+      .btn-logout{display:none}
+      .auth-chip{cursor:pointer}
+    }
+    @media (max-width:400px){ .nv-car{display:none} .logo .mark{font-size:16px !important} .nav-links{gap:10px} .auth-admin{display:none} }
     .lo-or{display:flex;align-items:center;gap:12px;color:var(--mut);font-size:12px;max-width:300px;margin:22px auto 14px}
     .lo-or::before,.lo-or::after{content:"";flex:1;height:1px;background:var(--line)}
     .lo-tabs{display:flex;max-width:300px;margin:0 auto 12px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
@@ -295,14 +329,33 @@
       <span class="en">OUT OF BOX</span>
     </a>
     <nav class="nav-links">
-      <a href="#shelf">서재</a>
-      <a href="#about">출판사 소개</a>
-      <a href="#authorfeed">작가의 오늘</a>
-      <a href="#ask">작가에게 묻다</a>
-      <a href="#daily">오늘의 문장</a>
-      <a href="#guestbook">방명록</a>
-      <a href="#shelves">작가들의 서재</a>
-      <a href="#" id="navMission">미션 웹</a>
+      <div class="nv-grp nv-author">
+        <button type="button" class="nv-tog" aria-expanded="false" aria-haspopup="true"><i class="nv-dot"></i>작가<span class="nv-car">▾</span></button>
+        <div class="nv-menu" role="menu">
+          <div class="nv-head">AUTHORS · 작가의 시간</div>
+          <a href="#authorfeed" data-tr="메뉴:작가:작가의오늘"><b>작가의 오늘</b><small>작가들의 일상과 집필 근황</small></a>
+          <a href="#shelves" data-tr="메뉴:작가:작가들의서재"><b>작가들의 서재</b><small>작가가 읽는 책과 독서 기록</small></a>
+        </div>
+      </div>
+      <div class="nv-grp nv-reader">
+        <button type="button" class="nv-tog" aria-expanded="false" aria-haspopup="true"><i class="nv-dot"></i>독자<span class="nv-car">▾</span></button>
+        <div class="nv-menu" role="menu">
+          <div class="nv-head">READERS · 독자의 자리</div>
+          <a href="#ask" data-tr="메뉴:독자:작가에게묻다"><b>작가에게 묻다</b><small>궁금한 걸 작가에게 직접 질문</small></a>
+          <a href="#daily" data-tr="메뉴:독자:오늘의문장"><b>오늘의 문장</b><small>필사의 방 · 이어쓰기 릴레이</small></a>
+          <a href="#guestbook" data-tr="메뉴:독자:방명록"><b>방명록</b><small>다녀간 흔적, 인사 한 줄</small></a>
+        </div>
+      </div>
+      <div class="nv-grp nv-press">
+        <button type="button" class="nv-tog" aria-expanded="false" aria-haspopup="true"><i class="nv-dot"></i>출판사<span class="nv-car">▾</span></button>
+        <div class="nv-menu" role="menu">
+          <div class="nv-head">OUT OF BOX · 출판사</div>
+          <a href="#shelf" data-tr="메뉴:출판사:서재"><b>서재</b><small>아웃오브박스가 펴낸 책</small></a>
+          <a href="#about" data-tr="메뉴:출판사:소개"><b>출판사 소개</b><small>우리가 만드는 책 이야기</small></a>
+          <a href="#" id="navMission" data-tr="메뉴:출판사:미션웹"><b>미션 웹</b><small>책을 읽고 실행하는 독자 미션</small></a>
+          <a href="#" id="navSubmit" data-tr="메뉴:출판사:원고투고"><b>원고 투고</b><small>새로운 이야기를 기다려요</small></a>
+        </div>
+      </div>
       <span class="auth-area" id="authArea"></span>
     </nav>
   </div>
@@ -1004,12 +1057,30 @@ document.getElementById("moGrid").innerHTML = BOOKS.filter(b => b.mission).map(b
     <div class="mo-go">미션 웹으로 이동 →</div>
   </a>`).join("");
 document.getElementById("navMission").addEventListener("click", (e) => { e.preventDefault(); moEl.hidden = false; document.body.style.overflow = "hidden"; });
+/* 상단 메뉴 토글 (작가 · 독자 · 출판사) */
+function closeNav() {
+  document.querySelectorAll(".nv-grp.open").forEach((g) => { g.classList.remove("open"); g.querySelector(".nv-tog").setAttribute("aria-expanded", "false"); });
+}
+document.querySelectorAll(".nv-grp").forEach((g) => {
+  const t = g.querySelector(".nv-tog");
+  t.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const willOpen = !g.classList.contains("open");
+    closeNav();
+    if (willOpen) { g.classList.add("open"); t.setAttribute("aria-expanded", "true"); track("click", "메뉴토글:" + t.textContent.replace("▾", "").trim()); }
+  });
+  g.addEventListener("mouseleave", () => { if (matchMedia("(hover:hover) and (min-width:761px)").matches) closeNav(); });
+  g.querySelectorAll(".nv-menu a").forEach((a) => a.addEventListener("click", () => { closeNav(); if (document.activeElement) document.activeElement.blur(); }));
+});
+document.addEventListener("click", (e) => { if (!e.target.closest(".nv-grp")) closeNav(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeNav(); });
 function moHide() { moEl.hidden = true; document.body.style.overflow = ""; }
 document.getElementById("moClose").addEventListener("click", moHide);
 moEl.addEventListener("click", (e) => { if (e.target === moEl) moHide(); });
 /* ── 원고 투고 팝업 ── */
 const soEl = document.getElementById("submitOverlay");
 document.getElementById("openSubmit").addEventListener("click", () => { soEl.hidden = false; document.body.style.overflow = "hidden"; });
+document.getElementById("navSubmit").addEventListener("click", (e) => { e.preventDefault(); soEl.hidden = false; document.body.style.overflow = "hidden"; });
 function soHide() { soEl.hidden = true; document.body.style.overflow = ""; }
 document.getElementById("soClose").addEventListener("click", soHide);
 soEl.addEventListener("click", (e) => { if (e.target === soEl) soHide(); });
@@ -1230,11 +1301,17 @@ function renderAuth() {
   }
   const p = obProfile || { nickname: "독자", avatar_url: "", is_admin: false };
   authArea.innerHTML = `
-    ${p.is_admin || p.is_author ? `<button class="auth-shelf" id="authShelfBtn" data-tr="상단:내서재">📖 내 서재</button>` : ""}
-    ${p.is_admin ? `<a class="auth-admin" href="admin.html">관리자</a>` : ""}
+    ${p.is_admin || p.is_author ? `<button class="auth-shelf" id="authShelfBtn" data-tr="상단:내서재" title="내 서재">📖<span class="t"> 내 서재</span></button>` : ""}
+    ${p.is_admin ? `<a class="auth-admin" href="admin.html" title="관리자">⚙<span class="t"> 관리자</span></a>` : ""}
     <span class="auth-chip">${p.avatar_url ? `<img src="${esc(p.avatar_url)}" alt="" referrerpolicy="no-referrer" />` : "🙂"}<span class="nick">${esc(p.nickname)}님</span></span>
     <button class="btn-logout" id="authOutBtn">로그아웃</button>`;
   document.getElementById("authOutBtn").addEventListener("click", async () => { await sb.auth.signOut(); toast("로그아웃 됐어요."); });
+  /* 모바일: 로그아웃 버튼 대신 프로필을 눌러 로그아웃 */
+  const chip = authArea.querySelector(".auth-chip");
+  if (chip) chip.addEventListener("click", async () => {
+    if (!matchMedia("(max-width:760px)").matches) return;
+    if (confirm(`${p.nickname || "독자"}님, 로그아웃할까요?`)) { await sb.auth.signOut(); toast("로그아웃 됐어요."); }
+  });
   const sb2 = document.getElementById("authShelfBtn");
   if (sb2) sb2.addEventListener("click", openMyShelf);
 }
