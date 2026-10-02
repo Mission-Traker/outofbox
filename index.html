@@ -2122,14 +2122,14 @@ const dsCard = document.getElementById("dsCard");
 const kstNow = () => new Date(Date.now() + 9 * 3600 * 1000);
 const kstDay = () => kstNow().toISOString().slice(0, 10);
 let dsTyping = null, dsRelay = null;
+/* 날짜별 문장은 서버(ob_daily_pick)가 하루 한 번 정해 고정 — 아직 안 나온 문장부터 순서대로 */
+const dailyCache = {};
 async function pickDaily(kind) {
-  const head = await sb.from("ob_daily_sentences").select("id", { count: "exact", head: true }).eq("kind", kind);
-  const n = head.count || 0;
-  if (!n) return null;
-  const idx = Math.floor((Date.now() + 9 * 3600 * 1000) / 86400000) % n;
-  const { data } = await sb.from("ob_daily_sentences").select("id, content, source").eq("kind", kind)
-    .order("created_at", { ascending: true }).order("id", { ascending: true }).range(idx, idx);
-  return (data && data[0]) || null;
+  const key = kind + ":" + kstDay();
+  if (dailyCache[key]) return dailyCache[key];
+  const { data, error } = await sb.rpc("ob_daily_pick", { p_kind: kind });
+  if (error || !data || !data.length) return null;
+  return (dailyCache[key] = data[0]);
 }
 async function myStreak() {
   if (!obUser) return 0;
