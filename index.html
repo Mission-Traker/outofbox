@@ -861,8 +861,11 @@ const MISSIONS = [
 /* ── 서재 데이터 — 새 책이 나오면 여기에 한 권 추가 ──
    sc: 책등 색 / st: 책등 글자색 / sh: 책 높이 / sw: 책등 폭 / sf: 책등 글자 크기 */
 const BOOKS = [
-  { slug: "homo-ambidex", isNew: true, cover: "covers/homo-ambidex.jpg",
-    title: "호모 앰비덱스", author: "윤성화", year: "출간 준비 중",
+  { slug: "homo-ambidex", isNew: true, cover: "covers/homo-ambidex.jpg", isbn: "9791199881761",
+    buy: "https://www.yes24.com/product/goods/197833729",
+    aladin: "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=403897045",
+    kyobo: "https://product.kyobobook.co.kr/detail/S000221586320",
+    title: "호모 앰비덱스", author: "윤성화", year: "2026년 10월 22일 출간",
     cat: "자기계발 · AI시대 생존법", mission: true, missionUrl: HA_MISSION_URL, tilt: true,
     sc: "#15151D", st: "#35C8E8", sh: 300, sw: 58, sf: 17,
     desc: "AI시대 양손잡이 신인류가 생존하는 10가지 방법. 한 손에는 나의 코어, 다른 손에는 AI — 한 장을 읽을 때마다 '나의 것'으로 바꾸는 독자 미션이 웹에서 기다립니다. 지금 9개의 미션이 공개되어 있어요." },
@@ -1032,7 +1035,7 @@ function openDetail(i) {
           ${missionGridHtml()}` : ""}
         <div class="btn-row">
           ${b.buy ? `<a class="btn btn-line" href="${b.buy}" target="_blank" rel="noopener" data-tr="구매:예스24:${b.title}">예스24 구매 →</a>` : ""}
-          ${b.buy && b.isbn ? `<a class="btn btn-line" href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=${b.isbn}" target="_blank" rel="noopener" data-tr="구매:알라딘:${b.title}">알라딘 구매 →</a><a class="btn btn-line" href="https://www.kyobobook.co.kr/product/detailViewKor.laf?barcode=${b.isbn}" target="_blank" rel="noopener" data-tr="구매:교보문고:${b.title}">교보문고 구매 →</a>` : ""}
+          ${b.buy && (b.aladin || b.isbn) ? `<a class="btn btn-line" href="${b.aladin || "https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=" + b.isbn}" target="_blank" rel="noopener" data-tr="구매:알라딘:${b.title}">알라딘 구매 →</a><a class="btn btn-line" href="${b.kyobo || "https://www.kyobobook.co.kr/product/detailViewKor.laf?barcode=" + b.isbn}" target="_blank" rel="noopener" data-tr="구매:교보문고:${b.title}">교보문고 구매 →</a>` : ""}
           ${b.mission ? `<a class="btn btn-gold" href="${b.missionUrl}" target="_blank" rel="noopener" data-tr="미션웹:${b.title}">미션 페이지로 이동하기 →</a>` : ""}
         </div>
       </div>
